@@ -2,9 +2,8 @@ package com.eventone.blockchainservice;
 
 import com.eventone.blockchainservice.domain.BlockchainTransaction;
 import com.eventone.blockchainservice.dto.BlockchainResponse;
-import com.eventone.blockchainservice.dto.IssueTicketRequest;
 import com.eventone.blockchainservice.repository.BlockchainTransactionRepository;
-import com.eventone.blockchainservice.service.BlockchainService;
+import com.eventone.blockchainservice.service.BlockchainActionService;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -42,7 +41,7 @@ public class BlockchainFailureTest {
     }
 
     @Autowired
-    private BlockchainService blockchainService;
+    private BlockchainActionService blockchainActionService;
 
     @Autowired
     private BlockchainTransactionRepository transactionRepository;
@@ -54,15 +53,14 @@ public class BlockchainFailureTest {
 
     @Test
     void testIssueTicketWithDeadRpcNodeFailsGracefully() {
-        IssueTicketRequest request = new IssueTicketRequest();
-        request.setTicketId("TICKET_DEAD_RPC");
-        request.setEventId("EVT_1");
-        request.setOwnerAddress("0x1234567890123456789012345678901234567890");
+        String ticketId = "TICKET_DEAD_RPC";
+        String eventId = "EVT_1";
+        String ownerAddress = "0x1234567890123456789012345678901234567890";
 
         // Should return a response indicating failure instead of completely blowing up if it's async
         // Or if it's sync, it should be marked as FAILED in DB.
         try {
-            BlockchainResponse response = blockchainService.issueTicket(request);
+            BlockchainResponse response = blockchainActionService.issueTicket(ownerAddress, eventId, ticketId);
             assertThat(response.getStatus()).isEqualTo("FAILED");
         } catch (Exception e) {
             // If it throws, check that DB state is saved or handled.
@@ -70,7 +68,7 @@ public class BlockchainFailureTest {
         }
 
         // Verify the transaction was recorded as FAILED or PENDING
-        Optional<BlockchainTransaction> txOpt = transactionRepository.findByReferenceId("TICKET_DEAD_RPC");
+        Optional<BlockchainTransaction> txOpt = transactionRepository.findByEntityTypeAndEntityIdAndOperation("TICKET", "TICKET_DEAD_RPC", "MINT");
         if (txOpt.isPresent()) {
             assertThat(txOpt.get().getStatus()).isIn("FAILED", "PENDING");
         }
