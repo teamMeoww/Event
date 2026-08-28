@@ -66,7 +66,8 @@ public class CheckinConcurrencyIntegrationTest {
     @Autowired
     private MongoTemplate mongoTemplate;
 
-    private final String secret = "defaultSuperSecretKeyForQrGenerationThatIsAtLeast32Bytes";
+    @org.springframework.beans.factory.annotation.Value("${jwt.secret:defaultSuperSecretKeyForQrGenerationThatIsAtLeast32Bytes}")
+    private String secret;
     private SecretKey key;
 
     @BeforeEach
@@ -98,7 +99,7 @@ public class CheckinConcurrencyIntegrationTest {
                 .compact();
 
         // 3. Prepare concurrent requests
-        int threadCount = 10;
+        int threadCount = 100;
         ExecutorService executor = Executors.newFixedThreadPool(threadCount);
         CountDownLatch latch = new CountDownLatch(1);
         CountDownLatch done = new CountDownLatch(threadCount);

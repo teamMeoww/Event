@@ -17,14 +17,15 @@ public class CheckinController {
     }
 
     @PostMapping("/verify")
+    @org.springframework.security.access.prepost.PreAuthorize("hasRole('ORGANIZER') or hasRole('SCANNER')")
     public ResponseEntity<CheckInResponse> verify(@RequestBody CheckInRequest request) {
         return ResponseEntity.ok(checkinService.verifyQr(request));
     }
 
     @PostMapping
-    public ResponseEntity<CheckInResponse> checkIn(@RequestBody CheckInRequest request) {
-        // TODO: In production, extract scannerId from SecurityContextHolder
-        String scannerId = "SCANNER_001";
+    @org.springframework.security.access.prepost.PreAuthorize("hasRole('ORGANIZER') or hasRole('SCANNER')")
+    public ResponseEntity<CheckInResponse> checkIn(@RequestBody CheckInRequest request, org.springframework.security.core.Authentication auth) {
+        String scannerId = auth.getName();
         CheckInResponse res = checkinService.performCheckIn(request, scannerId);
         if (!res.isSuccess()) {
             return ResponseEntity.badRequest().body(res);

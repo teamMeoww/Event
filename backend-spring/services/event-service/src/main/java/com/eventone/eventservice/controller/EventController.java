@@ -22,6 +22,7 @@ public class EventController {
     }
 
     @PostMapping
+    @org.springframework.security.access.prepost.PreAuthorize("hasRole('ORGANIZER')")
     public ApiResponse<Event> createEvent(@Valid @RequestBody EventRequest request, Authentication auth) {
         String userId = (String) auth.getPrincipal();
         Event event = eventService.createEvent(request, userId);
@@ -43,6 +44,7 @@ public class EventController {
     }
 
     @PutMapping("/{id}")
+    @org.springframework.security.access.prepost.PreAuthorize("hasRole('ORGANIZER')")
     public ApiResponse<Event> updateEvent(@PathVariable String id, @Valid @RequestBody EventRequest request, Authentication auth) {
         String userId = (String) auth.getPrincipal();
         Event event = eventService.updateEvent(id, request, userId);
@@ -50,6 +52,7 @@ public class EventController {
     }
 
     @PostMapping("/{id}/publish")
+    @org.springframework.security.access.prepost.PreAuthorize("hasRole('ORGANIZER')")
     public ApiResponse<Event> publishEvent(@PathVariable String id, Authentication auth) {
         String userId = (String) auth.getPrincipal();
         Event event = eventService.publishEvent(id, userId);

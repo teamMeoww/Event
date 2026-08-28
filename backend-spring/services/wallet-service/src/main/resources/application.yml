@@ -22,3 +22,12 @@ wallet:
     ttl-seconds: 300
     chain-id: 8453 # Base
     chain-name: BASE
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  endpoint:
+    health:
+      show-details: always

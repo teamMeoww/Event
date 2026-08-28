@@ -18,3 +18,12 @@ eventone:
   socketio:
     port: 9090
     host: 0.0.0.0
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  endpoint:
+    health:
+      show-details: always

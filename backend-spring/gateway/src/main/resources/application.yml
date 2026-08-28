@@ -1,8 +1,67 @@
+server:
+  port: 8080
+
 spring:
   application:
-    name: gateway
-server:
-  port: 0 # Random port for tests and default startup
+    name: api-gateway
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+  cloud:
+    gateway:
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins: "*"
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+              - OPTIONS
+            allowedHeaders: "*"
+      default-filters:
+        - SecureHeaders
+        - name: RequestRateLimiter
+          args:
+            redis-rate-limiter.replenishRate: 10
+            redis-rate-limiter.burstCapacity: 20
+            redis-rate-limiter.requestedTokens: 1
+      routes:
+        - id: auth-service
+          uri: http://localhost:8089
+          predicates:
+            - Path=/api/v1/auth/**
+        - id: event-service
+          uri: http://localhost:8081
+          predicates:
+            - Path=/api/v1/events/**
+        - id: ticket-service
+          uri: http://localhost:8082
+          predicates:
+            - Path=/api/v1/tickets/**
+        - id: checkin-service
+          uri: http://localhost:8083
+          predicates:
+            - Path=/api/v1/checkin/**
+        - id: credential-service
+          uri: http://localhost:8084
+          predicates:
+            - Path=/api/v1/credentials/**
+        - id: passport-service
+          uri: http://localhost:8085
+          predicates:
+            - Path=/api/v1/passport/**
+        - id: wallet-service
+          uri: http://localhost:8086
+          predicates:
+            - Path=/api/v1/wallet/**
+        - id: ai-service
+          uri: http://localhost:8090
+          predicates:
+            - Path=/api/v1/ai/**
+
 management:
   endpoints:
     web:

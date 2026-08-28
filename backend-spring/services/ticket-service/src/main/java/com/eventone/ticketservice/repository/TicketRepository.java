@@ -6,4 +6,5 @@ import java.util.Optional;
 
 public interface TicketRepository extends MongoRepository<Ticket, String> {
     Optional<Ticket> findByPublicId(String publicId);
+    java.util.List<Ticket> findByEventId(String eventId);
 }

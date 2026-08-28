@@ -35,6 +35,8 @@ public class JwtTokenProvider {
         return Jwts.builder()
                 .subject(userId)
                 .claim("roles", roles)
+                .issuer("eventone")
+                .audience().add("eventone-clients").and()
                 .issuedAt(now)
                 .expiration(expiryDate)
                 .signWith(getSigningKey())
@@ -62,6 +64,8 @@ public class JwtTokenProvider {
     private Claims getClaims(String token) {
         return Jwts.parser()
                 .verifyWith(getSigningKey())
+                .requireIssuer("eventone")
+                .requireAudience("eventone-clients")
                 .build()
                 .parseSignedClaims(token)
                 .getPayload();

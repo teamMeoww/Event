@@ -40,8 +40,12 @@ public class TicketController {
         }
         Ticket ticket = ticketOpt.get();
         
-        // TODO: In production, verify that the authenticated user owns this ticket.
-        
+        org.springframework.security.core.Authentication auth = org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null && auth.getPrincipal() instanceof String userId) {
+            if (!ticket.getUserId().equals(userId)) {
+                return ResponseEntity.status(403).build();
+            }
+        }
         String token = qrGeneratorService.generateQrToken(ticket.getId(), ticket.getEventId());
         
         return ResponseEntity.ok(Map.of(

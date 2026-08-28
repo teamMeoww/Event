@@ -19,10 +19,15 @@ public class CredentialController {
 
     private final CredentialService credentialService;
     private final CredentialRepository credentialRepository;
+    private final org.springframework.web.client.RestTemplate restTemplate;
 
-    public CredentialController(CredentialService credentialService, CredentialRepository credentialRepository) {
+    @org.springframework.beans.factory.annotation.Value("${eventone.services.event:http://localhost:8083}")
+    private String eventServiceUrl;
+
+    public CredentialController(CredentialService credentialService, CredentialRepository credentialRepository, org.springframework.boot.web.client.RestTemplateBuilder restTemplateBuilder) {
         this.credentialService = credentialService;
         this.credentialRepository = credentialRepository;
+        this.restTemplate = restTemplateBuilder.build();
     }
 
     @GetMapping
@@ -39,8 +44,8 @@ public class CredentialController {
     }
 
     @PostMapping("/{id}/revoke")
+    @org.springframework.security.access.prepost.PreAuthorize("hasRole('ORGANIZER')")
     public ResponseEntity<Void> revokeCredential(@PathVariable String id) {
-        // TODO: Ensure user has ADMIN/ISSUER role
         boolean revoked = credentialService.revokeCredential(id);
         return revoked ? ResponseEntity.ok().build() : ResponseEntity.notFound().build();
     }
@@ -56,7 +61,17 @@ public class CredentialController {
 
         Map<String, String> eventInfo = new HashMap<>();
         eventInfo.put("id", cred.getEventId());
-        eventInfo.put("name", "Event Name (Mock)"); // Real implementation queries event-service
+        try {
+            java.util.Map<String, Object> eventResp = restTemplate.getForObject(eventServiceUrl + "/api/v1/events/" + cred.getEventId(), java.util.Map.class);
+            if (eventResp != null && eventResp.containsKey("data")) {
+                java.util.Map<String, Object> data = (java.util.Map<String, Object>) eventResp.get("data");
+                if (data != null && data.containsKey("name")) {
+                    eventInfo.put("name", (String) data.get("name"));
+                }
+            }
+        } catch (Exception e) {
+            eventInfo.put("name", "Unknown Event");
+        }
         res.setEvent(eventInfo);
 
         Map<String, Object> blockchainInfo = new HashMap<>();

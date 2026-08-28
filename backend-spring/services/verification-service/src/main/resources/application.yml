@@ -23,3 +23,12 @@ eventone:
     rpcUrl: ${EVENTONE_BLOCKCHAIN_RPCURL:http://localhost:8545}
     ticketContract: ${EVENTONE_TICKET_CONTRACT:0xTBD}
     credentialContract: ${EVENTONE_CREDENTIAL_CONTRACT:0xTBD}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  endpoint:
+    health:
+      show-details: always

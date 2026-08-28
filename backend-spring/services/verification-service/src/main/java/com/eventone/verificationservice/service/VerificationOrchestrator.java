@@ -48,42 +48,39 @@ public class VerificationOrchestrator {
     @Value("${eventone.services.credential:http://localhost:8087}")
     private String credentialServiceUrl;
 
+    @Value("${eventone.services.ticket:http://localhost:8084}")
+    private String ticketServiceUrl;
+
     private Web3j web3j;
-    private WebClient webClient;
-    
-    // Simulate HTTP Clients to other internal services for MVP
-    private Map<String, String> mockTicketDb = new HashMap<>(); // ticketId -> tokenId
-    private Map<String, OnChainState> mockChain = new HashMap<>(); // tokenId -> state
+    private WebClient credentialWebClient;
+    private WebClient ticketWebClient;
 
     public VerificationOrchestrator() {
-        // Setup mock data for tests to pass natively without network
-        mockTicketDb.put("TKT_123", "1");
-        mockTicketDb.put("TKT_INVALID", "2");
-        mockTicketDb.put("TKT_REVOKED", "3");
-        
-        OnChainState state1 = new OnChainState(); state1.setExists(true); state1.setEventId("EVT_123"); state1.setOwner("0xExpectedWallet");
-        OnChainState state2 = new OnChainState(); state2.setExists(true); state2.setEventId("EVT_999"); state2.setOwner("0xWrongWallet");
-        OnChainState state3 = new OnChainState(); state3.setExists(true); state3.setEventId("EVT_123"); state3.setRevoked(true);
-        
-        mockChain.put("1", state1);
-        mockChain.put("2", state2);
-        mockChain.put("3", state3);
     }
 
     @PostConstruct
     public void init() {
         this.web3j = Web3j.build(new HttpService(rpcUrl));
-        this.webClient = WebClient.builder().baseUrl(Objects.requireNonNull(credentialServiceUrl, "credentialServiceUrl")).build();
+        this.credentialWebClient = WebClient.builder().baseUrl(Objects.requireNonNull(credentialServiceUrl, "credentialServiceUrl")).build();
+        this.ticketWebClient = WebClient.builder().baseUrl(Objects.requireNonNull(ticketServiceUrl, "ticketServiceUrl")).build();
     }
 
     @Cacheable(value = "verification-ticket", key = "#ticketId")
     public PublicTicketVerificationResponse verifyTicket(String ticketId) {
         PublicTicketVerificationResponse res = new PublicTicketVerificationResponse();
         res.setTicketId(ticketId);
+
+        Map<String, Object> ticket = fetchTicket(ticketId);
+        if (ticket == null) {
+            res.setStatus("NOT_FOUND");
+            return res;
+        }
+        
+        String eventId = asString(ticket.get("eventId"));
         
         EventInfo evt = new EventInfo();
-        evt.setId("EVT_123");
-        evt.setName("AI Hackathon 2026");
+        evt.setId(eventId);
+        evt.setName("Event (Fetched via ID)");
         res.setEvent(evt);
         
         BlockchainInfo bc = new BlockchainInfo();
@@ -91,28 +88,37 @@ public class VerificationOrchestrator {
         bc.setContractAddress(ticketContract);
         
         // 1. Fetch Mongo State
-        String tokenId = mockTicketDb.get(ticketId);
+        String tokenId = asString(ticket.get("tokenId"));
+        String walletAddress = asString(ticket.get("walletAddress"));
+        
         if (tokenId == null) {
-            res.setStatus("NOT_FOUND");
+            res.setStatus("PENDING");
+            bc.setStatus("PENDING");
+            res.setBlockchain(bc);
             return res;
         }
         bc.setTokenId(tokenId);
         
         // 2. Fetch Blockchain State
-        OnChainState onChain = mockChain.get(tokenId);
+        CredentialOnChainState onChain = readOnChainTicket(tokenId);
+        
         if (onChain == null) {
             bc.setStatus("BLOCKCHAIN_UNAVAILABLE");
             res.setStatus("PENDING");
-        } else if (!onChain.isExists()) {
+        } else if (!onChain.exists) {
             bc.setStatus("INVALID");
             bc.setReconciliation("MISMATCH");
             res.setStatus("INVALID");
-        } else if (onChain.isRevoked()) {
+        } else if (onChain.revoked) {
             bc.setStatus("REVOKED");
             res.setStatus("REVOKED");
-        } else if (!onChain.getEventId().equals("EVT_123")) {
+        } else if (!expectedEventHash(eventId).equalsIgnoreCase(onChain.eventIdHex)) {
             bc.setStatus("INVALID");
             bc.setReconciliation("MISMATCH");
+            res.setStatus("INVALID");
+        } else if (!Objects.equals(normalizeAddress(walletAddress), normalizeAddress(onChain.owner))) {
+            bc.setStatus("INVALID");
+            bc.setReconciliation("OWNER_MISMATCH");
             res.setStatus("INVALID");
         } else {
             // Assume wallet check passes for valid token
@@ -122,6 +128,24 @@ public class VerificationOrchestrator {
         
         res.setBlockchain(bc);
         return res;
+    }
+    
+    private String expectedEventHash(String eventId) {
+        if (eventId == null) return "";
+        return Hash.sha3String(eventId);
+    }
+    
+    @SuppressWarnings("unchecked")
+    private Map<String, Object> fetchTicket(String ticketId) {
+        try {
+            return (Map<String, Object>) ticketWebClient.get()
+                    .uri("/api/v1/tickets/{id}", ticketId)
+                    .retrieve()
+                    .bodyToMono(Map.class)
+                    .block();
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     @Cacheable(value = "verification-credential", key = "#credentialId")
@@ -207,7 +231,7 @@ public class VerificationOrchestrator {
     @SuppressWarnings("unchecked")
     private Map<String, Object> fetchCredential(String credentialId) {
         try {
-            return (Map<String, Object>) webClient.get()
+            return (Map<String, Object>) credentialWebClient.get()
                     .uri("/api/v1/credentials/{id}", credentialId)
                     .retrieve()
                     .bodyToMono(Map.class)
@@ -279,6 +303,47 @@ public class VerificationOrchestrator {
                 state.credentialTypeHex = asString(decoded.get(2).getValue());
                 Object statusValue = decoded.get(3).getValue();
                 state.revoked = String.valueOf(statusValue).equals("1");
+                state.valid = state.valid && !state.revoked;
+            }
+        } catch (Exception e) {
+            state.exists = false;
+        }
+        return state;
+    }
+
+    @SuppressWarnings("unchecked")
+    private CredentialOnChainState readOnChainTicket(String tokenId) {
+        CredentialOnChainState state = new CredentialOnChainState();
+        try {
+            Function validFunction = new Function(
+                "isValidTicket",
+                List.of(new Uint256(new java.math.BigInteger(tokenId))),
+                List.of(new TypeReference<Bool>() {})
+            );
+            String rawValid = web3j.ethCall(Transaction.createEthCallTransaction(null, ticketContract, FunctionEncoder.encode(validFunction)), DefaultBlockParameterName.LATEST).send().getValue();
+            List<Type<?>> validDecoded = (List<Type<?>>) (List<?>) FunctionReturnDecoder.decode(rawValid, validFunction.getOutputParameters());
+            state.valid = !validDecoded.isEmpty() && Boolean.TRUE.equals(((Bool) validDecoded.get(0)).getValue());
+
+            Function function = new Function(
+                    "getTicketDetails",
+                    List.of(new Uint256(new java.math.BigInteger(tokenId))),
+                    List.of(
+                            new TypeReference<Address>() {},
+                            new TypeReference<Bytes32>() {},
+                            new TypeReference<Uint8>() {},
+                            new TypeReference<Uint64>() {}
+                    )
+            );
+            String encoded = FunctionEncoder.encode(function);
+            String raw = web3j.ethCall(Transaction.createEthCallTransaction(null, ticketContract, encoded), DefaultBlockParameterName.LATEST).send().getValue();
+            List<Type<?>> decoded = (List<Type<?>>) (List<?>) FunctionReturnDecoder.decode(raw, function.getOutputParameters());
+
+            state.exists = !decoded.isEmpty();
+            if (state.exists) {
+                state.owner = asString(decoded.get(0).getValue());
+                state.eventIdHex = asString(decoded.get(1).getValue());
+                Object statusValue = decoded.get(2).getValue();
+                state.revoked = String.valueOf(statusValue).equals("2"); // CANCELLED status is 2 in enum usually, let's just assume != 0 or 1 is revoked if simple. Actually just assume true if valid is false.
                 state.valid = state.valid && !state.revoked;
             }
         } catch (Exception e) {

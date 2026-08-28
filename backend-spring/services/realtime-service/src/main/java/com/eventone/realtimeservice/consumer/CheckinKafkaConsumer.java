@@ -52,6 +52,27 @@ public class CheckinKafkaConsumer {
             System.out.println("Broadcasted real-time events for room: " + room);
         }
     }
+    
+    @KafkaListener(topics = "eventone.credentials.events", groupId = "realtime-service-group")
+    public void consumeCredentialEvents(Map<String, Object> payload) {
+        String eventType = (String) payload.get("eventType");
+        String eventId = (String) payload.get("eventId");
+        String txHash = (String) payload.get("transactionHash");
+        String uniqueId = eventId != null ? eventId : (txHash != null ? txHash : String.valueOf(payload.hashCode()));
+        
+        if (!isIdempotent("realtime_cred:" + uniqueId + ":" + eventType)) return;
+        
+        if ("CREDENTIAL_BLOCKCHAIN_CONFIRMED".equals(eventType) || "CREDENTIAL_BLOCKCHAIN_REVOKED".equals(eventType)) {
+            String pubEventId = (String) payload.get("publicEventId");
+            if (pubEventId != null) {
+                String room = "event:" + pubEventId;
+                server.getRoomOperations(room).sendEvent(
+                    "CREDENTIAL_BLOCKCHAIN_CONFIRMED".equals(eventType) ? "credential:issued" : "credential:revoked", 
+                    payload
+                );
+            }
+        }
+    }
 
     private boolean isIdempotent(String key) {
         Boolean set = redisTemplate.opsForValue().setIfAbsent("idemp:" + key, "processed", Duration.ofHours(24));
