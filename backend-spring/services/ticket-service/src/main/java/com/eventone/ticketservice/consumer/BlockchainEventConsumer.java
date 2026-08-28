@@ -21,13 +21,17 @@ public class BlockchainEventConsumer {
     }
 
     @KafkaListener(topics = "eventone.blockchain.events", groupId = "ticket-service-group")
+    @SuppressWarnings("unchecked")
     public void consume(String message) {
         try {
             Map<String, Object> event = objectMapper.readValue(message, Map.class);
             String eventType = (String) event.get("eventType");
+            String ticketId = (String) event.get("ticketId");
             
-            if ("TICKET_BLOCKCHAIN_CONFIRMED".equals(eventType) || "TICKET_BLOCKCHAIN_FAILED".equals(eventType)) {
-                String ticketId = (String) event.get("ticketId");
+            if ("TICKET_BLOCKCHAIN_CONFIRMED".equals(eventType) || "TICKET_BLOCKCHAIN_FAILED".equals(eventType) || "TICKET_BLOCKCHAIN_PENDING".equals(eventType)) {
+                if (ticketId == null) {
+                    return;
+                }
                 Optional<Ticket> opt = ticketRepository.findById(ticketId);
                 if (opt.isPresent()) {
                     Ticket t = opt.get();
@@ -35,8 +39,16 @@ public class BlockchainEventConsumer {
                         t.setBlockchainStatus("CONFIRMED");
                         t.setBlockchainTicketId((String) event.get("blockchainTicketId"));
                         t.setTransactionHash((String) event.get("transactionHash"));
+                    } else if ("TICKET_BLOCKCHAIN_PENDING".equals(eventType)) {
+                        t.setBlockchainStatus("PENDING");
+                        if (event.get("transactionHash") != null) {
+                            t.setTransactionHash((String) event.get("transactionHash"));
+                        }
                     } else {
                         t.setBlockchainStatus("FAILED");
+                        if (event.get("transactionHash") != null) {
+                            t.setTransactionHash((String) event.get("transactionHash"));
+                        }
                     }
                     ticketRepository.save(t);
                 }

@@ -1,9 +1,11 @@
 package com.eventone.realtimeservice.consumer;
 
 import com.corundumstudio.socketio.SocketIOServer;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
+import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -11,13 +13,18 @@ import java.util.Map;
 public class CheckinKafkaConsumer {
 
     private final SocketIOServer server;
+    private final StringRedisTemplate redisTemplate;
 
-    public CheckinKafkaConsumer(SocketIOServer server) {
+    public CheckinKafkaConsumer(SocketIOServer server, StringRedisTemplate redisTemplate) {
         this.server = server;
+        this.redisTemplate = redisTemplate;
     }
 
     @KafkaListener(topics = "eventone.checkins.events", groupId = "realtime-service-group")
     public void consumeCheckinCompleted(Map<String, Object> payload) {
+        String checkInId = (String) payload.get("checkInId");
+        if (checkInId == null || !isIdempotent("realtime_checkin:" + checkInId)) return;
+
         String eventId = (String) payload.get("eventId");
         String ticketId = (String) payload.get("ticketId");
         
@@ -44,5 +51,10 @@ public class CheckinKafkaConsumer {
             
             System.out.println("Broadcasted real-time events for room: " + room);
         }
+    }
+
+    private boolean isIdempotent(String key) {
+        Boolean set = redisTemplate.opsForValue().setIfAbsent("idemp:" + key, "processed", Duration.ofHours(24));
+        return Boolean.TRUE.equals(set);
     }
 }

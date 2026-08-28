@@ -1,6 +1,7 @@
 package com.eventone.ticketservice.outbox;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import java.time.Instant;
 import java.util.Map;
@@ -9,6 +10,7 @@ import java.util.Map;
 public class OutboxEvent {
     @Id
     private String id;
+    @Indexed(unique = true)
     private String eventId;
     private String aggregateType;
     private String aggregateId;

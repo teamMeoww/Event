@@ -19,6 +19,7 @@ contract EventOneCredential is ERC721URIStorage, AccessControl {
 
     uint256 private _nextTokenId;
     mapping(uint256 => CredentialData) public credentialDetails;
+    mapping(address => mapping(bytes32 => mapping(bytes32 => bool))) public hasCredential;
 
     event CredentialIssued(uint256 indexed tokenId, bytes32 indexed eventId, address indexed attendee);
     event CredentialRevoked(uint256 indexed tokenId);
@@ -35,6 +36,7 @@ contract EventOneCredential is ERC721URIStorage, AccessControl {
         string calldata uri
     ) external onlyRole(ISSUER_ROLE) returns (uint256) {
         require(attendee != address(0), "Invalid attendee address");
+        require(!hasCredential[attendee][eventId][credentialType], "Attendee already has this credential type for this event");
         
         uint256 tokenId = _nextTokenId++;
         
@@ -47,6 +49,7 @@ contract EventOneCredential is ERC721URIStorage, AccessControl {
 
         _safeMint(attendee, tokenId);
         _setTokenURI(tokenId, uri);
+        hasCredential[attendee][eventId][credentialType] = true;
         
         emit CredentialIssued(tokenId, eventId, attendee);
         return tokenId;

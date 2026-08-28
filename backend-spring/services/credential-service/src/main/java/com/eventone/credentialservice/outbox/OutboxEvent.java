@@ -1,5 +1,6 @@
 package com.eventone.credentialservice.outbox;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import java.time.Instant;
 import java.util.Map;
@@ -8,6 +9,8 @@ import java.util.Map;
 public class OutboxEvent {
     @Id
     private String id;
+    @Indexed(unique = true)
+    private String eventId;
     private String aggregateType;
     private String aggregateId;
     private String eventType;
@@ -18,6 +21,8 @@ public class OutboxEvent {
     // Getters and Setters
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }
+    public String getEventId() { return eventId; }
+    public void setEventId(String eventId) { this.eventId = eventId; }
     public String getAggregateType() { return aggregateType; }
     public void setAggregateType(String aggregateType) { this.aggregateType = aggregateType; }
     public String getAggregateId() { return aggregateId; }

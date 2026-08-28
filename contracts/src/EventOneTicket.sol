@@ -18,6 +18,7 @@ contract EventOneTicket is ERC721, AccessControl {
 
     uint256 private _nextTokenId;
     mapping(uint256 => TicketData) public ticketDetails;
+    mapping(address => mapping(bytes32 => bool)) public hasTicket;
 
     event TicketMinted(uint256 indexed tokenId, bytes32 indexed eventId, address indexed attendee);
     event TicketStatusChanged(uint256 indexed tokenId, TicketStatus status);
@@ -29,6 +30,7 @@ contract EventOneTicket is ERC721, AccessControl {
 
     function mintTicket(address attendee, bytes32 eventId) external onlyRole(ISSUER_ROLE) returns (uint256) {
         require(attendee != address(0), "Invalid attendee address");
+        require(!hasTicket[attendee][eventId], "Attendee already has a ticket for this event");
         
         uint256 tokenId = _nextTokenId++;
         
@@ -39,6 +41,7 @@ contract EventOneTicket is ERC721, AccessControl {
         });
 
         _safeMint(attendee, tokenId);
+        hasTicket[attendee][eventId] = true;
         
         emit TicketMinted(tokenId, eventId, attendee);
         return tokenId;

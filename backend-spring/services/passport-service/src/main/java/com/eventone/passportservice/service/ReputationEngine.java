@@ -9,6 +9,8 @@ import com.eventone.passportservice.repository.AwardRepository;
 import com.eventone.passportservice.repository.ContributionRepository;
 import com.eventone.passportservice.repository.PassportRepository;
 import org.springframework.dao.DuplicateKeyException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -18,6 +20,8 @@ import java.util.Map;
 
 @Service
 public class ReputationEngine {
+
+    private static final Logger log = LoggerFactory.getLogger(ReputationEngine.class);
     
     private final AchievementRepository achievementRepository;
     private final AwardRepository awardRepository;
@@ -80,7 +84,7 @@ public class ReputationEngine {
             a.setDescription(description);
             a.setEarnedAt(Instant.now());
             achievementRepository.save(a);
-            System.out.println("Granted achievement " + type + " to " + userId);
+            log.info("Granted achievement {} to {}", type, userId);
         } catch (DuplicateKeyException e) {
             // Idempotent: already has this achievement
         }

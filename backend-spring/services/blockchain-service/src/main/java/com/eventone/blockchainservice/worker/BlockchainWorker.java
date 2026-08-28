@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 @Service
 public class BlockchainWorker {
@@ -29,8 +30,9 @@ public class BlockchainWorker {
     }
 
     @KafkaListener(topics = "eventone.ticket.commands", groupId = "eventone-blockchain-workers")
+    @SuppressWarnings("unchecked")
     public void consumeTicketCommands(@Payload Map<String, Object> outboxEvent) {
-        String eventId = (String) outboxEvent.get("id"); // OutboxEvent ID
+        String eventId = (String) outboxEvent.getOrDefault("eventId", outboxEvent.get("id"));
         
         // Idempotency Guard
         if (processedEventRepository.findByEventIdAndConsumer(eventId, "TICKET_ISSUANCE").isPresent()) {
@@ -44,20 +46,23 @@ public class BlockchainWorker {
             String attendeeAddress = (String) payload.get("walletAddress");
             String publicEventId = (String) payload.get("eventId");
             String chainId = payload.get("chainId").toString();
+            String issuanceKey = (String) payload.get("issuanceKey");
 
             try {
-                // Perform action (this handles BlockchainTransaction idempotency inherently via ActionService)
-                BlockchainResponse resp = actionService.issueTicket(attendeeAddress, publicEventId);
+                BlockchainResponse resp = actionService.issueTicket(attendeeAddress, publicEventId, issuanceKey);
 
                 // Publish Domain Event back
                 Map<String, Object> responseEvent = new HashMap<>();
                 if ("CONFIRMED".equals(resp.getStatus())) {
                     responseEvent.put("eventType", "TICKET_BLOCKCHAIN_CONFIRMED");
-                    // Mock tokenId for now - in real life, decode the receipt logs
-                    responseEvent.put("blockchainTicketId", "1842"); 
+                    responseEvent.put("blockchainTicketId", resp.getTokenId()); 
+                    responseEvent.put("transactionHash", resp.getTransactionHash());
+                } else if ("PENDING".equals(resp.getStatus()) || "UNKNOWN".equals(resp.getStatus())) {
+                    responseEvent.put("eventType", "TICKET_BLOCKCHAIN_PENDING");
                     responseEvent.put("transactionHash", resp.getTransactionHash());
                 } else if ("REVERTED".equals(resp.getStatus()) || "FAILED".equals(resp.getStatus())) {
                     responseEvent.put("eventType", "TICKET_BLOCKCHAIN_FAILED");
+                    responseEvent.put("transactionHash", resp.getTransactionHash());
                 } else {
                     return; // Wait for monitor to confirm if it was PENDING
                 }
@@ -66,7 +71,7 @@ public class BlockchainWorker {
                 responseEvent.put("chainId", chainId);
                 responseEvent.put("timestamp", Instant.now().toString());
                 
-                kafkaTemplate.send("eventone.blockchain.events", ticketId, responseEvent);
+                kafkaTemplate.send("eventone.blockchain.events", Objects.requireNonNull(ticketId, "ticketId"), responseEvent);
 
                 // Mark processed
                 processedEventRepository.save(new ProcessedEvent(eventId, "TICKET_ISSUANCE", Instant.now()));

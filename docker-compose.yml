@@ -5,8 +5,13 @@ services:
     image: mongo:6.0
     ports:
       - "27017:27017"
+    command: ["--replSet", "rs0", "--bind_ip_all", "--port", "27017"]
     volumes:
       - mongodb_data:/data/db
+    healthcheck:
+      test: test $$(echo "rs.initiate({_id:'rs0',members:[{_id:0,host:\"mongodb:27017\"}]}).ok || rs.status().ok" | mongosh --port 27017 --quiet) -eq 1
+      interval: 10s
+      start_period: 15s
 
   redis:
     image: redis:7.0-alpine
@@ -25,6 +30,12 @@ services:
       - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=1@localhost:9093
       - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
       - ALLOW_PLAINTEXT_LISTENER=yes
+
+  anvil:
+    image: ghcr.io/foundry-rs/foundry:latest
+    ports:
+      - "8545:8545"
+    command: ["anvil", "--host", "0.0.0.0", "--chain-id", "31337"]
 
   # Microservices
   auth-service:
@@ -102,11 +113,14 @@ services:
       - SPRING_DATA_MONGODB_URI=mongodb://mongodb:27017/eventone
       - SPRING_DATA_REDIS_HOST=redis
       - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
-      - EVENTONE_BLOCKCHAIN_RPCURL=${EVENTONE_BLOCKCHAIN_RPCURL:-http://localhost:8545}
+      - EVENTONE_BLOCKCHAIN_RPCURL=${EVENTONE_BLOCKCHAIN_RPCURL:-http://anvil:8545}
+      - EVENTONE_TICKET_CONTRACT=${EVENTONE_TICKET_CONTRACT:-0xTBD}
+      - EVENTONE_CREDENTIAL_CONTRACT=${EVENTONE_CREDENTIAL_CONTRACT:-0xTBD}
     depends_on:
       - mongodb
       - redis
       - kafka
+      - anvil
 
   checkin-service:
     build:

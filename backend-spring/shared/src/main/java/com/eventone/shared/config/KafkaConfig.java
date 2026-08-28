@@ -1,6 +1,5 @@
-package com.eventone.blockchainservice.config;
+package com.eventone.shared.config;
 
-import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -10,13 +9,11 @@ import org.springframework.util.backoff.FixedBackOff;
 
 @Configuration
 public class KafkaConfig {
-    
+
     @Bean
     public DefaultErrorHandler errorHandler(KafkaTemplate<Object, Object> template) {
-        // Send to eventone.blockchain.dlq after 3 retries (1s backoff)
-        DeadLetterPublishingRecoverer recoverer = new DeadLetterPublishingRecoverer(template,
-                (r, e) -> new org.apache.kafka.common.TopicPartition("eventone.blockchain.dlq", r.partition()));
-        
-        return new DefaultErrorHandler(recoverer, new FixedBackOff(1000L, 3L));
+        DeadLetterPublishingRecoverer recoverer = new DeadLetterPublishingRecoverer(template);
+        // 3 attempts max, 2 second backoff
+        return new DefaultErrorHandler(recoverer, new FixedBackOff(2000L, 2L));
     }
 }

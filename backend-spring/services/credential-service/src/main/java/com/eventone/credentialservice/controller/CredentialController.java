@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @RestController
@@ -32,7 +33,7 @@ public class CredentialController {
 
     @GetMapping("/{id}")
     public ResponseEntity<CredentialResponse> getCredential(@PathVariable String id) {
-        return credentialRepository.findById(id)
+        return credentialRepository.findById(Objects.requireNonNull(id, "credentialId"))
                 .map(cred -> ResponseEntity.ok(mapToResponse(cred)))
                 .orElse(ResponseEntity.notFound().build());
     }
@@ -49,6 +50,7 @@ public class CredentialController {
         res.setId(cred.getPublicId()); // Expose publicId instead of internal id
         res.setType(cred.getType());
         res.setTitle(cred.getTitle());
+        res.setWalletAddress(cred.getWalletAddress());
         res.setStatus(cred.getStatus());
         res.setIssuedAt(cred.getIssuedAt());
 

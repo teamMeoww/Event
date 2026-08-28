@@ -5,6 +5,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Objects;
 
 @Component
 public class CredentialOutboxPublisher {
@@ -23,7 +24,7 @@ public class CredentialOutboxPublisher {
         for (OutboxEvent event : pending) {
             try {
                 // Topic: eventone.credentials.requests
-                kafkaTemplate.send("eventone.credentials.requests", event.getAggregateId(), event.getPayload()).get();
+                kafkaTemplate.send("eventone.credentials.requests", Objects.requireNonNull(event.getEventId(), "eventId"), event).get();
                 event.setStatus("PUBLISHED");
                 repository.save(event);
             } catch (Exception e) {

@@ -22,8 +22,8 @@ spring:
         spring.json.trusted.packages: "*"
 
 blockchain:
-  rpc-url: http://localhost:8545
-  chain-id: 31337
-  private-key: "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80"
-  ticket-contract: "0xTBD"
-  credential-contract: "0xTBD"
+  rpc-url: ${EVENTONE_BLOCKCHAIN_RPCURL:http://localhost:8545}
+  chain-id: ${EVENTONE_BLOCKCHAIN_CHAINID:31337}
+  private-key: ${EVENTONE_BLOCKCHAIN_PRIVATEKEY:0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80}
+  ticket-contract: ${EVENTONE_TICKET_CONTRACT:0xTBD}
+  credential-contract: ${EVENTONE_CREDENTIAL_CONTRACT:0xTBD}

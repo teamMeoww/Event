@@ -19,6 +19,7 @@ eventone:
     ticket: http://localhost:8085
     credential: http://localhost:8087
   blockchain:
-    chainId: 8453
-    ticketContract: "0xMockTicketContract"
-    credentialContract: "0xMockCredentialContract"
+    chainId: ${EVENTONE_BLOCKCHAIN_CHAINID:31337}
+    rpcUrl: ${EVENTONE_BLOCKCHAIN_RPCURL:http://localhost:8545}
+    ticketContract: ${EVENTONE_TICKET_CONTRACT:0xTBD}
+    credentialContract: ${EVENTONE_CREDENTIAL_CONTRACT:0xTBD}

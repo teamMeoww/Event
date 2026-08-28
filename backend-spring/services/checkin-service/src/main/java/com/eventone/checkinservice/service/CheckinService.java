@@ -27,6 +27,7 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 
 @Service
@@ -72,7 +73,8 @@ public class CheckinService {
             // Check ticket status in mongo
             String ticketId = claims.getSubject();
             Query q = new Query(Criteria.where("_id").is(ticketId));
-            Map ticket = mongoTemplate.findOne(q, Map.class, "tickets");
+            @SuppressWarnings("unchecked")
+            Map<String, Object> ticket = mongoTemplate.findOne(q, Map.class, "tickets");
             if (ticket == null) {
                 return new CheckInResponse(false, "INVALID", "Ticket not found");
             }
@@ -105,7 +107,7 @@ public class CheckinService {
         String nonce = claims.get("nonce", String.class);
 
         // Replay protection via Redis
-        Boolean set = redisTemplate.opsForValue().setIfAbsent("qr_used:" + nonce, "true", Duration.ofMinutes(5));
+        Boolean set = redisTemplate.opsForValue().setIfAbsent("qr_used:" + nonce, "true", Objects.requireNonNull(Duration.ofMinutes(5), "replayTtl"));
         if (Boolean.FALSE.equals(set)) {
             return new CheckInResponse(false, "ALREADY_USED", "QR token replay detected.");
         }
@@ -114,7 +116,8 @@ public class CheckinService {
         Query q = new Query(Criteria.where("_id").is(ticketId).and("status").is("ACTIVE"));
         Update u = new Update().set("status", "CHECKED_IN").set("used", true).set("usedAt", Instant.now());
         
-        Map updatedTicket = mongoTemplate.findAndModify(q, u, FindAndModifyOptions.options().returnNew(true), Map.class, "tickets");
+        @SuppressWarnings("unchecked")
+        Map<String, Object> updatedTicket = mongoTemplate.findAndModify(q, u, FindAndModifyOptions.options().returnNew(true), Map.class, "tickets");
         if (updatedTicket == null) {
             return new CheckInResponse(false, "ALREADY_USED", "Ticket was already checked in concurrently.");
         }
@@ -147,6 +150,8 @@ public class CheckinService {
         payload.put("checkInId", checkIn.getId());
         payload.put("checkedInAt", checkIn.getCheckedInAt().toString());
         payload.put("verificationMethod", "QR");
+        payload.put("walletAddress", updatedTicket.get("walletAddress"));
+        payload.put("blockchainEnabled", updatedTicket.get("blockchainEnabled"));
         event.setPayload(payload);
         
         outboxRepository.save(event);

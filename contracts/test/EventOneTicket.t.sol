@@ -43,4 +43,27 @@ contract EventOneTicketTest is Test {
         (, , EventOneTicket.TicketStatus status, ) = ticket.getTicketDetails(tokenId);
         assertEq(uint(status), uint(EventOneTicket.TicketStatus.REVOKED));
     }
+
+    function testUnauthorizedRevoke() public {
+        vm.prank(issuer);
+        uint256 tokenId = ticket.mintTicket(attendee, eventId);
+        
+        vm.prank(attendee); // Not an issuer
+        vm.expectRevert();
+        ticket.revoke(tokenId);
+    }
+
+    function testDuplicateMintReverts() public {
+        vm.startPrank(issuer);
+        ticket.mintTicket(attendee, eventId);
+        
+        vm.expectRevert("Attendee already has a ticket for this event");
+        ticket.mintTicket(attendee, eventId);
+        vm.stopPrank();
+    }
+
+    function testInvalidTokenDetails() public {
+        vm.expectRevert("Nonexistent token");
+        ticket.getTicketDetails(999);
+    }
 }

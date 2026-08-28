@@ -16,6 +16,7 @@ public class Credential {
     private String userId;
     private String eventId;
     private String ticketId;
+    private String walletAddress;
 
     private CredentialType type;
     private String title;
@@ -45,6 +46,8 @@ public class Credential {
     public void setEventId(String eventId) { this.eventId = eventId; }
     public String getTicketId() { return ticketId; }
     public void setTicketId(String ticketId) { this.ticketId = ticketId; }
+    public String getWalletAddress() { return walletAddress; }
+    public void setWalletAddress(String walletAddress) { this.walletAddress = walletAddress; }
     public CredentialType getType() { return type; }
     public void setType(CredentialType type) { this.type = type; }
     public String getTitle() { return title; }

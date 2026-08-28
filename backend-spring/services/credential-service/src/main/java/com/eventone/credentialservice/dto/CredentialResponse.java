@@ -8,6 +8,7 @@ public class CredentialResponse {
     private String id;
     private CredentialType type;
     private String title;
+    private String walletAddress;
     private Map<String, String> event;
     private CredentialStatus status;
     private Map<String, Object> blockchain;
@@ -20,6 +21,8 @@ public class CredentialResponse {
     public void setType(CredentialType type) { this.type = type; }
     public String getTitle() { return title; }
     public void setTitle(String title) { this.title = title; }
+    public String getWalletAddress() { return walletAddress; }
+    public void setWalletAddress(String walletAddress) { this.walletAddress = walletAddress; }
     public Map<String, String> getEvent() { return event; }
     public void setEvent(Map<String, String> event) { this.event = event; }
     public CredentialStatus getStatus() { return status; }

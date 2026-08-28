@@ -2,9 +2,11 @@ package com.eventone.ticketservice.service;
 
 import com.eventone.ticketservice.domain.Ticket;
 import com.eventone.ticketservice.domain.TicketStatus;
+import com.eventone.ticketservice.dto.TicketCreationRequest;
 import com.eventone.ticketservice.outbox.OutboxEvent;
 import com.eventone.ticketservice.outbox.OutboxEventRepository;
 import com.eventone.ticketservice.repository.TicketRepository;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,6 +14,7 @@ import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.Locale;
 
 @Service
 public class TicketService {
@@ -19,9 +22,18 @@ public class TicketService {
     private final TicketRepository ticketRepository;
     private final OutboxEventRepository outboxEventRepository;
 
+    @Value("${eventone.blockchain.chain-id:31337}")
+    private String blockchainChainId;
+
     public TicketService(TicketRepository ticketRepository, OutboxEventRepository outboxEventRepository) {
         this.ticketRepository = ticketRepository;
         this.outboxEventRepository = outboxEventRepository;
+    }
+
+    public Ticket createTicket(TicketCreationRequest request) {
+        boolean blockchainEnabled = request.getBlockchainEnabled() == null || request.getBlockchainEnabled();
+        boolean hasVerifiedWallet = request.getHasVerifiedWallet() == null || request.getHasVerifiedWallet();
+        return createTicket(request.getEventId(), request.getUserId(), request.getWalletAddress(), blockchainEnabled, hasVerifiedWallet);
     }
 
     @Transactional
@@ -36,23 +48,24 @@ public class TicketService {
         ticket.setWalletAddress(walletAddress);
         ticket.setIssuedAt(Instant.now());
         ticket.setUpdatedAt(Instant.now());
-        
         ticket.setBlockchainEnabled(blockchainEnabled);
 
         if (blockchainEnabled) {
             if (!hasVerifiedWallet || walletAddress == null || walletAddress.isEmpty()) {
-                // PROPOSED DECISION 1: Unverified Wallet on Blockchain-Enabled Event
                 ticket.setBlockchainStatus("NOT_ELIGIBLE");
             } else {
-                ticket.setBlockchainStatus("QUEUED");
+                ticket.setBlockchainStatus("PENDING");
             }
+        } else {
+            ticket.setBlockchainStatus("NOT_ENABLED");
         }
 
         Ticket savedTicket = ticketRepository.save(ticket);
 
-        if (blockchainEnabled && "QUEUED".equals(savedTicket.getBlockchainStatus())) {
+        if (blockchainEnabled && "PENDING".equals(savedTicket.getBlockchainStatus())) {
+            String issuanceKey = buildIssuanceKey(eventId, walletAddress);
             OutboxEvent outboxEvent = new OutboxEvent();
-            outboxEvent.setEventId("OUT_" + UUID.randomUUID());
+            outboxEvent.setEventId("TICKET_ISSUANCE_REQUESTED_" + issuanceKey);
             outboxEvent.setAggregateType("TICKET");
             outboxEvent.setAggregateId(savedTicket.getId());
             outboxEvent.setEventType("TICKET_ISSUANCE_REQUESTED");
@@ -65,12 +78,18 @@ public class TicketService {
             payload.put("ticketId", savedTicket.getId());
             payload.put("userId", userId);
             payload.put("walletAddress", walletAddress);
-            payload.put("chainId", 31337);
+            payload.put("issuanceKey", issuanceKey);
+            payload.put("chainId", blockchainChainId);
             
             outboxEvent.setPayload(payload);
             outboxEventRepository.save(outboxEvent);
         }
 
         return savedTicket;
+    }
+
+    private String buildIssuanceKey(String eventId, String walletAddress) {
+        String normalizedWalletAddress = walletAddress == null ? "" : walletAddress.trim().toLowerCase(Locale.ROOT);
+        return "TICKET_" + eventId + "_" + normalizedWalletAddress;
     }
 }
