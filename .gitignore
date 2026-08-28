@@ -42,3 +42,35 @@ coverage/
 # Temporary files
 *.tmp
 *~
+
+# --- Java & Maven ---
+target/
+*.class
+*.jar
+*.war
+*.ear
+*.nar
+*.log
+.mtj.tmp/
+
+# Maven wrapper
+.mvn/wrapper/maven-wrapper.jar
+
+# Spring Boot
+HELP.md
+
+# --- Foundry / Solidity ---
+cache/
+out/
+broadcast/
+.solhint.json
+*.t.sol.stub
+node_modules/
+.DS_Store
+
+# --- IDEs ---
+.idea/
+.vscode/
+*.iml
+*.iws
+*.ipr

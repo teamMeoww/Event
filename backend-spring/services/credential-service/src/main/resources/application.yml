@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: credential-service
+server:
+  port: 0 # Random port for tests and default startup
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics

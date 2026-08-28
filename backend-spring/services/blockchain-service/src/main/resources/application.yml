@@ -1,0 +1,29 @@
+server:
+  port: 8087
+
+spring:
+  application:
+    name: blockchain-service
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/eventone
+      auto-index-creation: true
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    consumer:
+      group-id: eventone-blockchain-workers
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: "*"
+
+blockchain:
+  rpc-url: http://localhost:8545
+  chain-id: 31337
+  private-key: "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80"
+  ticket-contract: "0xTBD"
+  credential-contract: "0xTBD"
