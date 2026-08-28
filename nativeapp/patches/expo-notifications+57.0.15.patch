@@ -1,0 +1,21 @@
+diff --git a/node_modules/expo-notifications/build/warnOfExpoGoPushUsage.js b/node_modules/expo-notifications/build/warnOfExpoGoPushUsage.js
+index 8260405..5198c48 100644
+--- a/node_modules/expo-notifications/build/warnOfExpoGoPushUsage.js
++++ b/node_modules/expo-notifications/build/warnOfExpoGoPushUsage.js
+@@ -4,13 +4,8 @@ let didWarn = false;
+ export const warnOfExpoGoPushUsage = () => {
+     if (isRunningInExpoGo() && !didWarn) {
+         const message = `expo-notifications: Android Push notifications (remote notifications) functionality provided by expo-notifications was removed from Expo Go with the release of SDK 53. Use a development build instead of Expo Go. Learn more at https://docs.expo.dev/develop/development-builds/introduction/.`;
+-        if (Platform.OS === 'android') {
+-            throw new Error(message);
+-        }
+-        else if (__DEV__) {
+-            didWarn = true;
+-            console.warn(message);
+-        }
++        didWarn = true;
++        console.warn(message);
+     }
+ };
+ //# sourceMappingURL=warnOfExpoGoPushUsage.js.map
+\ No newline at end of file
