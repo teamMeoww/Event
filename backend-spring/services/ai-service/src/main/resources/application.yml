@@ -1,10 +1,14 @@
+server:
+  port: 8090
+
 spring:
   application:
     name: ai-service
-server:
-  port: 0 # Random port for tests and default startup
-management:
-  endpoints:
-    web:
-      exposure:
-        include: health,info,metrics
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
+eventone:
+  services:
+    event: http://localhost:8081

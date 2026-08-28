@@ -1,0 +1,192 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo:6.0
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+
+  redis:
+    image: redis:7.0-alpine
+    ports:
+      - "6379:6379"
+
+  kafka:
+    image: bitnami/kafka:3.5.0
+    ports:
+      - "9092:9092"
+    environment:
+      - KAFKA_CFG_NODE_ID=1
+      - KAFKA_CFG_PROCESS_ROLES=broker,controller
+      - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092,CONTROLLER://:9093
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
+      - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=1@localhost:9093
+      - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
+      - ALLOW_PLAINTEXT_LISTENER=yes
+
+  # Microservices
+  auth-service:
+    build:
+      context: ./backend-spring
+      args:
+        SERVICE_NAME: auth-service
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_DATA_MONGODB_URI=mongodb://mongodb:27017/eventone
+      - SPRING_DATA_REDIS_HOST=redis
+      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+    depends_on:
+      - mongodb
+      - redis
+      - kafka
+
+  event-service:
+    build:
+      context: ./backend-spring
+      args:
+        SERVICE_NAME: event-service
+    ports:
+      - "8081:8081"
+    environment:
+      - SPRING_DATA_MONGODB_URI=mongodb://mongodb:27017/eventone
+      - SPRING_DATA_REDIS_HOST=redis
+      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+    depends_on:
+      - mongodb
+      - redis
+      - kafka
+
+  ticket-service:
+    build:
+      context: ./backend-spring
+      args:
+        SERVICE_NAME: ticket-service
+    ports:
+      - "8082:8082"
+    environment:
+      - SPRING_DATA_MONGODB_URI=mongodb://mongodb:27017/eventone
+      - SPRING_DATA_REDIS_HOST=redis
+      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+    depends_on:
+      - mongodb
+      - redis
+      - kafka
+
+  wallet-service:
+    build:
+      context: ./backend-spring
+      args:
+        SERVICE_NAME: wallet-service
+    ports:
+      - "8083:8083"
+    environment:
+      - SPRING_DATA_MONGODB_URI=mongodb://mongodb:27017/eventone
+      - SPRING_DATA_REDIS_HOST=redis
+      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+    depends_on:
+      - mongodb
+      - redis
+      - kafka
+
+  blockchain-service:
+    build:
+      context: ./backend-spring
+      args:
+        SERVICE_NAME: blockchain-service
+    ports:
+      - "8084:8084"
+    environment:
+      - SPRING_DATA_MONGODB_URI=mongodb://mongodb:27017/eventone
+      - SPRING_DATA_REDIS_HOST=redis
+      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+      - EVENTONE_BLOCKCHAIN_RPCURL=${EVENTONE_BLOCKCHAIN_RPCURL:-http://localhost:8545}
+    depends_on:
+      - mongodb
+      - redis
+      - kafka
+
+  checkin-service:
+    build:
+      context: ./backend-spring
+      args:
+        SERVICE_NAME: checkin-service
+    ports:
+      - "8085:8085"
+    environment:
+      - SPRING_DATA_MONGODB_URI=mongodb://mongodb:27017/eventone
+      - SPRING_DATA_REDIS_HOST=redis
+      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+    depends_on:
+      - mongodb
+      - redis
+      - kafka
+
+  credential-service:
+    build:
+      context: ./backend-spring
+      args:
+        SERVICE_NAME: credential-service
+    ports:
+      - "8086:8086"
+    environment:
+      - SPRING_DATA_MONGODB_URI=mongodb://mongodb:27017/eventone
+      - SPRING_DATA_REDIS_HOST=redis
+      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+    depends_on:
+      - mongodb
+      - redis
+      - kafka
+
+  passport-service:
+    build:
+      context: ./backend-spring
+      args:
+        SERVICE_NAME: passport-service
+    ports:
+      - "8087:8087"
+    environment:
+      - SPRING_DATA_MONGODB_URI=mongodb://mongodb:27017/eventone
+      - SPRING_DATA_REDIS_HOST=redis
+      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+    depends_on:
+      - mongodb
+      - redis
+      - kafka
+
+  verification-service:
+    build:
+      context: ./backend-spring
+      args:
+        SERVICE_NAME: verification-service
+    ports:
+      - "8088:8088"
+    environment:
+      - SPRING_DATA_MONGODB_URI=mongodb://mongodb:27017/eventone
+      - SPRING_DATA_REDIS_HOST=redis
+      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+    depends_on:
+      - mongodb
+      - redis
+      - kafka
+      
+  ai-service:
+    build:
+      context: ./backend-spring
+      args:
+        SERVICE_NAME: ai-service
+    ports:
+      - "8090:8090"
+    environment:
+      - SPRING_DATA_MONGODB_URI=mongodb://mongodb:27017/eventone
+      - SPRING_DATA_REDIS_HOST=redis
+      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+    depends_on:
+      - mongodb
+      - redis
+      - kafka
+
+volumes:
+  mongodb_data:

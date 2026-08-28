@@ -1,10 +1,24 @@
+server:
+  port: 8089
+
 spring:
   application:
     name: verification-service
-server:
-  port: 0 # Random port for tests and default startup
-management:
-  endpoints:
-    web:
-      exposure:
-        include: health,info,metrics
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/eventone
+    redis:
+      host: localhost
+      port: 6379
+  kafka:
+    bootstrap-servers: localhost:9092
+    
+eventone:
+  services:
+    blockchain: http://localhost:8084
+    ticket: http://localhost:8085
+    credential: http://localhost:8087
+  blockchain:
+    chainId: 8453
+    ticketContract: "0xMockTicketContract"
+    credentialContract: "0xMockCredentialContract"
