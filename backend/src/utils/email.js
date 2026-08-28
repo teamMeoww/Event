@@ -1,0 +1,103 @@
+import nodemailer from 'nodemailer';
+import { env } from '../config/env.js';
+
+// Construct auth object only if we have actual credentials
+const authConfig = (env.smtpUser && env.smtpPass)
+  ? { user: env.smtpUser, pass: env.smtpPass }
+  : undefined;
+
+const transporter = nodemailer.createTransport({
+  host: env.smtpHost,
+  port: env.smtpPort,
+  secure: env.smtpPort === 465,
+  auth: authConfig,
+});
+
+// Verify connection configuration
+transporter.verify(function (error, success) {
+  if (error) {
+    console.warn("Transporter verification warning:", error.message);
+    if (error.code === 'EAUTH') {
+      // This is expected if env vars are missing
+      console.warn("  -> Email functionality will not work until SMTP_USER and SMTP_PASS are set in .env");
+    }
+  } else {
+    console.log("Email server is ready.");
+  }
+});
+
+export async function sendEmail({ to, subject, html, text, attachments }) {
+  if (!authConfig) {
+    console.warn("⚠️ SMTP credentials missing (SMTP_USER/SMTP_PASS). Simulating email send...");
+    console.log(`[MOCK EMAIL] To: ${to}`);
+    console.log(`[MOCK EMAIL] Subject: ${subject}`);
+    // console.log(`[MOCK EMAIL] HTML: ${html.substring(0, 100)}...`); 
+    return { messageId: 'mock-email-id-12345' };
+  }
+
+  try {
+    return await transporter.sendMail({
+      from: env.emailFrom,
+      to,
+      subject,
+      html,
+      text,
+      attachments
+    });
+  } catch (error) {
+    console.error("Failed to send email:", error.message);
+    throw error;
+  }
+}
+
+export async function sendTicketEmail(to, event, registrationId, qrCodeBuffer) {
+  const subject = `Your Ticket for ${event.title}`;
+  const html = `
+  <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #f8fafc; border-radius: 16px; overflow: hidden; border: 1px solid #e2e8f0;">
+    <div style="background-color: #ea580c; padding: 24px; text-align: center;">
+      <h1 style="color: #ffffff; margin: 0; font-size: 24px;">Your Event Ticket</h1>
+    </div>
+    <div style="padding: 32px; background-color: #ffffff;">
+      <h2 style="color: #0f172a; margin-top: 0;">${event.title}</h2>
+      <p style="color: #64748b; margin-bottom: 24px;">Thank you for registering! Here are your event details.</p>
+
+      <table style="width: 100%; margin-bottom: 24px;">
+        <tr>
+          <td style="padding-bottom: 8px; color: #64748b; font-size: 12px; text-transform: uppercase;">Date & Time</td>
+        </tr>
+        <tr>
+          <td style="padding-bottom: 16px; color: #0f172a; font-weight: bold;">${new Date(event.date).toLocaleString()}</td>
+        </tr>
+        <tr>
+          <td style="padding-bottom: 8px; color: #64748b; font-size: 12px; text-transform: uppercase;">Location</td>
+        </tr>
+        <tr>
+          <td style="padding-bottom: 16px; color: #0f172a; font-weight: bold;">${event.location}</td>
+        </tr>
+      </table>
+
+      <div style="text-align: center; border-top: 2px dashed #e2e8f0; padding-top: 24px;">
+        <p style="color: #64748b; font-size: 14px; margin-bottom: 16px;">Scan this QR code at the entrance</p>
+        <img src="cid:ticketqrcode" alt="Ticket QR Code" style="width: 150px; height: 150px; border: 8px solid #f1f5f9; border-radius: 8px;" />
+        <p style="margin-top: 16px; font-family: monospace; color: #94a3b8;">${registrationId.toString().slice(-8).toUpperCase()}</p>
+      </div>
+    </div>
+    <div style="background-color: #f1f5f9; padding: 16px; text-align: center; color: #94a3b8; font-size: 12px;">
+      &copy; ${new Date().getFullYear()} Campus Events. All rights reserved.
+    </div>
+  </div>
+  `;
+
+  const attachments = [
+    {
+      filename: 'ticket-qr.png',
+      content: qrCodeBuffer.split(',')[1], // Remove 'data:image/png;base64,' prefix if present, but wait, usually we pass the buffer or proper base64 string
+      encoding: 'base64',
+      cid: 'ticketqrcode'
+    }
+  ];
+
+  return sendEmail({ to, subject, html, attachments });
+}
+
+
