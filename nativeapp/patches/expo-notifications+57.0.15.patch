@@ -1,3 +1,19 @@
+diff --git a/node_modules/expo-notifications/build/TopicSubscriptionModule.android.js b/node_modules/expo-notifications/build/TopicSubscriptionModule.android.js
+index 644a8bb..722caa6 100644
+--- a/node_modules/expo-notifications/build/TopicSubscriptionModule.android.js
++++ b/node_modules/expo-notifications/build/TopicSubscriptionModule.android.js
+@@ -1,3 +1,9 @@
+ import { requireNativeModule } from 'expo-modules-core';
+-export default requireNativeModule('ExpoTopicSubscriptionModule');
++let module = null;
++try {
++    module = requireNativeModule('ExpoTopicSubscriptionModule');
++} catch (e) {
++    console.warn("ExpoTopicSubscriptionModule not found. Push notifications are disabled in Expo Go.");
++}
++export default module;
+ //# sourceMappingURL=TopicSubscriptionModule.android.js.map
+\ No newline at end of file
 diff --git a/node_modules/expo-notifications/build/warnOfExpoGoPushUsage.js b/node_modules/expo-notifications/build/warnOfExpoGoPushUsage.js
 index 8260405..5198c48 100644
 --- a/node_modules/expo-notifications/build/warnOfExpoGoPushUsage.js
