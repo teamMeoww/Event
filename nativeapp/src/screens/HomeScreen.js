@@ -8,6 +8,10 @@ import { BlurView } from 'expo-blur';
 import { LinearGradient } from 'expo-linear-gradient';
 
 import { mockUser, mockCategories } from '../data/mockData';
+import Constants from 'expo-constants';
+const debuggerHost = Constants.expoConfig?.hostUri;
+const packagerIp = debuggerHost ? debuggerHost.split(':')[0] : 'localhost';
+const API_URL = `http://${packagerIp}:3001/api/events`;
 
 const { width, height } = Dimensions.get('window');
 
@@ -19,7 +23,7 @@ export default function HomeScreen({ navigation }) {
   const slideAnim = useRef(new Animated.Value(20)).current;
 
   useEffect(() => {
-    fetch('http://localhost:3001/api/events')
+    fetch(API_URL)
       .then(res => res.json())
       .then(data => {
         setRecommendedEvents(data);
