@@ -18,6 +18,7 @@ const NAV_LINKS = [
   { href: '/project', label: 'Works' },
   { href: '/services', label: 'Services' },
   { href: '/contact', label: 'Contact' },
+  { href: '/admin/dashboard', label: 'Dashboard' },
 ];
 
 const NavItem = () => {
