@@ -7,11 +7,8 @@ import LottieView from 'lottie-react-native';
 import { BlurView } from 'expo-blur';
 import { LinearGradient } from 'expo-linear-gradient';
 
-import { mockUser, mockCategories } from '../data/mockData';
-import Constants from 'expo-constants';
-const debuggerHost = Constants.expoConfig?.hostUri;
-const packagerIp = debuggerHost ? debuggerHost.split(':')[0] : 'localhost';
-const API_URL = `http://${packagerIp}:3001/api/events`;
+import { mockUser, mockCategories, mockEvents } from '../data/mockData';
+
 
 const { width, height } = Dimensions.get('window');
 
@@ -23,12 +20,8 @@ export default function HomeScreen({ navigation }) {
   const slideAnim = useRef(new Animated.Value(20)).current;
 
   useEffect(() => {
-    fetch(API_URL)
-      .then(res => res.json())
-      .then(data => {
-        setRecommendedEvents(data);
-      })
-      .catch(err => console.error("Error fetching mock events:", err));
+    // Hardcoding static offline data instead of fetching to avoid network/5G bridging issues
+    setRecommendedEvents(mockEvents);
       
     Animated.parallel([
       Animated.timing(fadeAnim, {
