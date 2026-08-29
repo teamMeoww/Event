@@ -5,9 +5,10 @@ import com.eventone.passportservice.dto.OrganizerContributionRequest;
 import com.eventone.passportservice.service.PassportService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 @RestController
-@RequestMapping("/api/v1/events/{eventId}")
+@RequestMapping("/api/v1/passport/events/{eventId}")
 public class OrganizerActionController {
 
     private final PassportService passportService;
@@ -16,6 +17,7 @@ public class OrganizerActionController {
         this.passportService = passportService;
     }
 
+    @PreAuthorize("hasRole('ORGANIZER')")
     @PostMapping("/awards")
     public ResponseEntity<Void> grantAward(@PathVariable String eventId, @RequestBody OrganizerAwardRequest req) {
         // RBAC ensures only Event Organizer reaches here
@@ -23,6 +25,7 @@ public class OrganizerActionController {
         return ResponseEntity.ok().build();
     }
 
+    @PreAuthorize("hasRole('ORGANIZER')")
     @PostMapping("/contributions")
     public ResponseEntity<Void> verifyContribution(@PathVariable String eventId, @RequestBody OrganizerContributionRequest req) {
         // RBAC ensures only Event Organizer reaches here

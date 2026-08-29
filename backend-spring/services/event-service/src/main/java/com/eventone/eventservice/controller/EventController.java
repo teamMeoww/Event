@@ -6,6 +6,8 @@ import com.eventone.eventservice.service.EventService;
 import com.eventone.shared.dto.ApiResponse;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,7 +24,7 @@ public class EventController {
     }
 
     @PostMapping
-    @org.springframework.security.access.prepost.PreAuthorize("hasRole('ORGANIZER')")
+    @PreAuthorize("hasRole('ORGANIZER')")
     public ApiResponse<Event> createEvent(@Valid @RequestBody EventRequest request, Authentication auth) {
         String userId = (String) auth.getPrincipal();
         Event event = eventService.createEvent(request, userId);
@@ -44,7 +46,7 @@ public class EventController {
     }
 
     @PutMapping("/{id}")
-    @org.springframework.security.access.prepost.PreAuthorize("hasRole('ORGANIZER')")
+    @PreAuthorize("hasRole('ORGANIZER')")
     public ApiResponse<Event> updateEvent(@PathVariable String id, @Valid @RequestBody EventRequest request, Authentication auth) {
         String userId = (String) auth.getPrincipal();
         Event event = eventService.updateEvent(id, request, userId);
@@ -52,10 +54,18 @@ public class EventController {
     }
 
     @PostMapping("/{id}/publish")
-    @org.springframework.security.access.prepost.PreAuthorize("hasRole('ORGANIZER')")
+    @PreAuthorize("hasRole('ORGANIZER')")
     public ApiResponse<Event> publishEvent(@PathVariable String id, Authentication auth) {
         String userId = (String) auth.getPrincipal();
         Event event = eventService.publishEvent(id, userId);
         return ApiResponse.success(event, UUID.randomUUID().toString());
+    }
+
+    @PostMapping("/{id}/register")
+    public ApiResponse<Object> registerForEvent(@PathVariable String id, Authentication auth, jakarta.servlet.http.HttpServletRequest httpRequest, org.springframework.boot.web.client.RestTemplateBuilder restTemplateBuilder, @org.springframework.beans.factory.annotation.Value("${eventone.services.ticket:http://ticket-service:8083}") String ticketServiceUrl) {
+        String userId = auth.getName();
+        String jwtToken = httpRequest.getHeader("Authorization");
+        Object ticketResponse = eventService.registerForEvent(id, userId, jwtToken, restTemplateBuilder, ticketServiceUrl);
+        return ApiResponse.success(ticketResponse, UUID.randomUUID().toString());
     }
 }

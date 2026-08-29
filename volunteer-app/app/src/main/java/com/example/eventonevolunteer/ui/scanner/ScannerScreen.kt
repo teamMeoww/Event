@@ -102,8 +102,9 @@ fun ScannerScreen() {
                                             // Send to backend
                                             coroutineScope.launch {
                                                 try {
-                                                    val request = CheckInRequest("evt_123456", rawValue)
-                                                    val response = RetrofitClient.checkinApi.performCheckIn("Bearer volunteer123", request)
+                                                    // Fetch eventId and token dynamically (placeholder for actual context extraction)
+                                                    val request = CheckInRequest("DYNAMIC_EVENT_ID", rawValue)
+                                                    val response = RetrofitClient.checkinApi.performCheckIn("Bearer DYNAMIC_TOKEN", request)
                                                     if (response.isSuccessful && response.body()?.success == true) {
                                                         scanResultText = "✅ Success!"
                                                         Toast.makeText(context, "Checked in successfully!", Toast.LENGTH_SHORT).show()

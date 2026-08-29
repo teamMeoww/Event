@@ -1,101 +1,114 @@
-import React from 'react';
-import { StyleSheet, Text, View, ScrollView } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, View, Text, FlatList, RefreshControl } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { BlurView } from 'expo-blur';
-import { LinearGradient } from 'expo-linear-gradient';
-import { mockUser, mockPassportCredentials } from '../data/mockData';
+import { getMyPassport, getMyCredentials } from '../api/passportApi';
+import { CredentialCard } from '../components/passport/CredentialCard';
+import { LoadingState, ErrorState, EmptyState } from '../components/ui/StateViews';
+import { GlassCard } from '../components/ui/GlassCard';
+import { colors } from '../theme/colors';
+import { spacing } from '../theme/spacing';
+import { typography } from '../theme/typography';
 
-export default function PassportScreen() {
-  return (
-    <View style={styles.container}>
-      <SafeAreaView style={{ flex: 1 }}>
-        <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
-          <View style={styles.header}>
-            <Text style={styles.userName}>{mockUser.name.toUpperCase()}</Text>
-            <Text style={styles.headerSubtitle}>EVENT PASSPORT</Text>
-          </View>
+export default function PassportScreen({ navigation }) {
+  const [passport, setPassport] = useState(null);
+  const [credentials, setCredentials] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
+  const [error, setError] = useState(null);
 
-          <View style={styles.statsGrid}>
-            {[
-              { num: mockUser.verifiedEvents, label: 'Events' },
-              { num: mockUser.contributions, label: 'Contributions' },
-              { num: mockUser.awards, label: 'Awards' },
-              { num: mockUser.reputation, label: 'Reputation' }
-            ].map((stat, idx) => (
-              <View key={idx} style={styles.statCard}>
-                <BlurView tint="dark" intensity={85} style={StyleSheet.absoluteFillObject} />
-                <LinearGradient colors={['rgba(255, 255, 255, 0.15)', 'rgba(255, 255, 255, 0.0)']} style={StyleSheet.absoluteFillObject} />
-                <View style={{position: 'relative', zIndex: 10, alignItems: 'center'}}>
-                  <Text style={styles.statNumber}>{stat.num}</Text>
-                  <Text style={styles.statLabel}>{stat.label}</Text>
-                </View>
-              </View>
-            ))}
-          </View>
+  const fetchData = async () => {
+    try {
+      setError(null);
+      const [passportData, credsData] = await Promise.all([
+        getMyPassport().catch(() => null), // Passport might not exist if 0 events
+        getMyCredentials().catch(() => [])
+      ]);
+      setPassport(passportData);
+      const credList = credsData?.content || credsData || [];
+      setCredentials(credList);
+    } catch (err) {
+      setError(err.message || 'Failed to fetch passport details');
+    } finally {
+      setLoading(false);
+      setRefreshing(false);
+    }
+  };
 
-          <Text style={styles.sectionDivider}>TOTAL CREDENTIALS</Text>
+  useEffect(() => {
+    fetchData();
+  }, []);
 
-          <View style={styles.credentialsSection}>
-            <Text style={styles.sectionTitle}>Your Credentials</Text>
-            {mockPassportCredentials.map(cred => (
-              <View key={cred.id} style={styles.credentialItem}>
-                <BlurView tint="dark" intensity={90} style={StyleSheet.absoluteFillObject} />
-                <LinearGradient colors={['rgba(255, 255, 255, 0.12)', 'rgba(255, 255, 255, 0.0)']} style={StyleSheet.absoluteFillObject} />
-                <View style={styles.credentialContent}>
-                  <View style={styles.credentialIconContainer}>
-                    <Text style={styles.credentialIcon}>{cred.type}</Text>
-                  </View>
-                  <View style={styles.credentialInfo}>
-                    <Text style={styles.credentialTitle}>{cred.title}</Text>
-                    <Text style={styles.credentialDate}>{cred.date}</Text>
-                  </View>
-                </View>
-              </View>
-            ))}
-          </View>
-        </ScrollView>
-      </SafeAreaView>
+  const onRefresh = () => {
+    setRefreshing(true);
+    fetchData();
+  };
+
+  const renderHeader = () => (
+    <View style={styles.headerContainer}>
+      <Text style={styles.title}>Passport</Text>
+      <GlassCard style={styles.statsCard}>
+        <View style={styles.statBox}>
+          <Text style={styles.statNumber}>{passport?.verifiedEvents || 0}</Text>
+          <Text style={styles.statLabel}>Events</Text>
+        </View>
+        <View style={styles.statDivider} />
+        <View style={styles.statBox}>
+          <Text style={styles.statNumber}>{passport?.reputationScore || 0}</Text>
+          <Text style={styles.statLabel}>Reputation</Text>
+        </View>
+        <View style={styles.statDivider} />
+        <View style={styles.statBox}>
+          <Text style={styles.statNumber}>{credentials.length}</Text>
+          <Text style={styles.statLabel}>Credentials</Text>
+        </View>
+      </GlassCard>
+      <Text style={styles.sectionTitle}>Digital Credentials</Text>
     </View>
+  );
+
+  return (
+    <SafeAreaView style={styles.container} edges={['top']}>
+      {loading && !refreshing ? (
+        <LoadingState message="Loading your passport..." />
+      ) : error ? (
+        <ErrorState message={error} onRetry={fetchData} />
+      ) : (
+        <FlatList
+          data={credentials}
+          keyExtractor={(item) => (item.id || item.credentialId).toString()}
+          contentContainerStyle={styles.listContent}
+          ListHeaderComponent={renderHeader}
+          ListEmptyComponent={
+            <EmptyState 
+              icon="school-outline"
+              title="No credentials yet" 
+              message="Attend events to earn verifiable digital credentials." 
+            />
+          }
+          renderItem={({ item }) => (
+            <CredentialCard 
+              credential={item} 
+              onPress={() => navigation.navigate('CredentialDetails', { credentialId: item.id || item.credentialId })} 
+            />
+          )}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={colors.primary} />
+          }
+        />
+      )}
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#000000' },
-  scrollContent: { padding: 20, paddingBottom: 60 },
-  header: { alignItems: 'center', marginBottom: 30, marginTop: 10 },
-  userName: { fontSize: 28, fontWeight: '800', letterSpacing: 2, color: '#FFFFFF', marginBottom: 5 },
-  headerSubtitle: { fontSize: 14, color: '#8c8cff', fontWeight: '600', letterSpacing: 3 },
-  statsGrid: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between', marginBottom: 40 },
-  statCard: { 
-    width: '48%', 
-    padding: 20, 
-    borderRadius: 16, 
-    alignItems: 'center', 
-    marginBottom: 15, 
-    borderWidth: 1, 
-    borderColor: 'rgba(255, 255, 255, 0.1)',
-    borderTopWidth: 1.5, borderTopColor: 'rgba(255, 255, 255, 0.4)', borderLeftWidth: 1, borderLeftColor: 'rgba(255, 255, 255, 0.2)',
-    overflow: 'hidden',
-    backgroundColor: 'rgba(255, 255, 255, 0.03)'
-  },
-  statNumber: { fontSize: 24, fontWeight: '800', marginBottom: 5, color: '#FFFFFF' },
-  statLabel: { fontSize: 12, color: '#A0A0A0', fontWeight: '600' },
-  sectionDivider: { textAlign: 'center', color: '#8c8cff', fontSize: 12, fontWeight: '700', letterSpacing: 2, marginBottom: 30 },
-  credentialsSection: { flex: 1 },
-  sectionTitle: { fontSize: 20, fontWeight: '700', marginBottom: 20, color: '#FFFFFF' },
-  credentialItem: { 
-    borderRadius: 16, 
-    marginBottom: 15, 
-    borderWidth: 1, 
-    borderColor: 'rgba(255, 255, 255, 0.1)',
-    borderTopWidth: 1.5, borderTopColor: 'rgba(255, 255, 255, 0.35)', borderLeftWidth: 1, borderLeftColor: 'rgba(255, 255, 255, 0.15)',
-    overflow: 'hidden',
-    backgroundColor: 'rgba(255, 255, 255, 0.03)'
-  },
-  credentialContent: { flexDirection: 'row', padding: 15, alignItems: 'center', position: 'relative', zIndex: 10 },
-  credentialIconContainer: { width: 50, height: 50, borderRadius: 25, backgroundColor: 'rgba(255, 255, 255, 0.05)', justifyContent: 'center', alignItems: 'center', marginRight: 15, borderWidth: 1, borderColor: 'rgba(255,255,255,0.1)' },
-  credentialIcon: { fontSize: 24 },
-  credentialInfo: { flex: 1 },
-  credentialTitle: { fontSize: 16, fontWeight: '600', marginBottom: 4, color: '#FFFFFF' },
-  credentialDate: { fontSize: 13, color: '#A0A0A0' }
+  container: { flex: 1, backgroundColor: colors.background },
+  listContent: { padding: spacing.xl, paddingBottom: spacing.huge },
+  headerContainer: { marginBottom: spacing.l },
+  title: { ...typography.h1, color: colors.text, marginBottom: spacing.xl },
+  statsCard: { flexDirection: 'row', alignItems: 'center', paddingVertical: spacing.xl, marginBottom: spacing.xxl },
+  statBox: { flex: 1, alignItems: 'center' },
+  statNumber: { ...typography.h2, color: colors.primary, marginBottom: spacing.xs },
+  statLabel: { ...typography.caption, color: colors.textSecondary },
+  statDivider: { width: 1, height: 40, backgroundColor: colors.borderLight },
+  sectionTitle: { ...typography.h3, color: colors.text, marginBottom: spacing.s }
 });

@@ -1,5 +1,5 @@
 server:
-  port: 8086
+  port: 8091
 
 spring:
   application:
@@ -16,7 +16,7 @@ spring:
 
 eventone:
   socketio:
-    port: 9090
+    port: 8091
     host: 0.0.0.0
 
 management:

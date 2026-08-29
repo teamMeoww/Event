@@ -83,6 +83,40 @@ public class EventService {
         return eventRepository.save(event);
     }
 
+    public Object registerForEvent(String eventId, String userId, String jwtToken, org.springframework.boot.web.client.RestTemplateBuilder restTemplateBuilder, String ticketServiceUrl) {
+        Event event = getEvent(eventId);
+        if (event.getStatus() != EventStatus.PUBLISHED) {
+            throw new EventOneException("EVENT_CLOSED", "Event is not open for registration");
+        }
+        if (event.getRegisteredCount() >= event.getCapacity()) {
+            throw new EventOneException("EVENT_FULL", "Event is at full capacity");
+        }
+
+        // Increment count
+        event.setRegisteredCount(event.getRegisteredCount() + 1);
+        eventRepository.save(event);
+
+        // Call Ticket Service
+        org.springframework.web.client.RestTemplate restTemplate = restTemplateBuilder.build();
+        org.springframework.http.HttpHeaders headers = new org.springframework.http.HttpHeaders();
+        headers.set("Authorization", jwtToken);
+        java.util.Map<String, Object> body = new java.util.HashMap<>();
+        body.put("eventId", eventId);
+        body.put("userId", userId);
+        
+        org.springframework.http.HttpEntity<java.util.Map<String, Object>> entity = new org.springframework.http.HttpEntity<>(body, headers);
+        
+        try {
+            org.springframework.http.ResponseEntity<Object> response = restTemplate.postForEntity(ticketServiceUrl + "/api/v1/tickets", entity, Object.class);
+            return response.getBody();
+        } catch(Exception e) {
+            // Revert count if failed
+            event.setRegisteredCount(event.getRegisteredCount() - 1);
+            eventRepository.save(event);
+            throw new EventOneException("REGISTRATION_FAILED", "Failed to issue ticket: " + e.getMessage());
+        }
+    }
+
     private void verifyOwnership(Event event, String userId) {
         if (!event.getOrganizerId().equals(userId)) {
             throw new EventOneException("FORBIDDEN", "You do not own this event");

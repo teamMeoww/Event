@@ -30,33 +30,49 @@ spring:
             redis-rate-limiter.requestedTokens: 1
       routes:
         - id: auth-service
-          uri: http://localhost:8089
+          uri: http://localhost:8081
           predicates:
             - Path=/api/v1/auth/**
         - id: event-service
-          uri: http://localhost:8081
+          uri: http://localhost:8082
           predicates:
             - Path=/api/v1/events/**
         - id: ticket-service
-          uri: http://localhost:8082
+          uri: http://localhost:8083
           predicates:
             - Path=/api/v1/tickets/**
         - id: checkin-service
-          uri: http://localhost:8083
+          uri: http://localhost:8085
           predicates:
-            - Path=/api/v1/checkin/**
+            - Path=/api/v1/checkins/**
         - id: credential-service
-          uri: http://localhost:8084
+          uri: http://localhost:8086
           predicates:
             - Path=/api/v1/credentials/**
         - id: passport-service
-          uri: http://localhost:8085
+          uri: http://localhost:8087
           predicates:
             - Path=/api/v1/passport/**
         - id: wallet-service
-          uri: http://localhost:8086
+          uri: http://localhost:8084
           predicates:
             - Path=/api/v1/wallet/**
+        - id: verification-service
+          uri: http://localhost:8088
+          predicates:
+            - Path=/api/v1/verification/**
+        - id: blockchain-service
+          uri: http://localhost:8089
+          predicates:
+            - Path=/api/v1/blockchain/**
+        - id: realtime-service
+          uri: http://localhost:8091
+          predicates:
+            - Path=/api/v1/realtime/**
+        - id: user-service
+          uri: http://localhost:8092
+          predicates:
+            - Path=/api/v1/users/**
         - id: ai-service
           uri: http://localhost:8090
           predicates:

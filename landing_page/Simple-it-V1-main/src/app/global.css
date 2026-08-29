@@ -16,6 +16,9 @@ html {
 body {
   overflow-x: hidden;
   width: 100%;
+  background-color: #000000;
+  color: #ffffff;
+  /* EventOne theme standard */
 }
 
 /* Smooth scroll behavior */

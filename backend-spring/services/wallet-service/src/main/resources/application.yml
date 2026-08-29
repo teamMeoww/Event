@@ -1,5 +1,5 @@
 server:
-  port: 8086
+  port: 8084
 
 spring:
   application:
@@ -10,7 +10,7 @@ spring:
       auto-index-creation: true
   redis:
     host: localhost
-    port: 6380
+    port: 8084
   kafka:
     bootstrap-servers: localhost:9092
     producer:

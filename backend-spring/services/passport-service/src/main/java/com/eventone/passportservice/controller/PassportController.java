@@ -4,6 +4,7 @@ import com.eventone.passportservice.dto.PrivatePassportResponse;
 import com.eventone.passportservice.dto.PublicPassportResponse;
 import com.eventone.passportservice.service.PassportService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -17,8 +18,9 @@ public class PassportController {
     }
 
     @GetMapping("/me")
-    public ResponseEntity<PrivatePassportResponse> getMyPassport(@RequestHeader("X-User-Id") String userId) {
-        // Authenticated access (API Gateway injects X-User-Id)
+    public ResponseEntity<PrivatePassportResponse> getMyPassport(Authentication auth) {
+        // Authenticated access via JWT Filter in SecurityContext
+        String userId = auth.getName();
         return ResponseEntity.ok(passportService.getPrivatePassport(userId));
     }
 

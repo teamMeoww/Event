@@ -45,10 +45,10 @@ public class VerificationOrchestrator {
     @Value("${eventone.blockchain.credentialContract}")
     private String credentialContract;
 
-    @Value("${eventone.services.credential:http://localhost:8087}")
+    @Value("${eventone.services.credential:http://localhost:8086}")
     private String credentialServiceUrl;
 
-    @Value("${eventone.services.ticket:http://localhost:8084}")
+    @Value("${eventone.services.ticket:http://localhost:8083}")
     private String ticketServiceUrl;
 
     private Web3j web3j;

@@ -6,6 +6,7 @@ import com.eventone.credentialservice.repository.CredentialRepository;
 import com.eventone.credentialservice.service.CredentialService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 import java.util.HashMap;
 import java.util.List;
@@ -21,7 +22,7 @@ public class CredentialController {
     private final CredentialRepository credentialRepository;
     private final org.springframework.web.client.RestTemplate restTemplate;
 
-    @org.springframework.beans.factory.annotation.Value("${eventone.services.event:http://localhost:8083}")
+    @org.springframework.beans.factory.annotation.Value("${eventone.services.event:http://localhost:8082}")
     private String eventServiceUrl;
 
     public CredentialController(CredentialService credentialService, CredentialRepository credentialRepository, org.springframework.boot.web.client.RestTemplateBuilder restTemplateBuilder) {
@@ -43,6 +44,7 @@ public class CredentialController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @PreAuthorize("hasAnyRole('ORGANIZER', 'ADMIN')")
     @PostMapping("/{id}/revoke")
     @org.springframework.security.access.prepost.PreAuthorize("hasRole('ORGANIZER')")
     public ResponseEntity<Void> revokeCredential(@PathVariable String id) {

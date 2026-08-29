@@ -27,9 +27,36 @@ public class TicketController {
     }
 
     @PostMapping
-    public ResponseEntity<Ticket> createTicket(@RequestBody TicketCreationRequest request) {
-        Ticket createdTicket = ticketService.createTicket(request);
+    public ResponseEntity<Ticket> createTicket(@RequestBody TicketCreationRequest request, org.springframework.security.core.Authentication auth, jakarta.servlet.http.HttpServletRequest httpRequest) {
+        // Enforce ownership: user can only create a ticket for themselves
+        request.setUserId(auth.getName());
+        
+        String jwtToken = httpRequest.getHeader("Authorization");
+        
+        Ticket createdTicket = ticketService.createTicket(request, jwtToken);
         return ResponseEntity.status(201).body(createdTicket);
+    }
+
+    @GetMapping
+    public ResponseEntity<java.util.List<Ticket>> getMyTickets(org.springframework.security.core.Authentication auth) {
+        String userId = auth.getName();
+        return ResponseEntity.ok(ticketRepository.findByUserId(userId));
+    }
+
+    @GetMapping("/{ticketId}")
+    public ResponseEntity<Ticket> getTicketById(@PathVariable String ticketId, org.springframework.security.core.Authentication auth) {
+        java.util.Optional<Ticket> ticketOpt = ticketRepository.findById(ticketId);
+        if (ticketOpt.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        Ticket ticket = ticketOpt.get();
+        if (auth != null && auth.getName() != null && !auth.getName().equals(ticket.getUserId())) {
+            // Need to verify if ADMIN or ORGANIZER can view, but for now restrict to owner
+            if (!auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ORGANIZER") || a.getAuthority().equals("ROLE_ADMIN"))) {
+                return ResponseEntity.status(403).build();
+            }
+        }
+        return ResponseEntity.ok(ticket);
     }
 
     @GetMapping("/{ticketId}/qr")

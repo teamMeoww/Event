@@ -1,7 +1,7 @@
 package com.eventone.shared.enums;
 
 public enum Role {
-    ATTENDEE,
+    USER,
     ORGANIZER,
     SCANNER,
     ADMIN

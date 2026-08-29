@@ -57,4 +57,27 @@ public class BlockchainEventConsumer {
             e.printStackTrace();
         }
     }
+
+    @KafkaListener(topics = "ticket-repair-events", groupId = "ticket-service-repair-group")
+    @SuppressWarnings("unchecked")
+    public void consumeRepair(String message) {
+        try {
+            Map<String, Object> event = objectMapper.readValue(message, Map.class);
+            String ticketId = (String) event.get("ticketId");
+            String action = (String) event.get("action");
+            
+            if (ticketId != null && "FORCE_REVOKE".equals(action)) {
+                Optional<Ticket> opt = ticketRepository.findById(ticketId);
+                if (opt.isPresent()) {
+                    Ticket t = opt.get();
+                    t.setStatus(com.eventone.ticketservice.domain.TicketStatus.REVOKED);
+                    t.setBlockchainStatus("REVOKED");
+                    ticketRepository.save(t);
+                    System.out.println("Repaired ticket state: " + ticketId + " -> REVOKED");
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

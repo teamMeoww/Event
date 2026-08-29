@@ -1,96 +1,39 @@
-import React, { useState } from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, ActivityIndicator, Alert } from 'react-native';
-import { mockForgotPassword } from '../api/mockService';
+import React from 'react';
+import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
+import { Ionicons } from '@expo/vector-icons';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { colors } from '../theme/colors';
+import { typography } from '../theme/typography';
+import { spacing } from '../theme/spacing';
 
 export default function ForgotPasswordScreen({ navigation }) {
-  const [email, setEmail] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
-
-  const handleReset = async () => {
-    setLoading(true);
-    setError('');
-    try {
-      const result = await mockForgotPassword(email);
-      Alert.alert('Success', result.message, [
-        { text: 'OK', onPress: () => navigation.goBack() }
-      ]);
-    } catch (err) {
-      setError(err.message);
-    }
-    setLoading(false);
-  };
-
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Reset Password</Text>
+      <LinearGradient colors={['#1a1a2e', '#000000']} style={StyleSheet.absoluteFillObject} />
       
-      {error ? <Text style={styles.error}>{error}</Text> : null}
+      <SafeAreaView style={{ flex: 1 }}>
+        <View style={styles.content}>
+          <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+            <Ionicons name="arrow-back" size={24} color={colors.text} />
+          </TouchableOpacity>
 
-      <TextInput
-        style={styles.input}
-        placeholder="Enter your email"
-        value={email}
-        onChangeText={setEmail}
-        autoCapitalize="none"
-        keyboardType="email-address"
-      />
-
-      <TouchableOpacity style={styles.button} onPress={handleReset} disabled={loading}>
-        {loading ? <ActivityIndicator color="#fff" /> : <Text style={styles.buttonText}>Send Reset Link</Text>}
-      </TouchableOpacity>
-
-      <TouchableOpacity onPress={() => navigation.goBack()} style={styles.loginLink}>
-        <Text style={styles.link}>Back to Log In</Text>
-      </TouchableOpacity>
+          <View style={styles.headerContainer}>
+            <Ionicons name="construct-outline" size={64} color={colors.primary} style={{ marginBottom: spacing.l }} />
+            <Text style={styles.title}>Under Construction</Text>
+            <Text style={styles.subtitle}>Password recovery is not yet supported by the EventOne backend services.</Text>
+          </View>
+        </View>
+      </SafeAreaView>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 20,
-    justifyContent: 'center',
-    backgroundColor: '#fff',
-  },
-  title: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    marginBottom: 40,
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: '#ccc',
-    padding: 15,
-    borderRadius: 8,
-    marginBottom: 15,
-    fontSize: 16,
-  },
-  button: {
-    backgroundColor: '#007AFF',
-    padding: 15,
-    borderRadius: 8,
-    alignItems: 'center',
-    marginBottom: 20,
-  },
-  buttonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  link: {
-    color: '#007AFF',
-    textAlign: 'center',
-    fontSize: 14,
-  },
-  loginLink: {
-    marginTop: 10,
-  },
-  error: {
-    color: 'red',
-    textAlign: 'center',
-    marginBottom: 15,
-  }
+  container: { flex: 1, backgroundColor: colors.background },
+  content: { flex: 1, padding: spacing.xxl },
+  backButton: { width: 40, height: 40, justifyContent: 'center', marginBottom: spacing.xl },
+  headerContainer: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+  title: { ...typography.h2, color: colors.text, marginBottom: spacing.m },
+  subtitle: { ...typography.body, color: colors.textSecondary, textAlign: 'center', lineHeight: 22 }
 });

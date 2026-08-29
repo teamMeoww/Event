@@ -2,7 +2,7 @@ spring:
   application:
     name: auth-service
 server:
-  port: 0 # Random port for tests and default startup
+  port: 8081 # Random port for tests and default startup
 management:
   endpoints:
     web:
