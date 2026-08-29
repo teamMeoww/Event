@@ -1,197 +1,134 @@
-import React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, ScrollView } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, View, Text, ScrollView, RefreshControl } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
-import QRCode from 'react-native-qrcode-svg';
-import { mockPassportCredentials, mockEvents } from '../data/mockData';
+import { getCredentialById } from '../api/passportApi';
+import { LoadingState, ErrorState } from '../components/ui/StateViews';
+import { GlassCard } from '../components/ui/GlassCard';
+import { Badge } from '../components/ui/Badge';
+import { Button } from '../components/ui/Button';
+import { colors } from '../theme/colors';
+import { spacing, radii } from '../theme/spacing';
+import { typography } from '../theme/typography';
 
-export default function CredentialDetailsScreen({ route, navigation }) {
+export default function CredentialDetailsScreen({ route }) {
   const { credentialId } = route.params;
-  const credential = mockPassportCredentials.find(c => c.id === credentialId);
-  const event = mockEvents.find(e => e.title === credential?.title);
+  const [credential, setCredential] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
+  const [error, setError] = useState(null);
 
-  if (!credential) {
-    return (
-      <View style={styles.center}>
-        <Text>Credential not found</Text>
-      </View>
-    );
-  }
+  const fetchDetails = async () => {
+    try {
+      setError(null);
+      const data = await getCredentialById(credentialId);
+      setCredential(data);
+    } catch (err) {
+      setError(err.message || 'Failed to fetch credential');
+    } finally {
+      setLoading(false);
+      setRefreshing(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchDetails();
+  }, [credentialId]);
+
+  const onRefresh = () => {
+    setRefreshing(true);
+    fetchDetails();
+  };
+
+  if (loading && !refreshing) return <View style={styles.container}><LoadingState message="Loading credential..." /></View>;
+  if (error || !credential) return <View style={styles.container}><ErrorState message={error || 'Credential not found'} onRetry={fetchDetails} /></View>;
+
+  const date = new Date(credential.issuedAt || credential.createdAt).toLocaleDateString('en-US', {
+    month: 'long', day: 'numeric', year: 'numeric'
+  });
 
   return (
-    <View style={styles.container}>
-      <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
-        
-        <View style={styles.card}>
+    <SafeAreaView style={styles.container} edges={['bottom']}>
+      <ScrollView 
+        contentContainerStyle={styles.scrollContent}
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={colors.primary} />}
+      >
+        <GlassCard style={styles.mainCard}>
           <View style={styles.iconContainer}>
-            <Ionicons name="ribbon" size={40} color="#000" />
-          </View>
-          <Text style={styles.credentialName}>{credential.title} 2026</Text>
-          
-          <View style={styles.issuerRow}>
-            <Text style={styles.issuerLabel}>Issued by</Text>
-            <Text style={styles.issuerValue}>{event ? event.organizer : 'EventOne'}</Text>
+            <Ionicons name="ribbon" size={64} color={colors.primary} />
           </View>
 
-          <View style={styles.statusContainer}>
-            <Ionicons name="checkmark-circle" size={20} color="#16a34a" />
-            <Text style={styles.statusText}>{credential.status}</Text>
-          </View>
+          <Text style={styles.credentialType}>{credential.credentialType || 'PROOF OF ATTENDANCE'}</Text>
+          <Text style={styles.eventName}>{credential.eventName}</Text>
 
-          <View style={styles.qrWrapper}>
-            <QRCode value={credentialId} size={150} />
-          </View>
+          <Badge 
+            text={credential.status === 'REVOKED' ? 'REVOKED' : 'VERIFIED'} 
+            status={credential.status === 'REVOKED' ? 'error' : 'success'} 
+            icon={credential.status === 'REVOKED' ? 'close-circle' : 'checkmark-circle'}
+          />
 
-          <Text style={styles.dateText}>{event ? event.fullDate : 'August 30, 2026'}</Text>
-        </View>
+          <View style={styles.divider} />
+
+          <View style={styles.detailsGrid}>
+            <View style={styles.detailBox}>
+              <Text style={styles.detailLabel}>ISSUED DATE</Text>
+              <Text style={styles.detailValue}>{date}</Text>
+            </View>
+            
+            <View style={styles.detailBox}>
+              <Text style={styles.detailLabel}>WALLET</Text>
+              <Text style={styles.detailValue} numberOfLines={1} ellipsizeMode="middle">
+                {credential.walletAddress || 'N/A'}
+              </Text>
+            </View>
+          </View>
+        </GlassCard>
+
+        {credential.tokenId && (
+          <GlassCard style={styles.blockchainCard}>
+            <View style={styles.blockchainHeader}>
+              <Ionicons name="cube" size={24} color={colors.primary} />
+              <Text style={styles.blockchainTitle}>Blockchain Proof</Text>
+            </View>
+            
+            <View style={styles.proofRow}>
+              <Text style={styles.proofLabel}>Token ID</Text>
+              <Text style={styles.proofValue}>{credential.tokenId}</Text>
+            </View>
+            
+            {credential.mintTransactionHash && (
+              <View style={styles.proofRow}>
+                <Text style={styles.proofLabel}>Transaction</Text>
+                <Text style={styles.proofValue} numberOfLines={1} ellipsizeMode="middle">{credential.mintTransactionHash}</Text>
+              </View>
+            )}
+            
+            <Button title="View Verification" variant="secondary" style={styles.verifyButton} />
+          </GlassCard>
+        )}
 
       </ScrollView>
-
-      <View style={styles.header}>
-        <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-          <Ionicons name="arrow-back" size={24} color="#000" />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>PROOF OF ATTENDANCE</Text>
-      </View>
-    </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#f5f5f5',
-  },
-  header: {
-    position: 'absolute',
-    top: 50,
-    left: 20,
-    right: 20,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  headerTitle: {
-    color: '#000',
-    fontSize: 16,
-    fontFamily: 'Inter_900Black',
-    letterSpacing: 2,
-    flex: 1,
-    textAlign: 'center',
-    marginRight: 40,
-  },
-  backButton: {
-    padding: 5,
-  },
-  scrollContent: {
-    paddingTop: 100,
-    paddingHorizontal: 20,
-    alignItems: 'center',
-  },
-  card: {
-    backgroundColor: '#fff',
-    borderRadius: 20,
-    padding: 30,
-    alignItems: 'center',
-    width: '100%',
-    marginBottom: 30,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 10,
-    elevation: 3,
-  },
-  iconContainer: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
-    backgroundColor: '#f0f0f0',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 20,
-  },
-  credentialName: {
-    fontSize: 24,
-    fontFamily: 'Inter_900Black',
-    textAlign: 'center',
-    marginBottom: 10,
-  },
-  issuerRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 30,
-  },
-  issuerLabel: {
-    color: '#666',
-    fontSize: 14,
-    fontFamily: 'Inter_400Regular',
-  },
-  issuerValue: {
-    color: '#000',
-    fontSize: 14,
-    fontFamily: 'Inter_700Bold',
-    marginLeft: 5,
-  },
-  qrWrapper: {
-    padding: 20,
-    backgroundColor: '#fff',
-    borderWidth: 1,
-    borderColor: '#eee',
-    borderRadius: 16,
-    marginBottom: 20,
-  },
-  dateText: {
-    color: '#999',
-    fontSize: 14,
-    fontFamily: 'Inter_400Regular',
-  },
-  statusContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#f0fdf4',
-    paddingHorizontal: 20,
-    paddingVertical: 12,
-    borderRadius: 25,
-    marginBottom: 30,
-  },
-  statusText: {
-    color: '#16a34a',
-    marginBottom: 30,
-  },
-  detailRow: {
-    width: '100%',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 20,
-  },
-  detailLabel: {
-    fontSize: 16,
-    color: '#666',
-  },
-  detailValue: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#000',
-  },
-  detailValueSuccess: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#16a34a',
-  },
-  footer: {
-    padding: 20,
-    backgroundColor: '#fff',
-    borderTopWidth: 1,
-    borderColor: '#eee',
-  },
-  proofButton: {
-    backgroundColor: '#000',
-    padding: 18,
-    borderRadius: 12,
-    alignItems: 'center',
-  },
-  proofButtonText: {
-    color: '#00FF00',
-    fontSize: 16,
-    fontWeight: 'bold',
-    letterSpacing: 1,
-  },
+  container: { flex: 1, backgroundColor: colors.background },
+  scrollContent: { padding: spacing.xl, paddingBottom: spacing.huge },
+  mainCard: { padding: spacing.xl, alignItems: 'center', borderLeftWidth: 4, borderLeftColor: colors.primary },
+  iconContainer: { width: 100, height: 100, borderRadius: 50, backgroundColor: 'rgba(140, 140, 255, 0.1)', alignItems: 'center', justifyContent: 'center', marginBottom: spacing.l },
+  credentialType: { ...typography.caption, color: colors.textSecondary, marginBottom: spacing.s },
+  eventName: { ...typography.h2, color: colors.text, textAlign: 'center', marginBottom: spacing.l },
+  divider: { height: 1, backgroundColor: colors.borderLight, width: '100%', marginVertical: spacing.xl },
+  detailsGrid: { flexDirection: 'row', justifyContent: 'space-between', width: '100%' },
+  detailBox: { flex: 1 },
+  detailLabel: { ...typography.caption, color: colors.textSecondary, marginBottom: spacing.xs },
+  detailValue: { ...typography.body, color: colors.text },
+  blockchainCard: { marginTop: spacing.xl, padding: spacing.l },
+  blockchainHeader: { flexDirection: 'row', alignItems: 'center', marginBottom: spacing.l },
+  blockchainTitle: { ...typography.h3, color: colors.text, marginLeft: spacing.m },
+  proofRow: { marginBottom: spacing.m },
+  proofLabel: { ...typography.caption, color: colors.textSecondary, marginBottom: spacing.xs },
+  proofValue: { ...typography.body, color: colors.primary, fontFamily: 'monospace' },
+  verifyButton: { marginTop: spacing.m }
 });

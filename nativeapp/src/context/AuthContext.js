@@ -1,60 +1,81 @@
 import React, { createContext, useState, useEffect } from 'react';
-import { saveToken, getToken, deleteToken } from '../utils/storage';
-import { mockLogin, mockRegister } from '../api/mockService';
+import * as SecureStore from 'expo-secure-store';
+import { login as loginApi, register as registerApi, getMe as getMeApi } from '../api/authApi';
 
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [userToken, setUserToken] = useState(null);
+  const [userInfo, setUserInfo] = useState(null);
+
+  const loadToken = async () => {
+    try {
+      const token = await SecureStore.getItemAsync('userToken');
+      if (token) {
+        setUserToken(token);
+        // Optionally fetch user info if needed here
+        try {
+            const meData = await getMeApi();
+            setUserInfo(meData);
+        } catch (e) {
+            console.log("Could not load user profile, token might be expired.");
+            await logout();
+        }
+      }
+    } catch (e) {
+      console.warn("Failed to load token", e);
+    }
+    setIsLoading(false);
+  };
 
   useEffect(() => {
-    // Check if token exists on app load
-    const bootstrapAsync = async () => {
-      let token;
-      try {
-        token = await getToken();
-      } catch (e) {
-        // Restoring token failed
-      }
-      setUserToken(token);
-      setIsLoading(false);
-    };
-
-    bootstrapAsync();
+    loadToken();
   }, []);
 
   const login = async (email, password) => {
+    setIsLoading(true);
     try {
-      const response = await mockLogin(email, password);
-      setUserToken(response.token);
-      await saveToken(response.token);
-      return { success: true };
-    } catch (error) {
-      return { success: false, error: error.message };
+      const response = await loginApi(email, password);
+      // Backend returns { token: "..." }
+      if (response && response.token) {
+        setUserToken(response.token);
+        await SecureStore.setItemAsync('userToken', response.token);
+        
+        // Fetch User Info
+        try {
+            const meData = await getMeApi();
+            setUserInfo(meData);
+        } catch (e) {}
+      } else {
+        throw new Error("Invalid login response");
+      }
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  const register = async (data) => {
+  const register = async (name, email, password) => {
+    setIsLoading(true);
     try {
-      const response = await mockRegister(data);
-      setUserToken(response.token);
-      await saveToken(response.token);
-      return { success: true };
-    } catch (error) {
-      return { success: false, error: error.message };
+      await registerApi(email, password, name);
+      // Auto login after register
+      await login(email, password);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const logout = async () => {
     setIsLoading(true);
     setUserToken(null);
-    await deleteToken();
+    setUserInfo(null);
+    await SecureStore.deleteItemAsync('userToken');
     setIsLoading(false);
   };
 
   return (
-    <AuthContext.Provider value={{ login, register, logout, isLoading, userToken }}>
+    <AuthContext.Provider value={{ login, register, logout, isLoading, userToken, userInfo }}>
       {children}
     </AuthContext.Provider>
   );
