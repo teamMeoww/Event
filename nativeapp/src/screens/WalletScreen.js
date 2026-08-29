@@ -5,8 +5,10 @@ import { Ionicons } from '@expo/vector-icons';
 import { BlurView } from 'expo-blur';
 import { LinearGradient } from 'expo-linear-gradient';
 import { mockUser, mockPassportCredentials, mockWallet } from '../data/mockData';
+import { AuthContext } from '../context/AuthContext';
 
 export default function WalletScreen() {
+  const { logout } = React.useContext(AuthContext);
   const [showAdvanced, setShowAdvanced] = useState(false);
   return (
     <View style={styles.container}>
