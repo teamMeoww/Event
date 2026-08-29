@@ -9,16 +9,28 @@ import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.ui.NavDisplay
 import com.example.eventonevolunteer.ui.scanner.ScannerScreen
+import com.example.eventonevolunteer.ui.login.LoginScreen
+import com.example.eventonevolunteer.ui.home.HomeScreen
 
 @Composable
 fun MainNavigation() {
-  val backStack = rememberNavBackStack(Main)
+  val backStack = rememberNavBackStack(Login) // start at Login
 
   NavDisplay(
     backStack = backStack,
     onBack = { backStack.removeLastOrNull() },
     entryProvider =
       entryProvider {
+        entry<Login> {
+          LoginScreen(onLoginSuccess = { token ->
+              backStack.add(Home(token))
+          })
+        }
+        entry<Home> { home ->
+            HomeScreen(token = home.token, onStartScanning = {
+                backStack.add(Main)
+            })
+        }
         entry<Main> {
           ScannerScreen()
         }

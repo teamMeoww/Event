@@ -26,4 +26,6 @@ object RetrofitClient {
         .build()
 
     val checkinApi: CheckinApi = retrofit.create(CheckinApi::class.java)
+    val authApi: AuthApi = retrofit.create(AuthApi::class.java)
+    val passportApi: PassportApi = retrofit.create(PassportApi::class.java)
 }
