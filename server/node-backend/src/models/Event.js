@@ -15,6 +15,9 @@ const eventSchema = new mongoose.Schema({
   coverImage: {
     type: String,
   },
+  imageUrl: {
+    type: String,
+  },
   images: [String],
   category: {
     type: String,
@@ -39,6 +42,9 @@ const eventSchema = new mongoose.Schema({
     latitude: Number,
     longitude: Number
   },
+  location: {
+    type: String,
+  },
   startDate: {
     type: Date,
     required: true
@@ -61,10 +67,14 @@ const eventSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    enum: ["DRAFT", "PUBLISHED", "ONGOING", "COMPLETED", "CANCELLED"],
-    default: "DRAFT"
+    enum: ["PENDING_APPROVAL", "DRAFT", "PUBLISHED", "ONGOING", "COMPLETED", "CANCELLED"],
+    default: "PENDING_APPROVAL"
   },
   isFeatured: {
+    type: Boolean,
+    default: false
+  },
+  isBlockchainEnabled: {
     type: Boolean,
     default: false
   },

@@ -8,7 +8,6 @@ import { TransitionProvider } from "@/contexts/TransitionContext";
 import LoadingSequence from "@/components/organisms/LoadingSequence";
 import LayoutRouteWatcher from "@/components/organisms/LayoutRouteWatcher";
 import CustomScrollbar from "@/components/atoms/CustomScrollbar";
-import { AuthProvider } from "@/contexts/AuthContext";
 import "./global.css";
 
 const geistSans = Geist({
@@ -70,9 +69,7 @@ export default function RootLayout({
           <LayoutRouteWatcher>
             <SmoothScroll />
             <Transition>
-              <AuthProvider>
-                {children}
-              </AuthProvider>
+              {children}
             </Transition>
           </LayoutRouteWatcher>
         </TransitionProvider>

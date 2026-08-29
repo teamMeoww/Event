@@ -40,6 +40,10 @@ const userSchema = new mongoose.Schema({
     type: Boolean,
     default: true
   },
+  hasMobileAccess: {
+    type: Boolean,
+    default: false
+  },
   refreshTokens: [String]
 }, {
   timestamps: true

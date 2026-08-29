@@ -9,15 +9,19 @@ const {
   publishEvent,
   registerForEvent,
   assignVolunteer,
-  getEventAnalytics 
+  getEventAnalytics,
+  getPendingEvents,
+  approveEvent
 } = require('./eventController');
 const { protect, authorize } = require('../../middleware/authMiddleware');
 const { issueCredentials } = require('../credentials/credentialController');
 
-// Public routes
 router.get('/', getEvents);
 router.get('/featured', getFeaturedEvents);
-router.get('/:id', getEventById); // Ensure this is below /featured
+
+// Admin routes
+router.get('/admin/pending', protect, authorize('SUPER_ADMIN'), getPendingEvents);
+router.put('/admin/:id/approve', protect, authorize('SUPER_ADMIN'), approveEvent);
 
 // Organizer routes
 router.post('/', protect, authorize('ORGANIZER'), createEvent);
@@ -29,5 +33,8 @@ router.post('/:eventId/credentials/issue', protect, authorize('ORGANIZER'), issu
 
 // Participant routes
 router.post('/:eventId/register', protect, registerForEvent);
+
+// ID Route must be last
+router.get('/:id', getEventById);
 
 module.exports = router;

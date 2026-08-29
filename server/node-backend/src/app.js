@@ -23,9 +23,12 @@ const organizationRoutes = require('./modules/organizations/organizationRoutes')
 const eventRoutes = require('./modules/events/eventRoutes');
 const ticketRoutes = require('./modules/tickets/ticketRoutes');
 const volunteerRoutes = require('./modules/volunteers/volunteerRoutes');
+const adminRoutes = require('./modules/admin/adminRoutes');
 const checkinRoutes = require('./modules/checkins/checkinRoutes');
 const notificationRoutes = require('./modules/notifications/notificationRoutes');
 const credentialRoutes = require('./modules/credentials/credentialRoutes');
+const passportRoutes = require('./modules/passport/passportRoutes');
+const walletRoutes = require('./modules/wallet/walletRoutes');
 
 // Routes will be added here
 app.use('/api/v1/auth', authRoutes);
@@ -33,9 +36,12 @@ app.use('/api/v1/organizations', organizationRoutes);
 app.use('/api/v1/events', eventRoutes);
 app.use('/api/v1/tickets', ticketRoutes);
 app.use('/api/v1/volunteer', volunteerRoutes);
+app.use('/api/v1/admin', adminRoutes);
 app.use('/api/v1/checkin', checkinRoutes);
 app.use('/api/v1/notifications', notificationRoutes);
 app.use('/api/v1/credentials', credentialRoutes);
+app.use('/api/v1/passport', passportRoutes);
+app.use('/api/v1/wallet', walletRoutes);
 
 // 404 Handler
 app.use((req, res, next) => {

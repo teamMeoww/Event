@@ -89,15 +89,20 @@ const scanTicket = async (req, res, next) => {
     // 17. Emit real-time events (Socket.io)
     const io = req.app.get('io');
     if (io) {
-      // Notify organizer dashboard
+      // Notify organizer dashboard (specific room)
       io.to(`organization:${event.organizationId}`).emit('event_checkin_updated', {
         eventId: event._id,
         ticketId: ticket._id
       });
-      // Notify participant app
+      // Notify participant app (specific room)
       io.to(`user:${ticket.userId}`).emit('participant_checked_in', {
         eventId: event._id,
         ticketId: ticket._id
+      });
+      // Trigger a global dashboard refresh for Admins, Organizers, and Volunteers
+      io.emit('SYSTEM_UPDATE', { 
+        type: 'CHECKIN_COMPLETED', 
+        eventId: event._id 
       });
     }
 

@@ -95,6 +95,11 @@ const createEvent = async (req, res, next) => {
       organizationId: req.user.organizationId
     });
 
+    const io = req.app.get('io');
+    if (io) {
+      io.emit('SYSTEM_UPDATE', { type: 'EVENT_CREATED', eventId: event._id });
+    }
+
     res.status(201).json({ success: true, data: event });
   } catch (error) {
     next(error);
@@ -280,6 +285,46 @@ const getEventAnalytics = async (req, res, next) => {
   }
 };
 
+// @desc    Get pending events
+// @route   GET /api/v1/events/admin/pending
+// @access  Private (SUPER_ADMIN)
+const getPendingEvents = async (req, res, next) => {
+  try {
+    const events = await Event.find({ status: 'PENDING_APPROVAL' })
+      .populate('organizationId', 'name logo')
+      .populate('organizerId', 'name email');
+
+    res.json({ success: true, data: events });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// @desc    Approve an event
+// @route   PUT /api/v1/events/admin/:id/approve
+// @access  Private (SUPER_ADMIN)
+const approveEvent = async (req, res, next) => {
+  try {
+    let event = await Event.findById(req.params.id);
+
+    if (!event) {
+      return res.status(404).json({ success: false, message: 'Event not found' });
+    }
+
+    event.status = 'PUBLISHED';
+    await event.save();
+
+    const io = req.app.get('io');
+    if (io) {
+      io.emit('SYSTEM_UPDATE', { type: 'EVENT_APPROVED', eventId: event._id });
+    }
+
+    res.json({ success: true, data: event });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   getEvents,
   getFeaturedEvents,
@@ -289,5 +334,7 @@ module.exports = {
   publishEvent,
   registerForEvent,
   assignVolunteer,
-  getEventAnalytics
+  getEventAnalytics,
+  getPendingEvents,
+  approveEvent
 };

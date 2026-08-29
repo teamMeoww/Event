@@ -52,7 +52,53 @@ const getMyOrganization = async (req, res, next) => {
   }
 };
 
+// @desc    Get volunteers for organization (Prototype: all volunteers)
+// @route   GET /api/v1/organizations/me/volunteers
+// @access  Private (ORGANIZER)
+const getOrganizationVolunteers = async (req, res, next) => {
+  try {
+    // For this prototype, we return all volunteers. 
+    // In production, we would filter by a relation or an application status.
+    const volunteers = await User.find({ role: 'VOLUNTEER' }).select('-password').sort({ createdAt: -1 });
+
+    res.json({
+      success: true,
+      data: volunteers
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// @desc    Toggle mobile access for a volunteer
+// @route   PATCH /api/v1/organizations/me/volunteers/:volunteerId/access
+// @access  Private (ORGANIZER)
+const toggleVolunteerAccess = async (req, res, next) => {
+  try {
+    const { volunteerId } = req.params;
+    const { hasMobileAccess } = req.body;
+
+    const volunteer = await User.findById(volunteerId);
+    
+    if (!volunteer || volunteer.role !== 'VOLUNTEER') {
+      return res.status(404).json({ success: false, message: 'Volunteer not found' });
+    }
+
+    volunteer.hasMobileAccess = hasMobileAccess;
+    await volunteer.save();
+
+    res.json({
+      success: true,
+      data: volunteer
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   createOrganization,
-  getMyOrganization
+  getMyOrganization,
+  getOrganizationVolunteers,
+  toggleVolunteerAccess
 };

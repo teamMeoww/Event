@@ -9,7 +9,7 @@ export default function Footer() {
   useLayoutEffect(() => {
     if (typeof window === 'undefined') return;
 
-    let ctx: unknown;
+    let ctx: any;
     let timer: NodeJS.Timeout;
 
     // Function to initialize animations
@@ -17,10 +17,11 @@ export default function Footer() {
       // Check if footer section exists in DOM
       if (!footerRef.current) return;
 
-      const gsapRef = (window as unknown as { gsap: typeof gsap }).gsap;
-      const ScrollTriggerRef = (window as unknown as { ScrollTrigger: typeof ScrollTrigger }).ScrollTrigger;
+      // Use GSAP from window (CDN) or import
+      const gsap = window.gsap;
+      const ScrollTrigger = window.ScrollTrigger;
 
-      if (!gsapRef || !ScrollTriggerRef) return;
+      if (!gsap || !ScrollTrigger) return;
 
       ctx = gsap.context(() => {
         // Set initial CSS properties for performance
@@ -99,7 +100,7 @@ export default function Footer() {
     };
 
     // Delay to ensure DOM is ready and GSAP is available
-    let timer = setTimeout(() => {
+    timer = setTimeout(() => {
       initAnimations();
     }, 200);
 

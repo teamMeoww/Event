@@ -1,12 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const { getMyCredentials, issueCredentials } = require('./credentialController');
+const { getMyCredentials, getCredentialById, issueCredentials } = require('./credentialController');
 const { protect, authorize } = require('../../middleware/authMiddleware');
 
 // Get participant's credentials
-router.get('/me', protect, getMyCredentials);
+router.get('/', protect, getMyCredentials);
 
-// Note: The issueCredentials route would typically be mounted in the eventRoutes router
-// router.post('/events/:eventId/credentials/issue', protect, authorize('ORGANIZER'), issueCredentials);
+// Get single credential by ID
+router.get('/:id', protect, getCredentialById);
 
 module.exports = router;

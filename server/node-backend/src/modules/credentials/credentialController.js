@@ -19,6 +19,26 @@ const getMyCredentials = async (req, res, next) => {
   }
 };
 
+// @desc    Get credential by ID
+// @route   GET /api/v1/credentials/:id
+// @access  Private
+const getCredentialById = async (req, res, next) => {
+  try {
+    const credential = await Credential.findOne({
+      _id: req.params.id,
+      userId: req.user._id
+    }).populate('eventId', 'title coverImage');
+
+    if (!credential) {
+      return res.status(404).json({ success: false, message: 'Credential not found' });
+    }
+
+    res.json({ success: true, data: credential });
+  } catch (error) {
+    next(error);
+  }
+};
+
 // @desc    Issue POAPs to checked-in participants
 // @route   POST /api/v1/events/:eventId/credentials/issue
 // @access  Private (ORGANIZER)
@@ -84,5 +104,6 @@ const issueCredentials = async (req, res, next) => {
 
 module.exports = {
   getMyCredentials,
+  getCredentialById,
   issueCredentials
 };

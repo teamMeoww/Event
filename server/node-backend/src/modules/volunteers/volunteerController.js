@@ -7,7 +7,7 @@ const Event = require('../../models/Event');
 const getVolunteerDashboard = async (req, res, next) => {
   try {
     const totalScans = await Checkin.countDocuments({ volunteerId: req.user._id });
-    
+
     // Count today's scans
     const startOfDay = new Date();
     startOfDay.setHours(0, 0, 0, 0);
