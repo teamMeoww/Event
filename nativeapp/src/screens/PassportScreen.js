@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, View, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { BlurView } from 'expo-blur';
+import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { mockUser, mockPassportCredentials } from '../data/mockData';
 
@@ -43,7 +44,7 @@ export default function PassportScreen() {
                 <LinearGradient colors={['rgba(255, 255, 255, 0.12)', 'rgba(255, 255, 255, 0.0)']} style={StyleSheet.absoluteFillObject} />
                 <View style={styles.credentialContent}>
                   <View style={styles.credentialIconContainer}>
-                    <Text style={styles.credentialIcon}>{cred.type}</Text>
+                    <Ionicons name={cred.type} size={28} color="#8c8cff" />
                   </View>
                   <View style={styles.credentialInfo}>
                     <Text style={styles.credentialTitle}>{cred.title}</Text>

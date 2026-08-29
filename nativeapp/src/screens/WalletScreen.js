@@ -73,7 +73,7 @@ export default function WalletScreen() {
                 <LinearGradient colors={['rgba(255, 255, 255, 0.15)', 'rgba(255, 255, 255, 0.0)']} style={StyleSheet.absoluteFillObject} />
                 <View style={{alignItems: 'center', position: 'relative', zIndex: 10}}>
                   <View style={styles.credentialIconContainer}>
-                    <Text style={styles.credentialType}>{cred.type}</Text>
+                    <Ionicons name={cred.type} size={28} color="#8c8cff" />
                   </View>
                   <Text style={styles.credentialTitle}>{cred.title}</Text>
                   <Text style={styles.credentialStatus}>{cred.status}</Text>
@@ -81,6 +81,10 @@ export default function WalletScreen() {
               </View>
             ))}
           </View>
+                    <TouchableOpacity style={styles.logoutButton} onPress={() => logout()}>
+            <Ionicons name="log-out-outline" size={20} color="#FF453A" style={{marginRight: 8}} />
+            <Text style={styles.logoutText}>Log Out</Text>
+          </TouchableOpacity>
           <View style={{height: 60}} />
         </ScrollView>
       </SafeAreaView>
@@ -152,5 +156,17 @@ const styles = StyleSheet.create({
   credentialIconContainer: { width: 60, height: 60, borderRadius: 30, backgroundColor: 'rgba(140, 140, 255, 0.1)', justifyContent: 'center', alignItems: 'center', marginBottom: 12, borderWidth: 1, borderColor: 'rgba(140,140,255,0.2)' },
   credentialType: { fontSize: 24 },
   credentialTitle: { fontSize: 14, fontWeight: '600', color: '#FFFFFF', textAlign: 'center', marginBottom: 6 },
-  credentialStatus: { fontSize: 11, color: '#8c8cff', fontWeight: '700', textTransform: 'uppercase', letterSpacing: 1 }
+  credentialStatus: { fontSize: 11, color: '#8c8cff', fontWeight: '700', textTransform: 'uppercase', letterSpacing: 1 },
+  logoutButton: { 
+    flexDirection: 'row', 
+    alignItems: 'center', 
+    justifyContent: 'center', 
+    padding: 16, 
+    marginTop: 20, 
+    borderRadius: 16, 
+    borderWidth: 1, 
+    borderColor: 'rgba(255, 69, 58, 0.3)', 
+    backgroundColor: 'rgba(255, 69, 58, 0.1)' 
+  },
+  logoutText: { color: '#FF453A', fontSize: 16, fontWeight: '700' }
 });

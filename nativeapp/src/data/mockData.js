@@ -52,19 +52,19 @@ export const mockPassportCredentials = [
     id: 'c1',
     title: 'AI Hackathon',
     status: 'Verified',
-    type: '🏆',
+    type: 'hardware-chip-outline',
   },
   {
     id: 'c2',
     title: 'Developer Conference',
     status: 'Verified',
-    type: '🎤',
+    type: 'terminal-outline',
   },
   {
     id: 'c3',
     title: 'Web3 Challenge',
     status: 'Winner',
-    type: '🥇',
+    type: 'cube-outline',
   },
 ];
 
