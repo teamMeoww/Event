@@ -6,6 +6,57 @@ services:
     ports:
       - "27017:27017"
     command: ["--replSet", "rs0", "--bind_ip_all", "--port", "27017"]
+    
+  gateway-service:
+    build:
+      context: ./server
+      args:
+        SERVICE_NAME: gateway-service
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_DATA_MONGODB_URI=mongodb://mongodb:27017/eventone
+      - SPRING_DATA_REDIS_HOST=redis
+      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+    depends_on:
+      - mongodb
+      - redis
+      - kafka
+
+
+  realtime-service:
+    build:
+      context: ./server
+      args:
+        SERVICE_NAME: realtime-service
+    ports:
+      - "8091:8091"
+    environment:
+      - SPRING_DATA_MONGODB_URI=mongodb://mongodb:27017/eventone
+      - SPRING_DATA_REDIS_HOST=redis
+      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+    depends_on:
+      - mongodb
+      - redis
+      - kafka
+
+
+  user-service:
+    build:
+      context: ./server
+      args:
+        SERVICE_NAME: user-service
+    ports:
+      - "8092:8092"
+    environment:
+      - SPRING_DATA_MONGODB_URI=mongodb://mongodb:27017/eventone
+      - SPRING_DATA_REDIS_HOST=redis
+      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+    depends_on:
+      - mongodb
+      - redis
+      - kafka
+
     volumes:
       - mongodb_data:/data/db
     healthcheck:
@@ -39,25 +90,9 @@ services:
   # Microservices
   auth-service:
     build:
-      context: ./backend-spring
+      context: ./server
       args:
         SERVICE_NAME: auth-service
-    ports:
-      - "8080:8080"
-    environment:
-      - SPRING_DATA_MONGODB_URI=mongodb://mongodb:27017/eventone
-      - SPRING_DATA_REDIS_HOST=redis
-      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
-    depends_on:
-      - mongodb
-      - redis
-      - kafka
-
-  event-service:
-    build:
-      context: ./backend-spring
-      args:
-        SERVICE_NAME: event-service
     ports:
       - "8081:8081"
     environment:
@@ -69,11 +104,11 @@ services:
       - redis
       - kafka
 
-  ticket-service:
+  event-service:
     build:
-      context: ./backend-spring
+      context: ./server
       args:
-        SERVICE_NAME: ticket-service
+        SERVICE_NAME: event-service
     ports:
       - "8082:8082"
     environment:
@@ -85,11 +120,11 @@ services:
       - redis
       - kafka
 
-  wallet-service:
+  ticket-service:
     build:
-      context: ./backend-spring
+      context: ./server
       args:
-        SERVICE_NAME: wallet-service
+        SERVICE_NAME: ticket-service
     ports:
       - "8083:8083"
     environment:
@@ -101,13 +136,29 @@ services:
       - redis
       - kafka
 
+  wallet-service:
+    build:
+      context: ./server
+      args:
+        SERVICE_NAME: wallet-service
+    ports:
+      - "8084:8084"
+    environment:
+      - SPRING_DATA_MONGODB_URI=mongodb://mongodb:27017/eventone
+      - SPRING_DATA_REDIS_HOST=redis
+      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+    depends_on:
+      - mongodb
+      - redis
+      - kafka
+
   blockchain-service:
     build:
-      context: ./backend-spring
+      context: ./server
       args:
         SERVICE_NAME: blockchain-service
     ports:
-      - "8084:8084"
+      - "8089:8089"
     environment:
       - SPRING_DATA_MONGODB_URI=mongodb://mongodb:27017/eventone
       - SPRING_DATA_REDIS_HOST=redis
@@ -123,7 +174,7 @@ services:
 
   checkin-service:
     build:
-      context: ./backend-spring
+      context: ./server
       args:
         SERVICE_NAME: checkin-service
     ports:
@@ -139,7 +190,7 @@ services:
 
   credential-service:
     build:
-      context: ./backend-spring
+      context: ./server
       args:
         SERVICE_NAME: credential-service
     ports:
@@ -155,7 +206,7 @@ services:
 
   passport-service:
     build:
-      context: ./backend-spring
+      context: ./server
       args:
         SERVICE_NAME: passport-service
     ports:
@@ -171,7 +222,7 @@ services:
 
   verification-service:
     build:
-      context: ./backend-spring
+      context: ./server
       args:
         SERVICE_NAME: verification-service
     ports:
@@ -187,7 +238,7 @@ services:
       
   ai-service:
     build:
-      context: ./backend-spring
+      context: ./server
       args:
         SERVICE_NAME: ai-service
     ports:
@@ -203,3 +254,5 @@ services:
 
 volumes:
   mongodb_data:
+
+
