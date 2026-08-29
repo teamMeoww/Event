@@ -1,0 +1,125 @@
+package com.eventone.eventservice.service;
+
+import com.eventone.eventservice.domain.Event;
+import com.eventone.eventservice.domain.EventStatus;
+import com.eventone.eventservice.dto.EventRequest;
+import com.eventone.eventservice.repository.EventRepository;
+import com.eventone.shared.exceptions.EventOneException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.stereotype.Service;
+
+import java.time.Instant;
+
+@Service
+public class EventService {
+    private final EventRepository eventRepository;
+
+    public EventService(EventRepository eventRepository) {
+        this.eventRepository = eventRepository;
+    }
+
+    public Event createEvent(EventRequest request, String organizerId) {
+        if (request.getEndAt().isBefore(request.getStartAt())) {
+            throw new EventOneException("INVALID_DATES", "endAt cannot be before startAt");
+        }
+
+        Event event = new Event();
+        event.setTitle(request.getTitle());
+        event.setDescription(request.getDescription());
+        event.setCategory(request.getCategory());
+        event.setLocation(request.getLocation());
+        event.setStartAt(request.getStartAt());
+        event.setEndAt(request.getEndAt());
+        event.setCapacity(request.getCapacity());
+        event.setOrganizerId(organizerId);
+        event.setStatus(EventStatus.DRAFT);
+        event.setRegisteredCount(0);
+        event.setCreatedAt(Instant.now());
+        event.setUpdatedAt(Instant.now());
+
+        return eventRepository.save(event);
+    }
+
+    public Page<Event> getAllEvents(int page, int size) {
+        return eventRepository.findAll(PageRequest.of(page, size));
+    }
+
+    public Event getEvent(String id) {
+        return eventRepository.findById(id)
+                .orElseThrow(() -> new EventOneException("NOT_FOUND", "Event not found"));
+    }
+
+    public Event updateEvent(String id, EventRequest request, String userId) {
+        Event event = getEvent(id);
+        verifyOwnership(event, userId);
+
+        if (request.getEndAt().isBefore(request.getStartAt())) {
+            throw new EventOneException("INVALID_DATES", "endAt cannot be before startAt");
+        }
+
+        event.setTitle(request.getTitle());
+        event.setDescription(request.getDescription());
+        event.setCategory(request.getCategory());
+        event.setLocation(request.getLocation());
+        event.setStartAt(request.getStartAt());
+        event.setEndAt(request.getEndAt());
+        event.setCapacity(request.getCapacity());
+        event.setUpdatedAt(Instant.now());
+
+        return eventRepository.save(event);
+    }
+
+    public Event publishEvent(String id, String userId) {
+        Event event = getEvent(id);
+        verifyOwnership(event, userId);
+
+        if (event.getStatus() != EventStatus.DRAFT) {
+            throw new EventOneException("INVALID_TRANSITION", "Only DRAFT events can be published");
+        }
+
+        event.setStatus(EventStatus.PUBLISHED);
+        event.setUpdatedAt(Instant.now());
+        return eventRepository.save(event);
+    }
+
+    public Object registerForEvent(String eventId, String userId, String jwtToken, org.springframework.boot.web.client.RestTemplateBuilder restTemplateBuilder, String ticketServiceUrl) {
+        Event event = getEvent(eventId);
+        if (event.getStatus() != EventStatus.PUBLISHED) {
+            throw new EventOneException("EVENT_CLOSED", "Event is not open for registration");
+        }
+        if (event.getRegisteredCount() >= event.getCapacity()) {
+            throw new EventOneException("EVENT_FULL", "Event is at full capacity");
+        }
+
+        // Increment count
+        event.setRegisteredCount(event.getRegisteredCount() + 1);
+        eventRepository.save(event);
+
+        // Call Ticket Service
+        org.springframework.web.client.RestTemplate restTemplate = restTemplateBuilder.build();
+        org.springframework.http.HttpHeaders headers = new org.springframework.http.HttpHeaders();
+        headers.set("Authorization", jwtToken);
+        java.util.Map<String, Object> body = new java.util.HashMap<>();
+        body.put("eventId", eventId);
+        body.put("userId", userId);
+        
+        org.springframework.http.HttpEntity<java.util.Map<String, Object>> entity = new org.springframework.http.HttpEntity<>(body, headers);
+        
+        try {
+            org.springframework.http.ResponseEntity<Object> response = restTemplate.postForEntity(ticketServiceUrl + "/api/v1/tickets", entity, Object.class);
+            return response.getBody();
+        } catch(Exception e) {
+            // Revert count if failed
+            event.setRegisteredCount(event.getRegisteredCount() - 1);
+            eventRepository.save(event);
+            throw new EventOneException("REGISTRATION_FAILED", "Failed to issue ticket: " + e.getMessage());
+        }
+    }
+
+    private void verifyOwnership(Event event, String userId) {
+        if (!event.getOrganizerId().equals(userId)) {
+            throw new EventOneException("FORBIDDEN", "You do not own this event");
+        }
+    }
+}

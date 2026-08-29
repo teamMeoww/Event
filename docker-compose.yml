@@ -9,7 +9,7 @@ services:
     
   gateway-service:
     build:
-      context: ./backend-spring
+      context: ./server
       args:
         SERVICE_NAME: gateway-service
     ports:
@@ -26,7 +26,7 @@ services:
 
   realtime-service:
     build:
-      context: ./backend-spring
+      context: ./server
       args:
         SERVICE_NAME: realtime-service
     ports:
@@ -43,7 +43,7 @@ services:
 
   user-service:
     build:
-      context: ./backend-spring
+      context: ./server
       args:
         SERVICE_NAME: user-service
     ports:
@@ -90,7 +90,7 @@ services:
   # Microservices
   auth-service:
     build:
-      context: ./backend-spring
+      context: ./server
       args:
         SERVICE_NAME: auth-service
     ports:
@@ -106,7 +106,7 @@ services:
 
   event-service:
     build:
-      context: ./backend-spring
+      context: ./server
       args:
         SERVICE_NAME: event-service
     ports:
@@ -122,7 +122,7 @@ services:
 
   ticket-service:
     build:
-      context: ./backend-spring
+      context: ./server
       args:
         SERVICE_NAME: ticket-service
     ports:
@@ -138,7 +138,7 @@ services:
 
   wallet-service:
     build:
-      context: ./backend-spring
+      context: ./server
       args:
         SERVICE_NAME: wallet-service
     ports:
@@ -154,7 +154,7 @@ services:
 
   blockchain-service:
     build:
-      context: ./backend-spring
+      context: ./server
       args:
         SERVICE_NAME: blockchain-service
     ports:
@@ -174,7 +174,7 @@ services:
 
   checkin-service:
     build:
-      context: ./backend-spring
+      context: ./server
       args:
         SERVICE_NAME: checkin-service
     ports:
@@ -190,7 +190,7 @@ services:
 
   credential-service:
     build:
-      context: ./backend-spring
+      context: ./server
       args:
         SERVICE_NAME: credential-service
     ports:
@@ -206,7 +206,7 @@ services:
 
   passport-service:
     build:
-      context: ./backend-spring
+      context: ./server
       args:
         SERVICE_NAME: passport-service
     ports:
@@ -222,7 +222,7 @@ services:
 
   verification-service:
     build:
-      context: ./backend-spring
+      context: ./server
       args:
         SERVICE_NAME: verification-service
     ports:
@@ -238,7 +238,7 @@ services:
       
   ai-service:
     build:
-      context: ./backend-spring
+      context: ./server
       args:
         SERVICE_NAME: ai-service
     ports:
