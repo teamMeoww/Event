@@ -1,0 +1,30 @@
+server:
+  port: 8088
+
+spring:
+  application:
+    name: passport-service
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/eventone
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: passport-service-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: "*"
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  endpoint:
+    health:
+      show-details: always

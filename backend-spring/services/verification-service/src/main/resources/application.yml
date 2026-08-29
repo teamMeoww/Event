@@ -1,0 +1,34 @@
+server:
+  port: 8089
+
+spring:
+  application:
+    name: verification-service
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/eventone
+    redis:
+      host: localhost
+      port: 6379
+  kafka:
+    bootstrap-servers: localhost:9092
+    
+eventone:
+  services:
+    blockchain: http://localhost:8084
+    ticket: http://localhost:8085
+    credential: http://localhost:8087
+  blockchain:
+    chainId: ${EVENTONE_BLOCKCHAIN_CHAINID:31337}
+    rpcUrl: ${EVENTONE_BLOCKCHAIN_RPCURL:http://localhost:8545}
+    ticketContract: ${EVENTONE_TICKET_CONTRACT:0xTBD}
+    credentialContract: ${EVENTONE_CREDENTIAL_CONTRACT:0xTBD}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  endpoint:
+    health:
+      show-details: always

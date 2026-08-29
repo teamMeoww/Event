@@ -1,4 +1,5 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useRef } from 'react';
+import { StyleSheet, View, Animated } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -20,28 +21,81 @@ import { Ionicons } from '@expo/vector-icons';
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
+function TabIcon({ focused, outlineName, filledName }) {
+  const scale = useRef(new Animated.Value(1)).current;
+
+  useEffect(() => {
+    if (focused) {
+      Animated.sequence([
+        Animated.timing(scale, {
+          toValue: 0.85,
+          duration: 50,
+          useNativeDriver: true,
+        }),
+        Animated.spring(scale, {
+          toValue: 1,
+          friction: 4,
+          tension: 50,
+          useNativeDriver: true,
+        })
+      ]).start();
+    } else {
+      // Ensure it resets safely when unfocused
+      scale.setValue(1);
+    }
+  }, [focused, scale]);
+
+  return (
+    <Animated.View style={[styles.iconWrapper, { transform: [{ scale }] }]}>
+      <Ionicons 
+        name={focused ? filledName : outlineName} 
+        size={28} 
+        color={focused ? '#FFFFFF' : '#A0A0A0'} 
+      />
+    </Animated.View>
+  );
+}
+
 function MainTabs() {
   return (
     <Tab.Navigator 
       screenOptions={({ route }) => ({
         headerShown: false, 
-        tabBarActiveTintColor: '#007AFF',
-        tabBarIcon: ({ focused, color, size }) => {
-          let iconName;
+        tabBarActiveTintColor: '#FFFFFF',
+        tabBarInactiveTintColor: '#FFFFFF',
+        tabBarShowLabel: false,
+        tabBarStyle: {
+          backgroundColor: '#000000',
+          borderTopWidth: 0.5,
+          borderTopColor: '#262626',
+          elevation: 0,
+          shadowOpacity: 0,
+          height: 60,
+        },
+        tabBarItemStyle: {
+          paddingVertical: 5,
+        },
+        tabBarIcon: ({ focused }) => {
+          let outlineName, filledName;
 
           if (route.name === 'Home') {
-            iconName = focused ? 'home' : 'home-outline';
+            outlineName = 'home-outline';
+            filledName = 'home';
           } else if (route.name === 'Discover') {
-            iconName = focused ? 'search' : 'search-outline';
+            outlineName = 'search-outline';
+            filledName = 'search';
           } else if (route.name === 'Tickets') {
-            iconName = focused ? 'ticket' : 'ticket-outline';
+            outlineName = 'ticket-outline';
+            filledName = 'ticket';
           } else if (route.name === 'Passport') {
-            iconName = focused ? 'id-card' : 'id-card-outline';
+            outlineName = 'file-tray-outline'; 
+            filledName = 'file-tray-full';
           } else if (route.name === 'Profile') {
-            iconName = focused ? 'wallet' : 'wallet-outline';
+            outlineName = 'person-circle-outline';
+            filledName = 'person-circle';
           }
 
-          return <Ionicons name={iconName} size={size} color={color} />;
+          return <TabIcon focused={focused} outlineName={outlineName} filledName={filledName} />;
         },
       })}
     >
@@ -49,7 +103,7 @@ function MainTabs() {
       <Tab.Screen name="Discover" component={DiscoverScreen} />
       <Tab.Screen name="Tickets" component={TicketScreen} />
       <Tab.Screen name="Passport" component={PassportScreen} />
-      <Tab.Screen name="Profile" component={WalletScreen} options={{ title: 'Wallet' }} />
+      <Tab.Screen name="Profile" component={WalletScreen} />
     </Tab.Navigator>
   );
 }
@@ -63,7 +117,7 @@ export default function AppNavigator() {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Navigator screenOptions={{ headerShown: false, animation: 'slide_from_right' }}>
         {userToken == null ? (
           <>
             <Stack.Screen name="Login" component={LoginScreen} />
@@ -73,11 +127,19 @@ export default function AppNavigator() {
         ) : (
           <>
             <Stack.Screen name="MainTabs" component={MainTabs} />
-            <Stack.Screen name="EventDetails" component={EventDetailsScreen} options={{ headerShown: true, title: 'Event Details' }} />
-            <Stack.Screen name="CredentialDetails" component={CredentialDetailsScreen} options={{ headerShown: true, title: 'Credential' }} />
+            <Stack.Screen name="EventDetails" component={EventDetailsScreen} options={{ headerShown: true, title: 'Event Details', headerStyle: { backgroundColor: '#000' }, headerTintColor: '#fff' }} />
+            <Stack.Screen name="CredentialDetails" component={CredentialDetailsScreen} options={{ headerShown: true, title: 'Credential', headerStyle: { backgroundColor: '#000' }, headerTintColor: '#fff' }} />
           </>
         )}
       </Stack.Navigator>
     </NavigationContainer>
   );
 }
+
+const styles = StyleSheet.create({
+  iconWrapper: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: '100%',
+  }
+});

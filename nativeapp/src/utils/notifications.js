@@ -19,14 +19,14 @@ export async function requestNotificationPermissions() {
   return finalStatus === 'granted';
 }
 
-export async function scheduleLocalNotification(title, body, seconds = 1) {
+export async function scheduleLocalNotification(title, body, seconds = null) {
   await Notifications.scheduleNotificationAsync({
     content: {
       title,
       body,
       sound: true,
     },
-    trigger: { seconds },
+    trigger: seconds ? { seconds, type: 'timeInterval' } : null,
   });
 }
 

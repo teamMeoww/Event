@@ -1,0 +1,23 @@
+server:
+  port: 8090
+
+spring:
+  application:
+    name: ai-service
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
+eventone:
+  services:
+    event: http://localhost:8081
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  endpoint:
+    health:
+      show-details: always

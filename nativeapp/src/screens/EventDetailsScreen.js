@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, ScrollView, Image, TouchableOpacity, Alert } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons, Feather } from '@expo/vector-icons';
 import { mockEvents } from '../data/mockData';
 import { notifyRegistrationSuccess } from '../utils/notifications';
@@ -12,7 +13,7 @@ export default function EventDetailsScreen({ route, navigation }) {
   if (!event) {
     return (
       <View style={styles.center}>
-        <Text>Event not found</Text>
+        <Text style={{color: '#FFFFFF'}}>Event not found</Text>
       </View>
     );
   }
@@ -29,19 +30,19 @@ export default function EventDetailsScreen({ route, navigation }) {
   return (
     <View style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false}>
-        <Image source={{ uri: event.image }} style={styles.image} />
+        <Image source={event.image || { uri: event.image }} style={styles.image} />
         
         <View style={styles.content}>
           <Text style={styles.title}>{event.title}</Text>
           <Text style={styles.organizer}>by {event.organizer}</Text>
 
           <View style={styles.detailRow}>
-            <Feather name="calendar" size={18} color="#666" style={styles.icon} />
+            <Feather name="calendar" size={18} color="#8E8E93" style={styles.icon} />
             <Text style={styles.detailText}>{event.fullDate}</Text>
           </View>
 
           <View style={styles.detailRow}>
-            <Feather name="map-pin" size={18} color="#666" style={styles.icon} />
+            <Feather name="map-pin" size={18} color="#8E8E93" style={styles.icon} />
             <Text style={styles.detailText}>{event.location}</Text>
           </View>
 
@@ -55,7 +56,10 @@ export default function EventDetailsScreen({ route, navigation }) {
 
       <View style={styles.footer}>
         {isRegistered ? (
-          <TouchableOpacity style={styles.ticketButton} onPress={() => navigation.navigate('Tickets')}>
+          <TouchableOpacity 
+            style={styles.ticketButton} 
+            onPress={() => navigation.navigate('MainTabs', { screen: 'Tickets' })}
+          >
             <Text style={styles.ticketButtonText}>VIEW TICKET</Text>
           </TouchableOpacity>
         ) : (
@@ -71,30 +75,32 @@ export default function EventDetailsScreen({ route, navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#0F0F13',
   },
   center: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: '#0F0F13',
   },
   image: {
     width: '100%',
     height: 250,
-    backgroundColor: '#ddd',
+    backgroundColor: '#1C1C1E',
   },
   content: {
     padding: 20,
   },
   title: {
     fontSize: 28,
-    fontFamily: 'Inter_900Black',
+    fontWeight: '800',
+    color: '#FFFFFF',
     marginBottom: 5,
   },
   organizer: {
     fontSize: 16,
-    color: '#007AFF',
-    fontFamily: 'Inter_600SemiBold',
+    color: '#5E5CE6',
+    fontWeight: '600',
     marginBottom: 20,
   },
   detailRow: {
@@ -107,24 +113,24 @@ const styles = StyleSheet.create({
   },
   detailText: {
     fontSize: 16,
-    color: '#333',
-    fontFamily: 'Inter_400Regular',
+    color: '#EBEBF5',
+    fontWeight: '500',
   },
   divider: {
     height: 1,
-    backgroundColor: '#eee',
+    backgroundColor: '#2C2C2E',
     marginVertical: 20,
   },
   sectionTitle: {
     fontSize: 20,
-    fontFamily: 'Inter_700Bold',
+    fontWeight: '700',
+    color: '#FFFFFF',
     marginBottom: 10,
   },
   description: {
     fontSize: 16,
-    color: '#444',
+    color: '#8E8E93',
     lineHeight: 24,
-    fontFamily: 'Inter_400Regular',
   },
   footer: {
     position: 'absolute',
@@ -132,43 +138,40 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     padding: 20,
-    backgroundColor: '#fff',
+    paddingBottom: 40, // extra padding for safe area
+    backgroundColor: '#1C1C1E',
     borderTopWidth: 1,
-    borderColor: '#eee',
+    borderColor: '#2C2C2E',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
   },
-  price: {
-    fontSize: 24,
-    fontFamily: 'Inter_900Black',
-  },
   registerButton: {
-    backgroundColor: '#000',
+    backgroundColor: '#5E5CE6',
     paddingHorizontal: 30,
     paddingVertical: 15,
     borderRadius: 12,
-    minWidth: 150,
+    flex: 1,
     alignItems: 'center',
-  },
-  registerButtonDisabled: {
-    backgroundColor: '#ccc',
   },
   registerButtonText: {
     color: '#fff',
     fontSize: 16,
-    fontFamily: 'Inter_700Bold',
+    fontWeight: '700',
   },
   ticketButton: {
-    backgroundColor: '#000',
+    backgroundColor: 'rgba(0, 255, 157, 0.1)',
+    borderWidth: 1,
+    borderColor: 'rgba(0, 255, 157, 0.3)',
     padding: 15,
     borderRadius: 12,
     alignItems: 'center',
     flex: 1,
   },
   ticketButtonText: {
-    color: '#00FF00',
-    fontSize: 18,
-    fontWeight: 'bold',
+    color: '#00FF9D',
+    fontSize: 16,
+    fontWeight: '700',
+    letterSpacing: 1,
   },
 });

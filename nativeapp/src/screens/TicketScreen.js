@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, ScrollView, ActivityIndicator, Switch } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import QRCode from 'react-native-qrcode-svg';
 import { useNetInfo } from '@react-native-community/netinfo';
 import { Ionicons } from '@expo/vector-icons';
@@ -7,20 +8,13 @@ import { mockEvents, mockUser } from '../data/mockData';
 import { notifyCheckIn, notifyCredentialIssued, requestNotificationPermissions } from '../utils/notifications';
 
 export default function TicketScreen() {
-  const ticketEvent = mockEvents.find(e => e.isRegistered);
-  
-  // State for simulating the check-in flow
-  // 'idle' -> 'checking_in' -> 'checked_in' -> 'credential_issued'
+  const ticketEvent = mockEvents.find(e => e.isRegistered) || mockEvents[0];
   const [checkInState, setCheckInState] = useState('idle');
   const [simulateOffline, setSimulateOffline] = useState(false);
   const netInfo = useNetInfo();
-
   const isOffline = (netInfo.isConnected === false) || simulateOffline;
 
-  useEffect(() => {
-    requestNotificationPermissions();
-  }, []);
-
+  useEffect(() => { requestNotificationPermissions(); }, []);
   useEffect(() => {
     let timer1, timer2;
     if (checkInState === 'checking_in') {
@@ -34,377 +28,162 @@ export default function TicketScreen() {
         if (!isOffline) notifyCredentialIssued(ticketEvent?.title);
       }, 2500);
     }
-    return () => {
-      clearTimeout(timer1);
-      clearTimeout(timer2);
-    };
+    return () => { clearTimeout(timer1); clearTimeout(timer2); };
   }, [checkInState, isOffline, ticketEvent]);
 
   if (!ticketEvent) {
     return (
-      <View style={styles.center}>
-        <Text style={styles.noTicketText}>No tickets found</Text>
-      </View>
+      <SafeAreaView style={styles.container}>
+        <View style={styles.center}><Text style={{color:'#fff'}}>No tickets found</Text></View>
+      </SafeAreaView>
     );
   }
 
-  // Render the post-checkin experience
   if (checkInState !== 'idle' && checkInState !== 'checking_in') {
     return (
-      <View style={styles.successContainer}>
-        <Ionicons name="checkmark-circle" size={80} color="#16a34a" style={styles.successIcon} />
+      <SafeAreaView style={styles.successContainer}>
+        <Ionicons name="checkmark-circle" size={80} color="#16a34a" style={{marginBottom: 20}} />
         <Text style={styles.successTitle}>CHECKED IN</Text>
         <Text style={styles.successWelcome}>Welcome to {ticketEvent.title}!</Text>
-
         {checkInState === 'checked_in' ? (
-          <View style={styles.issuingContainer}>
-            <ActivityIndicator size="small" color="#007AFF" style={styles.loader} />
-            <Text style={styles.issuingText}>Issuing your attendance credential...</Text>
+          <View style={{alignItems: 'center'}}>
+            <ActivityIndicator size="small" color="#5E5CE6" style={{marginBottom: 15}} />
+            <Text style={{color: '#fff'}}>Issuing your credential...</Text>
           </View>
         ) : (
           <View style={styles.issuedContainer}>
-            <Ionicons name="trophy" size={50} color="#FFD700" style={styles.issuedIcon} />
+            <Ionicons name="trophy" size={50} color="#FFD700" style={{marginBottom: 15}} />
             <Text style={styles.issuedText}>CREDENTIAL ISSUED</Text>
-            <TouchableOpacity style={styles.viewCredentialButton} onPress={() => setCheckInState('idle')}>
-              <Text style={styles.viewCredentialButtonText}>Return to Ticket</Text>
+            <TouchableOpacity style={styles.actionButton} onPress={() => setCheckInState('idle')}>
+              <Text style={styles.actionButtonText}>Return</Text>
             </TouchableOpacity>
           </View>
         )}
-      </View>
+      </SafeAreaView>
     );
   }
 
-  const renderContent = () => {
-    if (isOffline) {
-      return (
-        <View style={styles.center}>
-          <View style={styles.offlineBanner}>
-            <Text style={styles.offlineBannerText}>OFFLINE MODE</Text>
-          </View>
-          <View style={styles.ticketCard}>
-            <Text style={styles.eventTitle}>{ticketEvent.title.toUpperCase()}</Text>
-            <View style={styles.qrContainer}>
-              <QRCode value={`ticket-${ticketEvent.id}-${mockUser.id}`} size={200} />
-            </View>
-            <Text style={styles.offlineSubText}>This QR code works without an internet connection.</Text>
-          </View>
-        </View>
-      );
-    }
-
-    return (
-      <View style={styles.ticketCard}>
-        <Text style={styles.eventTitle}>{ticketEvent.title.toUpperCase()}</Text>
-        <Text style={styles.userName}>{mockUser.name}</Text>
-        
-        <View style={styles.detailsRow}>
-          <View style={styles.detailBox}>
-            <Text style={styles.detailLabel}>DATE & TIME</Text>
-            <Text style={styles.detailValue}>{ticketEvent.date}</Text>
-          </View>
-          <View style={styles.detailBox}>
-            <Text style={styles.detailLabel}>LOCATION</Text>
-            <Text style={styles.detailValue}>{ticketEvent.location}</Text>
-          </View>
-        </View>
-
-        <TouchableOpacity 
-          style={styles.qrContainer}
-          onPress={() => setCheckInState('checking_in')}
-          activeOpacity={0.8}
-        >
-          {checkInState === 'checking_in' ? (
-            <View style={styles.qrPlaceholder}>
-              <ActivityIndicator size="large" color="#000" />
-              <Text style={styles.simulatingText}>Simulating Scan...</Text>
-            </View>
-          ) : (
-            <QRCode
-              value={`ticket:${mockUser.id}:${ticketEvent.id}`}
-              size={200}
-              color="black"
-              backgroundColor="white"
-            />
-          )}
-        </TouchableOpacity>
-
-        <View style={styles.statusContainer}>
-          <Ionicons name="checkmark-circle" size={16} color="#16a34a" />
-          <Text style={styles.statusText}>VERIFIED</Text>
-        </View>
-        <Text style={styles.hintText}>(Tap QR code to simulate organizer scan)</Text>
-      </View>
-    );
-  };
-
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.headerTitle}>YOUR TICKET</Text>
         <View style={styles.offlineToggleRow}>
-          <Text style={styles.offlineToggleLabel}>Simulate Offline</Text>
-          <Switch value={simulateOffline} onValueChange={setSimulateOffline} trackColor={{ true: '#FF3B30', false: '#333' }} />
+          <Text style={styles.offlineToggleLabel}>Offline Mode</Text>
+          <Switch value={simulateOffline} onValueChange={setSimulateOffline} />
         </View>
       </View>
+      
       <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
-        {renderContent()}
-        {!isOffline && (
-          <View style={styles.actionsContainer}>
-            <TouchableOpacity style={styles.actionButton}>
-              <Ionicons name="logo-apple" size={20} color="#fff" style={styles.actionIcon} />
-              <Text style={styles.actionButtonText}>Add to Apple Wallet</Text>
+        <View style={styles.ticketCard}>
+          <View style={styles.ticketTop}>
+            <Text style={styles.ticketEventTitle}>{ticketEvent.title.toUpperCase()}</Text>
+            <View style={styles.ticketMetaRow}>
+              <View style={styles.ticketMetaCol}>
+                <Text style={styles.ticketMetaLabel}>DATE</Text>
+                <Text style={styles.ticketMetaValue}>{ticketEvent.date}</Text>
+              </View>
+              <View style={styles.ticketMetaCol}>
+                <Text style={styles.ticketMetaLabel}>LOCATION</Text>
+                <Text style={styles.ticketMetaValue}>{ticketEvent.location}</Text>
+              </View>
+            </View>
+          </View>
+          
+          <View style={styles.ticketDivider}>
+            <View style={[styles.cutout, styles.cutoutLeft]} />
+            <View style={styles.dashedLine} />
+            <View style={[styles.cutout, styles.cutoutRight]} />
+          </View>
+          
+          <View style={styles.ticketBottom}>
+            <Text style={styles.attendeeName}>{mockUser.name}</Text>
+            <Text style={styles.attendeeType}>VIP ADMISSION</Text>
+            
+            <TouchableOpacity 
+              style={styles.qrContainer}
+              onPress={() => setCheckInState('checking_in')}
+              activeOpacity={0.8}
+            >
+              {checkInState === 'checking_in' ? (
+                <View style={styles.qrPlaceholder}>
+                  <ActivityIndicator size="large" color="#FFFFFF" />
+                  <Text style={{color: '#FFFFFF', marginTop: 10}}>Simulating...</Text>
+                </View>
+              ) : (
+                <View style={{backgroundColor: '#fff', padding: 10, borderRadius: 10}}>
+                  <QRCode
+                    value={`ticket:${mockUser.id}:${ticketEvent.id}`}
+                    size={160}
+                    color="black"
+                    backgroundColor="white"
+                  />
+                </View>
+              )}
             </TouchableOpacity>
-            <TouchableOpacity style={styles.actionButton}>
-              <Ionicons name="share-outline" size={20} color="#fff" style={styles.actionIcon} />
-              <Text style={styles.actionButtonText}>Share Ticket</Text>
+            
+            <View style={styles.statusContainer}>
+              <Ionicons name="checkmark-circle" size={16} color="#00FF9D" />
+              <Text style={styles.statusText}>VERIFIED</Text>
+            </View>
+            <Text style={styles.hintText}>(Tap QR code to simulate scan)</Text>
+          </View>
+        </View>
+
+        {!isOffline && (
+          <View style={styles.actionContainer}>
+            <TouchableOpacity style={styles.walletButton}>
+              <Ionicons name="card-outline" size={20} color="#000" style={{marginRight: 8}} />
+              <Text style={styles.walletButtonText}>Save to Apple Wallet</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.shareButton}>
+              <Ionicons name="share-outline" size={20} color="#FFFFFF" style={{marginRight: 8}} />
+              <Text style={styles.shareButtonText}>Share Ticket</Text>
             </TouchableOpacity>
           </View>
         )}
       </ScrollView>
-    </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#000',
-  },
-  header: {
-    paddingTop: 60,
-    paddingBottom: 20,
-    alignItems: 'center',
-    borderBottomWidth: 1,
-    borderColor: '#333',
-  },
-  headerTitle: {
-    color: '#fff',
-    fontSize: 20,
-    fontFamily: 'Inter_900Black',
-    letterSpacing: 3,
-  },
-  offlineToggleRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 10,
-  },
-  offlineToggleLabel: {
-    color: '#ccc',
-    marginRight: 10,
-    fontSize: 14,
-    fontFamily: 'Inter_600SemiBold',
-  },
-  scrollContent: {
-    padding: 20,
-    paddingBottom: 40,
-  },
-  center: {
-    flex: 1,
-    alignItems: 'center',
-  },
-  noTicketText: {
-    color: '#fff',
-    fontSize: 18,
-    marginTop: 100,
-    fontFamily: 'Inter_600SemiBold',
-  },
-  offlineBanner: {
-    backgroundColor: '#FF3B30',
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    borderRadius: 20,
-    marginBottom: 20,
-    marginTop: 20,
-  },
-  offlineBannerText: {
-    color: '#fff',
-    fontFamily: 'Inter_700Bold',
-    letterSpacing: 2,
-  },
-  offlineSubText: {
-    color: '#666',
-    textAlign: 'center',
-    marginTop: 20,
-    fontSize: 14,
-    paddingHorizontal: 10,
-    fontFamily: 'Inter_400Regular',
-  },
-  ticketCard: {
-    backgroundColor: '#fff',
-    borderRadius: 20,
-    padding: 30,
-    alignItems: 'center',
-    marginBottom: 30,
-    width: '100%',
-  },
-  eventTitle: {
-    fontSize: 24,
-    fontFamily: 'Inter_900Black',
-    letterSpacing: 1,
-    marginBottom: 10,
-    textAlign: 'center',
-  },
-  userName: {
-    fontSize: 20,
-    color: '#333',
-    marginBottom: 30,
-    fontFamily: 'Inter_600SemiBold',
-  },
-  detailsRow: {
-    flexDirection: 'row',
-    width: '100%',
-    justifyContent: 'space-between',
-    marginBottom: 40,
-  },
-  detailBox: {
-    flex: 1,
-  },
-  detailLabel: {
-    fontSize: 12,
-    color: '#999',
-    fontFamily: 'Inter_700Bold',
-    marginBottom: 5,
-    letterSpacing: 1,
-  },
-  detailValue: {
-    fontSize: 16,
-    fontFamily: 'Inter_600SemiBold',
-    color: '#000',
-  },
-  qrContainer: {
-    padding: 20,
-    backgroundColor: '#fff',
-    borderRadius: 10,
-    marginBottom: 20,
-    borderWidth: 1,
-    borderColor: '#eee',
-    minHeight: 240,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  qrPlaceholder: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: 200,
-    width: 200,
-  },
-  simulatingText: {
-    marginTop: 15,
-    color: '#666',
-    fontFamily: 'Inter_700Bold',
-  },
-  statusContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#f0fdf4',
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    borderRadius: 20,
-    marginBottom: 10,
-  },
-  statusText: {
-    color: '#16a34a',
-    fontFamily: 'Inter_700Bold',
-    letterSpacing: 1,
-    marginLeft: 5,
-  },
-  hintText: {
-    fontSize: 12,
-    color: '#999',
-    fontStyle: 'italic',
-    fontFamily: 'Inter_400Regular',
-  },
-  actionsContainer: {
-    width: '100%',
-  },
-  actionButton: {
-    flexDirection: 'row',
-    backgroundColor: '#333',
-    padding: 15,
-    borderRadius: 12,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 15,
-  },
-  actionIcon: {
-    marginRight: 10,
-  },
-  actionButtonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontFamily: 'Inter_700Bold',
-  },
-  successContainer: {
-    flex: 1,
-    backgroundColor: '#000',
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 20,
-  },
-  successIcon: {
-    fontSize: 80,
-    color: '#00FF00',
-    marginBottom: 20,
-  },
-  successTitle: {
-    fontSize: 32,
-    fontFamily: 'Inter_900Black',
-    color: '#fff',
-    letterSpacing: 2,
-    marginBottom: 10,
-  },
-  successWelcome: {
-    fontSize: 18,
-    color: '#ccc',
-    fontFamily: 'Inter_400Regular',
-    marginBottom: 40,
-    textAlign: 'center',
-  },
-  issuingContainer: {
-    alignItems: 'center',
-    backgroundColor: '#111',
-    padding: 20,
-    borderRadius: 12,
-    width: '100%',
-  },
-  loader: {
-    marginBottom: 15,
-  },
-  issuingText: {
-    color: '#fff',
-    fontSize: 16,
-    fontFamily: 'Inter_600SemiBold',
-    textAlign: 'center',
-    lineHeight: 24,
-  },
-  issuedContainer: {
-    alignItems: 'center',
-    backgroundColor: '#111',
-    padding: 30,
-    borderRadius: 16,
-    width: '100%',
-    borderWidth: 1,
-    borderColor: '#333',
-  },
-  issuedIcon: {
-    marginBottom: 15,
-  },
-  issuedText: {
-    color: '#FFD700',
-    fontSize: 20,
-    fontFamily: 'Inter_700Bold',
-    letterSpacing: 1,
-    marginBottom: 30,
-  },
-  viewCredentialButton: {
-    backgroundColor: '#fff',
-    paddingVertical: 12,
-    paddingHorizontal: 30,
-    borderRadius: 25,
-  },
-  viewCredentialButtonText: {
-    color: '#000',
-    fontFamily: 'Inter_700Bold',
-    fontSize: 16,
-  },
+  container: { flex: 1, backgroundColor: '#0F0F13' },
+  header: { alignItems: 'center', marginBottom: 20 },
+  headerTitle: { fontSize: 20, fontWeight: '700', color: '#FFFFFF', letterSpacing: 2 },
+  offlineToggleRow: { flexDirection: 'row', alignItems: 'center', marginTop: 10 },
+  offlineToggleLabel: { color: '#8E8E93', marginRight: 10, fontSize: 14 },
+  scrollContent: { paddingHorizontal: 20, paddingBottom: 20, alignItems: 'center' },
+  ticketCard: { width: '100%', maxWidth: 340, backgroundColor: '#1C1C1E', borderRadius: 24, overflow: 'hidden', borderWidth: 1, borderColor: '#2C2C2E' },
+  ticketTop: { padding: 30, paddingBottom: 20 },
+  ticketEventTitle: { fontSize: 24, fontWeight: '800', color: '#FFFFFF', marginBottom: 24, textAlign: 'center' },
+  ticketMetaRow: { flexDirection: 'row', justifyContent: 'space-between' },
+  ticketMetaCol: { flex: 1 },
+  ticketMetaLabel: { fontSize: 11, color: '#8E8E93', fontWeight: '700', letterSpacing: 1, marginBottom: 4 },
+  ticketMetaValue: { fontSize: 14, color: '#EBEBF5', fontWeight: '600' },
+  ticketDivider: { height: 30, justifyContent: 'center', position: 'relative', overflow: 'hidden' },
+  dashedLine: { width: '100%', height: 1, borderWidth: 1, borderColor: '#3A3A3C', borderStyle: 'dashed' },
+  cutout: { width: 30, height: 30, borderRadius: 15, backgroundColor: '#0F0F13', position: 'absolute', top: 0, borderWidth: 1, borderColor: '#2C2C2E' },
+  cutoutLeft: { left: -16 },
+  cutoutRight: { right: -16 },
+  ticketBottom: { padding: 30, alignItems: 'center' },
+  attendeeName: { fontSize: 20, fontWeight: '700', color: '#FFFFFF', marginBottom: 4 },
+  attendeeType: { fontSize: 13, fontWeight: '700', color: '#5E5CE6', letterSpacing: 1.5, marginBottom: 20 },
+  qrContainer: { padding: 15, backgroundColor: '#000000', borderRadius: 20, borderWidth: 1, borderColor: '#3A3A3C', marginBottom: 20 },
+  qrPlaceholder: { justifyContent: 'center', alignItems: 'center', height: 160, width: 160 },
+  statusContainer: { flexDirection: 'row', alignItems: 'center', backgroundColor: 'rgba(0, 255, 157, 0.1)', paddingHorizontal: 12, paddingVertical: 6, borderRadius: 20, marginBottom: 8 },
+  statusText: { color: '#00FF9D', fontSize: 12, fontWeight: '700', marginLeft: 6, letterSpacing: 1 },
+  hintText: { fontSize: 12, color: '#8E8E93', fontStyle: 'italic' },
+  actionContainer: { width: '100%', maxWidth: 340, marginTop: 30 },
+  walletButton: { flexDirection: 'row', backgroundColor: '#FFFFFF', paddingVertical: 16, borderRadius: 16, alignItems: 'center', justifyContent: 'center', marginBottom: 12 },
+  walletButtonText: { color: '#000000', fontSize: 16, fontWeight: '700' },
+  shareButton: { flexDirection: 'row', backgroundColor: '#1C1C1E', paddingVertical: 16, borderRadius: 16, alignItems: 'center', justifyContent: 'center', borderWidth: 1, borderColor: '#2C2C2E' },
+  shareButtonText: { color: '#FFFFFF', fontSize: 16, fontWeight: '600' },
+  successContainer: { flex: 1, backgroundColor: '#0F0F13', justifyContent: 'center', alignItems: 'center' },
+  successTitle: { fontSize: 32, fontWeight: '800', color: '#fff', letterSpacing: 2, marginBottom: 10 },
+  successWelcome: { fontSize: 18, color: '#ccc', marginBottom: 40 },
+  issuedContainer: { alignItems: 'center', backgroundColor: '#1C1C1E', padding: 30, borderRadius: 16, borderWidth: 1, borderColor: '#333' },
+  issuedText: { color: '#FFD700', fontSize: 20, fontWeight: '700', letterSpacing: 1, marginBottom: 30 },
+  actionButton: { backgroundColor: '#fff', paddingVertical: 12, paddingHorizontal: 30, borderRadius: 25 },
+  actionButtonText: { color: '#000', fontWeight: '700', fontSize: 16 },
+  center: { flex: 1, justifyContent: 'center', alignItems: 'center' }
 });
