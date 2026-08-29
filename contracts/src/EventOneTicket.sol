@@ -16,12 +16,19 @@ contract EventOneTicket is ERC721, AccessControl {
         uint64 issuedAt;
     }
 
-    uint256 private _nextTokenId;
+    uint256 private _nextTokenId = 1;
     mapping(uint256 => TicketData) public ticketDetails;
     mapping(address => mapping(bytes32 => bool)) public hasTicket;
 
     event TicketMinted(uint256 indexed tokenId, bytes32 indexed eventId, address indexed attendee);
     event TicketStatusChanged(uint256 indexed tokenId, TicketStatus status);
+    
+    error TicketIsSoulbound();
+    error InvalidAttendee();
+    error AttendeeAlreadyHasTicket();
+    error NonexistentToken();
+    error TicketNotActive();
+    error TicketCannotBeRevoked();
 
     constructor() ERC721("EventOneTicket", "E1T") {
         _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
@@ -29,8 +36,8 @@ contract EventOneTicket is ERC721, AccessControl {
     }
 
     function mintTicket(address attendee, bytes32 eventId) external onlyRole(ISSUER_ROLE) returns (uint256) {
-        require(attendee != address(0), "Invalid attendee address");
-        require(!hasTicket[attendee][eventId], "Attendee already has a ticket for this event");
+        if (attendee == address(0)) revert InvalidAttendee();
+        if (hasTicket[attendee][eventId]) revert AttendeeAlreadyHasTicket();
         
         uint256 tokenId = _nextTokenId++;
         
@@ -48,33 +55,58 @@ contract EventOneTicket is ERC721, AccessControl {
     }
 
     function cancel(uint256 tokenId) external onlyRole(ISSUER_ROLE) {
-        require(_ownerOf(tokenId) != address(0), "Nonexistent token");
-        require(ticketDetails[tokenId].status == TicketStatus.ACTIVE, "Cannot cancel non-active ticket");
+        if (_ownerOf(tokenId) == address(0)) revert NonexistentToken();
+        if (ticketDetails[tokenId].status != TicketStatus.ACTIVE) revert TicketNotActive();
         
         ticketDetails[tokenId].status = TicketStatus.CANCELLED;
         emit TicketStatusChanged(tokenId, TicketStatus.CANCELLED);
     }
 
     function revoke(uint256 tokenId) external onlyRole(ISSUER_ROLE) {
-        require(_ownerOf(tokenId) != address(0), "Nonexistent token");
-        require(ticketDetails[tokenId].status != TicketStatus.REVOKED, "Already revoked");
+        if (_ownerOf(tokenId) == address(0)) revert NonexistentToken();
+        if (ticketDetails[tokenId].status == TicketStatus.REVOKED || ticketDetails[tokenId].status == TicketStatus.CANCELLED) revert TicketCannotBeRevoked();
         
         ticketDetails[tokenId].status = TicketStatus.REVOKED;
         emit TicketStatusChanged(tokenId, TicketStatus.REVOKED);
     }
 
     function markUsed(uint256 tokenId) external onlyRole(ISSUER_ROLE) {
-        require(_ownerOf(tokenId) != address(0), "Nonexistent token");
-        require(ticketDetails[tokenId].status == TicketStatus.ACTIVE, "Ticket not active");
+        if (_ownerOf(tokenId) == address(0)) revert NonexistentToken();
+        if (ticketDetails[tokenId].status != TicketStatus.ACTIVE) revert TicketNotActive();
         
         ticketDetails[tokenId].status = TicketStatus.USED;
         emit TicketStatusChanged(tokenId, TicketStatus.USED);
     }
 
     function getTicketDetails(uint256 tokenId) external view returns (address owner, bytes32 eventId, TicketStatus status, uint64 issuedAt) {
-        require(_ownerOf(tokenId) != address(0), "Nonexistent token");
+        if (_ownerOf(tokenId) == address(0)) revert NonexistentToken();
         TicketData memory data = ticketDetails[tokenId];
         return (ownerOf(tokenId), data.eventId, data.status, data.issuedAt);
+    }
+    
+    function isValidTicket(uint256 tokenId) external view returns (bool) {
+        if (_ownerOf(tokenId) == address(0)) {
+            return false;
+        }
+        return ticketDetails[tokenId].status == TicketStatus.ACTIVE;
+    }
+
+    // --- SOULBOUND IMPLEMENTATION --- //
+
+    function _update(address to, uint256 tokenId, address auth) internal override returns (address) {
+        address from = _ownerOf(tokenId);
+        if (from != address(0) && to != address(0)) {
+            revert TicketIsSoulbound();
+        }
+        return super._update(to, tokenId, auth);
+    }
+    
+    function approve(address to, uint256 tokenId) public override {
+        revert TicketIsSoulbound();
+    }
+    
+    function setApprovalForAll(address operator, bool approved) public override {
+        revert TicketIsSoulbound();
     }
 
     function supportsInterface(bytes4 interfaceId) public view override(ERC721, AccessControl) returns (bool) {

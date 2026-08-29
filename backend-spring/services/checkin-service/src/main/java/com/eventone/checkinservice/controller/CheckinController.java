@@ -6,6 +6,7 @@ import com.eventone.checkinservice.service.CheckinService;
 import com.eventone.checkinservice.service.SseService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 @RestController
@@ -26,6 +27,7 @@ public class CheckinController {
         return sseService.subscribe(eventId);
     }
 
+    @PreAuthorize("hasAnyRole('SCANNER', 'ORGANIZER')")
     @PostMapping("/verify")
     @org.springframework.security.access.prepost.PreAuthorize("hasRole('ORGANIZER') or hasRole('SCANNER')")
     public ResponseEntity<CheckInResponse> verify(@RequestBody CheckInRequest request) {

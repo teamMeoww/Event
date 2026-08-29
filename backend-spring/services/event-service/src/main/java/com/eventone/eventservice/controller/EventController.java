@@ -6,6 +6,8 @@ import com.eventone.eventservice.service.EventService;
 import com.eventone.shared.dto.ApiResponse;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,7 +24,7 @@ public class EventController {
     }
 
     @PostMapping
-    @org.springframework.security.access.prepost.PreAuthorize("hasRole('ORGANIZER')")
+    @PreAuthorize("hasRole('ORGANIZER')")
     public ApiResponse<Event> createEvent(@Valid @RequestBody EventRequest request, Authentication auth) {
         String userId = (String) auth.getPrincipal();
         Event event = eventService.createEvent(request, userId);
@@ -44,7 +46,7 @@ public class EventController {
     }
 
     @PutMapping("/{id}")
-    @org.springframework.security.access.prepost.PreAuthorize("hasRole('ORGANIZER')")
+    @PreAuthorize("hasRole('ORGANIZER')")
     public ApiResponse<Event> updateEvent(@PathVariable String id, @Valid @RequestBody EventRequest request, Authentication auth) {
         String userId = (String) auth.getPrincipal();
         Event event = eventService.updateEvent(id, request, userId);
@@ -52,7 +54,7 @@ public class EventController {
     }
 
     @PostMapping("/{id}/publish")
-    @org.springframework.security.access.prepost.PreAuthorize("hasRole('ORGANIZER')")
+    @PreAuthorize("hasRole('ORGANIZER')")
     public ApiResponse<Event> publishEvent(@PathVariable String id, Authentication auth) {
         String userId = (String) auth.getPrincipal();
         Event event = eventService.publishEvent(id, userId);

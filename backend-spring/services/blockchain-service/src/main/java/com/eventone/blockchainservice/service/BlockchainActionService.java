@@ -20,6 +20,9 @@ import org.web3j.abi.datatypes.Utf8String;
 import org.web3j.abi.datatypes.generated.Bytes32;
 import org.web3j.abi.datatypes.generated.Uint256;
 import org.web3j.protocol.core.methods.response.EthGetTransactionReceipt;
+import org.web3j.abi.EventEncoder;
+import org.web3j.abi.datatypes.Event;
+import org.web3j.abi.TypeReference;
 
 import jakarta.annotation.PostConstruct;
 import java.net.SocketTimeoutException;
@@ -32,6 +35,23 @@ import java.util.Locale;
 
 @Service
 public class BlockchainActionService {
+
+    private static final Event TICKET_MINTED_EVENT = new Event("TicketMinted", 
+        Arrays.asList(
+            new TypeReference<Uint256>(true) {}, 
+            new TypeReference<Bytes32>(true) {}, 
+            new TypeReference<Address>(true) {}
+        )
+    );
+
+    private static final Event CREDENTIAL_ISSUED_EVENT = new Event("CredentialIssued", 
+        Arrays.asList(
+            new TypeReference<Uint256>(true) {}, 
+            new TypeReference<Bytes32>(true) {}, 
+            new TypeReference<Address>(true) {}
+        )
+    );
+
 
     private final Web3Client web3Client;
     private final BlockchainTransactionRepository transactionRepository;
@@ -107,11 +127,19 @@ public class BlockchainActionService {
             tx.setStatus("CONFIRMED");
             tx.setConfirmedAt(Instant.now());
 
-            if (!receipt.getLogs().isEmpty()) {
-                org.web3j.protocol.core.methods.response.Log log = receipt.getLogs().get(0);
-                if (log.getTopics().size() > 1) {
-                    extractedTokenId = new BigInteger(log.getTopics().get(1).substring(2), 16).toString();
-                    tx.setLastError("TokenID: " + extractedTokenId);
+            String ticketMintedTopic = EventEncoder.encode(TICKET_MINTED_EVENT);
+            String credIssuedTopic = EventEncoder.encode(CREDENTIAL_ISSUED_EVENT);
+
+            for (org.web3j.protocol.core.methods.response.Log log : receipt.getLogs()) {
+                if (!log.getTopics().isEmpty()) {
+                    String eventTopic = log.getTopics().get(0);
+                    if (eventTopic.equals(ticketMintedTopic) || eventTopic.equals(credIssuedTopic)) {
+                        if (log.getTopics().size() > 1) {
+                            extractedTokenId = new BigInteger(log.getTopics().get(1).substring(2), 16).toString();
+                            tx.setLastError("TokenID: " + extractedTokenId);
+                            break;
+                        }
+                    }
                 }
             }
         } else if (receipt != null) {

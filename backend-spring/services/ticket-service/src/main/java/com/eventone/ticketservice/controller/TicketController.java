@@ -27,8 +27,13 @@ public class TicketController {
     }
 
     @PostMapping
-    public ResponseEntity<Ticket> createTicket(@RequestBody TicketCreationRequest request) {
-        Ticket createdTicket = ticketService.createTicket(request);
+    public ResponseEntity<Ticket> createTicket(@RequestBody TicketCreationRequest request, org.springframework.security.core.Authentication auth, jakarta.servlet.http.HttpServletRequest httpRequest) {
+        // Enforce ownership: user can only create a ticket for themselves
+        request.setUserId(auth.getName());
+        
+        String jwtToken = httpRequest.getHeader("Authorization");
+        
+        Ticket createdTicket = ticketService.createTicket(request, jwtToken);
         return ResponseEntity.status(201).body(createdTicket);
     }
 

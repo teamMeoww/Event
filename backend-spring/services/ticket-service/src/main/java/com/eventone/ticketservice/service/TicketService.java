@@ -9,6 +9,7 @@ import com.eventone.ticketservice.repository.TicketRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import java.time.Instant;
 import java.util.HashMap;
@@ -21,19 +22,43 @@ public class TicketService {
 
     private final TicketRepository ticketRepository;
     private final OutboxEventRepository outboxEventRepository;
+    private final WebClient webClient;
 
     @Value("${eventone.blockchain.chain-id:31337}")
     private String blockchainChainId;
 
-    public TicketService(TicketRepository ticketRepository, OutboxEventRepository outboxEventRepository) {
+    public TicketService(TicketRepository ticketRepository, OutboxEventRepository outboxEventRepository, WebClient.Builder webClientBuilder) {
         this.ticketRepository = ticketRepository;
         this.outboxEventRepository = outboxEventRepository;
+        this.webClient = webClientBuilder.baseUrl("http://wallet-service:8084").build();
     }
 
-    public Ticket createTicket(TicketCreationRequest request) {
+    public Ticket createTicket(TicketCreationRequest request, String jwtToken) {
+        // Fetch wallet securely
+        boolean hasVerifiedWallet = false;
+        String walletAddress = request.getWalletAddress();
+        
+        try {
+            Map resp = webClient.get()
+                .uri("/api/v1/wallet")
+                .header("Authorization", jwtToken)
+                .retrieve()
+                .bodyToMono(Map.class)
+                .block();
+                
+            if (resp != null && resp.get("data") != null) {
+                Map data = (Map) resp.get("data");
+                if (Boolean.TRUE.equals(data.get("verified"))) {
+                    hasVerifiedWallet = true;
+                    walletAddress = (String) data.get("address");
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("Failed to fetch wallet status: " + e.getMessage());
+        }
+        
         boolean blockchainEnabled = request.getBlockchainEnabled() == null || request.getBlockchainEnabled();
-        boolean hasVerifiedWallet = request.getHasVerifiedWallet() == null || request.getHasVerifiedWallet();
-        return createTicket(request.getEventId(), request.getUserId(), request.getWalletAddress(), blockchainEnabled, hasVerifiedWallet);
+        return createTicket(request.getEventId(), request.getUserId(), walletAddress, blockchainEnabled, hasVerifiedWallet);
     }
 
     @Transactional

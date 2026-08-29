@@ -43,7 +43,7 @@ public class CheckinService {
                           OutboxRepository outboxRepository,
                           MongoTemplate mongoTemplate,
                           StringRedisTemplate redisTemplate,
-                          @Value("${eventone.qr.secret:defaultSuperSecretKeyForQrGenerationThatIsAtLeast32Bytes}") String secret) {
+                          @Value("${eventone.qr.secret}") String secret) {
         this.checkInRepository = checkInRepository;
         this.outboxRepository = outboxRepository;
         this.mongoTemplate = mongoTemplate;

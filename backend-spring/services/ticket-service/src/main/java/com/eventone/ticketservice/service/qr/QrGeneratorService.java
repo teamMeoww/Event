@@ -18,7 +18,7 @@ public class QrGeneratorService {
     private final SecretKey key;
     private final long ttlSeconds;
 
-    public QrGeneratorService(@Value("${eventone.qr.secret:defaultSuperSecretKeyForQrGenerationThatIsAtLeast32Bytes}") String secret,
+    public QrGeneratorService(@Value("${eventone.qr.secret}") String secret,
                               @Value("${eventone.qr.ttl:60}") long ttlSeconds) {
         this.key = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
         this.ttlSeconds = ttlSeconds;

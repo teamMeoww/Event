@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 @Component
 public class EventServiceClient {
 
-    @org.springframework.beans.factory.annotation.Value("${eventone.services.event:http://localhost:8083}")
+    @org.springframework.beans.factory.annotation.Value("${eventone.services.event:http://localhost:8082}")
     private String eventServiceUrl;
 
     private final org.springframework.web.reactive.function.client.WebClient webClient;

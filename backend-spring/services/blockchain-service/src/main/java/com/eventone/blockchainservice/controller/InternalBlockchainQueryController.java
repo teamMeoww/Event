@@ -2,6 +2,7 @@ package com.eventone.blockchainservice.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.access.prepost.PreAuthorize;
 import java.util.Map;
 
 @RestController
@@ -14,6 +15,7 @@ public class InternalBlockchainQueryController {
         this.web3Client = web3Client;
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/owner/{contract}/{tokenId}")
     public ResponseEntity<Map<String, String>> getOwner(@PathVariable String contract, @PathVariable String tokenId) {
         try {
