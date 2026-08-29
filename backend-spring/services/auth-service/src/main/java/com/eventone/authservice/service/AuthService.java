@@ -36,7 +36,7 @@ public class AuthService {
         user.setName(request.getName());
         user.setEmail(request.getEmail().toLowerCase());
         user.setPasswordHash(passwordEncoder.encode(request.getPassword()));
-        user.setRoles(List.of(Role.ATTENDEE));
+        user.setRoles(List.of(Role.USER));
         user.setCreatedAt(Instant.now());
         user.setUpdatedAt(Instant.now());
         user.setReputationScore(0);
@@ -55,6 +55,20 @@ public class AuthService {
         }
 
         return login(user);
+    }
+
+    public Map<String, Object> getMe(String userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EventOneException("USER_NOT_FOUND", "User not found"));
+        return Map.of(
+                "user", Map.of(
+                        "id", user.getId(),
+                        "name", user.getName(),
+                        "email", user.getEmail(),
+                        "roles", user.getRoles(),
+                        "reputationScore", user.getReputationScore()
+                )
+        );
     }
 
     private Map<String, Object> login(User user) {

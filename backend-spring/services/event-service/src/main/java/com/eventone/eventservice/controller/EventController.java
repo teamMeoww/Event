@@ -60,4 +60,12 @@ public class EventController {
         Event event = eventService.publishEvent(id, userId);
         return ApiResponse.success(event, UUID.randomUUID().toString());
     }
+
+    @PostMapping("/{id}/register")
+    public ApiResponse<Object> registerForEvent(@PathVariable String id, Authentication auth, jakarta.servlet.http.HttpServletRequest httpRequest, org.springframework.boot.web.client.RestTemplateBuilder restTemplateBuilder, @org.springframework.beans.factory.annotation.Value("${eventone.services.ticket:http://ticket-service:8083}") String ticketServiceUrl) {
+        String userId = auth.getName();
+        String jwtToken = httpRequest.getHeader("Authorization");
+        Object ticketResponse = eventService.registerForEvent(id, userId, jwtToken, restTemplateBuilder, ticketServiceUrl);
+        return ApiResponse.success(ticketResponse, UUID.randomUUID().toString());
+    }
 }

@@ -41,7 +41,11 @@ apiClient.interceptors.response.use(
         switch (error.response.status) {
           case 401:
             message = 'Unauthorized. Please log in.';
-            // Handle global logout event here if needed
+            // Handle global logout event
+            Cookies.remove('userToken');
+            if (typeof window !== 'undefined' && !window.location.pathname.includes('/login')) {
+              window.location.href = '/login';
+            }
             break;
           case 403:
             message = 'You do not have permission for this action.';

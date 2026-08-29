@@ -5,8 +5,15 @@ import Cookies from 'js-cookie';
 import { getMe, login as apiLogin, register as apiRegister } from '@/lib/api/auth';
 import { useRouter } from 'next/navigation';
 
+interface AuthUser {
+  id: string;
+  email: string;
+  name: string;
+  roles?: string[];
+}
+
 interface AuthContextType {
-  user: any;
+  user: AuthUser | null;
   isAuthenticated: boolean;
   isLoading: boolean;
   login: (email: string, pass: string) => Promise<void>;
@@ -18,7 +25,7 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<AuthUser | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
 
@@ -27,7 +34,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const token = Cookies.get('userToken');
     if (token) {
       try {
-        const me = await getMe();
+        const me: AuthUser = await getMe();
         setUser(me);
       } catch (err) {
         console.error('Session invalid:', err);
@@ -45,9 +52,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const login = async (email: string, pass: string) => {
     setIsLoading(true);
     try {
-      const res: any = await apiLogin(email, pass);
-      if (res && res.token) {
-        Cookies.set('userToken', res.token, { expires: 7, secure: true, sameSite: 'strict' });
+      const res: { accessToken: string } = await apiLogin(email, pass);
+      if (res && res.accessToken) {
+        Cookies.set('userToken', res.accessToken, { expires: 7, secure: true, sameSite: 'strict' });
         await refreshSession();
       } else {
         throw new Error('Invalid credentials');

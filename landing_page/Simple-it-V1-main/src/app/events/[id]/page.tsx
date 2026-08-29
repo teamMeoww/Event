@@ -35,7 +35,7 @@ export default function EventDetailsPage({ params }: { params: { id: string } })
   }, [params.id]);
 
   const handleRegister = async () => {
-    if (event?.isBlockchainEnabled) {
+    if (event?.blockchainEnabled) {
       if (confirm('This event issues tickets on the blockchain. We\'ll need to verify your wallet first. Go to Wallet?')) {
         router.push('/wallet');
       }
@@ -80,7 +80,7 @@ export default function EventDetailsPage({ params }: { params: { id: string } })
 
         <div className="flex flex-wrap items-center gap-3 mb-6">
           <Badge variant="primary">{event.category || 'Event'}</Badge>
-          {event.isBlockchainEnabled && (
+          {event.blockchainEnabled && (
             <Badge variant="success" className="bg-emerald-500/20 text-emerald-400 border-emerald-500/30">
               <Hexagon className="w-3 h-3 mr-1" /> Web3 Ticket
             </Badge>

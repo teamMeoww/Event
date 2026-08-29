@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/Button';
 import { ArrowLeft, Award, Hexagon, CheckCircle2, XCircle, ExternalLink } from 'lucide-react';
 import Link from 'next/link';
 import { format } from 'date-fns';
+import { BlockchainProof } from '@/components/ui/BlockchainProof';
 
 export default function CredentialDetailsPage({ params }: { params: { id: string } }) {
   const [credential, setCredential] = useState<any>(null);
@@ -80,37 +81,24 @@ export default function CredentialDetailsPage({ params }: { params: { id: string
           </div>
         </Card>
 
-        {credential.tokenId && (
-          <Card className="bg-indigo-900/10 border-indigo-500/20">
-            <div className="flex items-center mb-6">
-              <Hexagon className="w-6 h-6 text-indigo-400 mr-3" />
-              <h2 className="text-xl font-bold text-white">Blockchain Proof</h2>
-            </div>
-            
-            <div className="space-y-6">
-              <div>
-                <p className="text-xs text-indigo-300 font-medium mb-2 uppercase">Token ID</p>
-                <p className="text-white font-mono">{credential.tokenId}</p>
-              </div>
-              
-              {credential.mintTransactionHash && (
-                <div>
-                  <p className="text-xs text-indigo-300 font-medium mb-2 uppercase">Transaction Hash</p>
-                  <p className="text-indigo-400 font-mono break-all text-sm">{credential.mintTransactionHash}</p>
-                </div>
-              )}
-            </div>
-
-            <div className="mt-8">
-              <Link href={`/verify/${credential.id || credential.credentialId}`} target="_blank">
-                <Button variant="secondary" className="w-full sm:w-auto">
-                  <ExternalLink className="w-4 h-4 mr-2" />
-                  View Public Verification
-                </Button>
-              </Link>
-            </div>
-          </Card>
+        {credential.blockchain && (
+          <BlockchainProof 
+            status={credential.blockchain.status}
+            tokenId={credential.blockchain.tokenId}
+            transactionHash={credential.blockchain.transactionHash}
+            chainId={credential.blockchain.chainId}
+            contractAddress={credential.blockchain.contractAddress}
+          />
         )}
+
+        <div className="mt-8">
+          <Link href={`/verify/${credential.id || credential.credentialId}`} target="_blank">
+            <Button variant="secondary" className="w-full sm:w-auto">
+              <ExternalLink className="w-4 h-4 mr-2" />
+              View Public Verification
+            </Button>
+          </Link>
+        </div>
       </div>
     </div>
   );

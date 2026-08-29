@@ -5,10 +5,10 @@ import { Badge } from '../ui/Badge';
 import { format } from 'date-fns';
 import { Calendar, MapPin, Users, Hexagon } from 'lucide-react';
 
-export const EventCard = ({ event }: { event: any }) => {
+export const EventCard = ({ event }: { event: Record<string, any> }) => {
   if (!event) return null;
 
-  const date = format(new Date(event.startAt || event.date || new Date()), 'MMM dd, yyyy');
+  const date = format(new Date((event.startAt as string) || (event.date as string) || new Date()), 'MMM dd, yyyy');
 
   return (
     <Link href={`/events/${event.id || event.eventId}`} className="block group">
@@ -21,7 +21,7 @@ export const EventCard = ({ event }: { event: any }) => {
           )}
           <div className="absolute top-4 left-4 right-4 flex justify-between items-start">
             <Badge variant="primary">{event.category || 'Event'}</Badge>
-            {event.isBlockchainEnabled && (
+            {event.blockchainEnabled && (
               <Badge variant="success" className="bg-emerald-500/20"><Hexagon className="w-3 h-3 mr-1" /> Web3</Badge>
             )}
           </div>

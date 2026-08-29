@@ -7,18 +7,18 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 if (typeof window !== 'undefined') {
-  window.gsap = gsap;
-  window.ScrollTrigger = ScrollTrigger;
+  (window as unknown as { gsap: typeof gsap }).gsap = gsap;
+  (window as unknown as { ScrollTrigger: typeof ScrollTrigger }).ScrollTrigger = ScrollTrigger;
   gsap.registerPlugin(ScrollTrigger);
 }
 
 const NAV_LINKS = [
-  { href: '/', label: 'Home' },
-  { href: '/about', label: 'About' },
-  { href: '/project', label: 'Works' },
-  { href: '/services', label: 'Services' },
-  { href: '/contact', label: 'Contact' },
-  { href: '/admin/dashboard', label: 'Dashboard' },
+  { href: '/discover', label: 'Discover' },
+  { href: '/tickets', label: 'My Tickets' },
+  { href: '/passport', label: 'Passport' },
+  { href: '/verify', label: 'Verify' },
+  { href: '/organizer', label: 'Organizer' },
+  { href: '/wallet', label: 'Profile' },
 ];
 
 const NavItem = () => {
@@ -26,7 +26,7 @@ const NavItem = () => {
   const navRef = useRef<HTMLElement>(null);
   const drawerRef = useRef<HTMLDivElement>(null);
   const tlRef = useRef<any>(null);
-  const [gsapLoaded, setGsapLoaded] = useState(true);
+  const [gsapLoaded] = useState(true);
 
   const [showNav, setShowNav] = useState(true);
 
@@ -76,10 +76,10 @@ const NavItem = () => {
 
   // GSAP animation for mobile drawer to avoid Tailwind transition clashes
   useEffect(() => {
-    if (!gsapLoaded || !window.gsap || !drawerRef.current) return;
-    const gsap = window.gsap;
+    if (!gsapLoaded || !(window as unknown as { gsap: typeof gsap }).gsap || !drawerRef.current) return;
+    const gsapRef = (window as unknown as { gsap: typeof gsap }).gsap;
 
-    gsap.set(drawerRef.current, {
+    gsapRef.set(drawerRef.current, {
       clipPath: "polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%)",
       pointerEvents: "none"
     });
@@ -109,7 +109,7 @@ const NavItem = () => {
 
   useEffect(() => {
     if (!tlRef.current) return;
-    const gsap = window.gsap;
+    const gsap = (window as any).gsap;
 
     if (open) {
       gsap?.set(drawerRef.current, { pointerEvents: "auto" });
@@ -132,7 +132,7 @@ const NavItem = () => {
       {/* ── Top bar ─────────────────────────────────────────────────────────── */}
       <nav ref={navRef} className={`fixed left-0 w-full z-50 flex items-center justify-between px-6 md:px-10 py-6 md:py-8 mix-blend-difference text-white transition-[top] duration-300 ease-out ${showNav ? 'top-0' : '-top-[150px]'}`}>
         {/* Logo */}
-        <div className="text-xl md:text-2xl font-black tracking-tighter italic">Event App GenZ.</div>
+        <div className="text-xl md:text-2xl font-black tracking-tighter italic">EventOne</div>
 
         {/* Desktop links */}
         <div className="hidden lg:flex gap-10 xl:gap-12 text-[10px] font-bold uppercase tracking-[0.2em]">
@@ -146,10 +146,10 @@ const NavItem = () => {
         {/* Right side — always visible */}
         <div className="flex items-center gap-4 md:gap-6">
           <TransitionLink
-            href="/book"
+            href="/discover"
             className="bg-white text-black px-3 sm:px-5 md:px-8 py-1.5 sm:py-2 md:py-2.5 rounded-full text-[8px] sm:text-[9px] md:text-[10px] font-bold uppercase tracking-widest hover:scale-105 transition-all flex items-center justify-center whitespace-nowrap"
           >
-            Let's Talk!
+            Find Events
           </TransitionLink>
 
           {/* Hamburger — visible on < lg */}
@@ -180,7 +180,7 @@ const NavItem = () => {
       >
         {/* Top row */}
         <div className="flex justify-between items-center mobile-menu-footer opacity-0 mt-6 md:mt-0">
-          <span className="text-white text-xl sm:text-2xl font-black tracking-tighter italic">Event App GenZ.</span>
+          <span className="text-white text-xl sm:text-2xl font-black tracking-tighter italic">EventOne</span>
           <button
             onClick={() => setOpen(false)}
             className="w-10 h-10 sm:w-12 sm:h-12 rounded-full border border-zinc-700/50 flex items-center justify-center text-white hover:bg-zinc-800 transition-colors bg-white/5 backdrop-blur-md"
@@ -211,9 +211,9 @@ const NavItem = () => {
 
         {/* Bottom row */}
         <div className="flex items-center justify-between mobile-menu-footer opacity-0 mt-8">
-          <TransitionLink href="/book" onClick={() => setOpen(false)}>
+          <TransitionLink href="/discover" onClick={() => setOpen(false)}>
             <span className="inline-flex items-center justify-center bg-[#ecff33] text-black px-6 sm:px-8 py-3 sm:py-4 rounded-full font-black text-xs sm:text-sm uppercase tracking-widest hover:scale-105 active:scale-95 transition-transform">
-              Let's Talk!
+              Find Events
             </span>
           </TransitionLink>
           <div className="flex flex-col items-end gap-1">

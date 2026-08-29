@@ -30,4 +30,10 @@ public class AuthController {
         Map<String, Object> data = authService.login(request);
         return ApiResponse.success(data, UUID.randomUUID().toString());
     }
+    @GetMapping("/me")
+    public ApiResponse<Map<String, Object>> getMe(org.springframework.security.core.Authentication auth) {
+        String userId = auth.getName();
+        Map<String, Object> data = authService.getMe(userId);
+        return ApiResponse.success(data, UUID.randomUUID().toString());
+    }
 }

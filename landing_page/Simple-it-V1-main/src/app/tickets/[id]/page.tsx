@@ -7,6 +7,8 @@ import { Card } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { ArrowLeft, QrCode, Hexagon } from 'lucide-react';
 import Link from 'next/link';
+import { QRCodeSVG } from 'qrcode.react';
+import { BlockchainProof } from '@/components/ui/BlockchainProof';
 
 export default function TicketDetailsPage({ params }: { params: { id: string } }) {
   const [ticket, setTicket] = useState<any>(null);
@@ -58,11 +60,8 @@ export default function TicketDetailsPage({ params }: { params: { id: string } }
           <div className="p-12 flex flex-col items-center justify-center bg-gray-50">
             {qrData ? (
               <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-100">
-                {/* For real implementation, you'd use a QR Code generator library like qrcode.react */}
-                <div className="w-64 h-64 bg-gray-200 flex items-center justify-center rounded-lg">
-                  <p className="text-gray-500 font-mono text-sm break-all text-center p-4">
-                    {qrData}
-                  </p>
+                <div className="w-64 h-64 flex items-center justify-center rounded-lg">
+                  <QRCodeSVG value={qrData} size={256} />
                 </div>
                 <p className="text-center text-gray-400 text-sm mt-4">Present this QR code for scanning</p>
               </div>
@@ -70,7 +69,7 @@ export default function TicketDetailsPage({ params }: { params: { id: string } }
               <div className="w-64 h-64 border-2 border-dashed border-gray-300 rounded-xl flex flex-col items-center justify-center text-gray-400">
                 <QrCode className="w-16 h-16 mb-4" />
                 <p className="text-sm">QR Code not available</p>
-                {ticket.status === 'BLOCKCHAIN_PENDING' && (
+                {ticket.blockchainStatus === 'PENDING' && (
                   <p className="text-xs mt-2 text-center px-4">Waiting for blockchain confirmation</p>
                 )}
               </div>
@@ -91,13 +90,17 @@ export default function TicketDetailsPage({ params }: { params: { id: string } }
             </div>
           </div>
 
-          {ticket.tokenId && (
-            <div className="px-8 py-6 bg-indigo-50 border-t border-indigo-100 flex items-center">
-              <Hexagon className="w-6 h-6 text-indigo-500 mr-4 shrink-0" />
-              <div>
-                <p className="text-xs text-indigo-400 font-medium mb-1">Blockchain Token ID</p>
-                <p className="text-sm font-mono text-indigo-900 font-bold">{ticket.tokenId}</p>
-              </div>
+          {ticket.blockchainStatus && ticket.blockchainStatus !== 'NOT_ENABLED' && (
+            <div className="px-8 py-6 bg-indigo-50 border-t border-indigo-100 flex items-center justify-center">
+               <div className="w-full">
+                  <BlockchainProof 
+                    status={ticket.blockchainStatus}
+                    tokenId={ticket.tokenId}
+                    transactionHash={ticket.transactionHash}
+                    chainId={ticket.chainId}
+                    contractAddress={ticket.contractAddress}
+                  />
+               </div>
             </div>
           )}
         </Card>

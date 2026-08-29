@@ -57,7 +57,7 @@ services:
       - redis
       - kafka
 
-volumes:
+    volumes:
       - mongodb_data:/data/db
     healthcheck:
       test: test $$(echo "rs.initiate({_id:'rs0',members:[{_id:0,host:\"mongodb:27017\"}]}).ok || rs.status().ok" | mongosh --port 27017 --quiet) -eq 1
@@ -252,56 +252,7 @@ volumes:
       - redis
       - kafka
 
-
-  gateway-service:
-    build:
-      context: ./backend-spring
-      args:
-        SERVICE_NAME: gateway-service
-    ports:
-      - "8080:8080"
-    environment:
-      - SPRING_DATA_MONGODB_URI=mongodb://mongodb:27017/eventone
-      - SPRING_DATA_REDIS_HOST=redis
-      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
-    depends_on:
-      - mongodb
-      - redis
-      - kafka
-
-
-  realtime-service:
-    build:
-      context: ./backend-spring
-      args:
-        SERVICE_NAME: realtime-service
-    ports:
-      - "8091:8091"
-    environment:
-      - SPRING_DATA_MONGODB_URI=mongodb://mongodb:27017/eventone
-      - SPRING_DATA_REDIS_HOST=redis
-      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
-    depends_on:
-      - mongodb
-      - redis
-      - kafka
-
-
-  user-service:
-    build:
-      context: ./backend-spring
-      args:
-        SERVICE_NAME: user-service
-    ports:
-      - "8092:8092"
-    environment:
-      - SPRING_DATA_MONGODB_URI=mongodb://mongodb:27017/eventone
-      - SPRING_DATA_REDIS_HOST=redis
-      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
-    depends_on:
-      - mongodb
-      - redis
-      - kafka
-
 volumes:
   mongodb_data:
+
+

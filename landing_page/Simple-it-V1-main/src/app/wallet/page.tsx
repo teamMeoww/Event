@@ -57,6 +57,12 @@ export default function WalletPage() {
         throw new Error('No address found from wallet.');
       }
 
+      const network = await provider.getNetwork();
+      const expectedChainId = process.env.NEXT_PUBLIC_CHAIN_ID || 31337; 
+      if (network.chainId !== BigInt(expectedChainId)) {
+        throw new Error(`Wrong Network. Please switch your wallet to network ${expectedChainId}.`);
+      }
+
       const signer = await provider.getSigner();
 
       // Request EIP-712 Challenge from backend
@@ -132,7 +138,7 @@ export default function WalletPage() {
               
               <div className="mb-8 p-4 bg-black/40 rounded-xl border border-white/5">
                 <p className="text-xs text-gray-500 font-medium mb-2 uppercase">Connected Address</p>
-                <p className="text-gray-200 font-mono break-all">{walletInfo.walletAddress}</p>
+                <p className="text-gray-200 font-mono break-all">{walletInfo.address}</p>
               </div>
               
               <Button 

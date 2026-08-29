@@ -41,10 +41,9 @@ echo "5. Sign Challenge & Verify (Mocked Signature for now since we don't have a
 echo "Skipping full wallet sig in Bash..."
 
 echo "6. Ticket Registration"
-TICKET_JSON=$(curl -s -X POST $GATEWAY_URL/api/v1/tickets \
+TICKET_JSON=$(curl -s -X POST $GATEWAY_URL/api/v1/events/evt_test_123/register \
   -H "Authorization: Bearer $JWT" \
-  -H "Content-Type: application/json" \
-  -d '{"eventId":"evt_test_123", "walletAddress":"0x1234567890abcdef1234567890abcdef12345678", "blockchainEnabled":true}')
+  -H "Content-Type: application/json")
 echo "Ticket Creation: $TICKET_JSON"
 TICKET_ID=$(echo $TICKET_JSON | grep -o '"id":"[^"]*' | grep -o '[^"]*$')
 
