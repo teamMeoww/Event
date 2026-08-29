@@ -1,0 +1,238 @@
+
+> web-studio@0.1.0 lint
+> eslint
+
+
+/home/afz-k/Projects-Linux/Simple-it V1/backend/dist/app.js
+   6:35  error    A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+   7:32  error    A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+   8:34  error    A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+   9:34  error    A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+  10:34  error    A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+  20:20  warning  'next' is defined but never used         @typescript-eslint/no-unused-vars
+  24:25  warning  'next' is defined but never used         @typescript-eslint/no-unused-vars
+
+/home/afz-k/Projects-Linux/Simple-it V1/backend/dist/controllers/blogController.js
+  7:34  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+
+/home/afz-k/Projects-Linux/Simple-it V1/backend/dist/controllers/contactController.js
+  7:38  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+  8:34  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+
+/home/afz-k/Projects-Linux/Simple-it V1/backend/dist/controllers/projectController.js
+  7:34  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+
+/home/afz-k/Projects-Linux/Simple-it V1/backend/dist/controllers/userController.js
+  7:34  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+
+/home/afz-k/Projects-Linux/Simple-it V1/backend/dist/index.js
+  6:31  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+
+/home/afz-k/Projects-Linux/Simple-it V1/backend/dist/lib/prisma.js
+  6:14  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+  7:22  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+  8:18  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+  9:34  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+
+/home/afz-k/Projects-Linux/Simple-it V1/backend/dist/routes/blogRoutes.js
+  3:19  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+  4:26  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+
+/home/afz-k/Projects-Linux/Simple-it V1/backend/dist/routes/contactRoutes.js
+  3:19  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+  4:29  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+
+/home/afz-k/Projects-Linux/Simple-it V1/backend/dist/routes/index.js
+  6:19  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+  7:41  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+
+/home/afz-k/Projects-Linux/Simple-it V1/backend/dist/routes/projectRoutes.js
+  3:19  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+  4:29  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+
+/home/afz-k/Projects-Linux/Simple-it V1/backend/dist/routes/userRoutes.js
+  3:19  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+  4:26  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+
+/home/afz-k/Projects-Linux/Simple-it V1/backend/src/app.ts
+  19:20  warning  'next' is defined but never used          @typescript-eslint/no-unused-vars
+  24:15  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  24:65  warning  'next' is defined but never used          @typescript-eslint/no-unused-vars
+
+/home/afz-k/Projects-Linux/Simple-it V1/postcss.config.mjs
+  1:1  warning  Assign object to a variable before exporting as module default  import/no-anonymous-default-export
+
+/home/afz-k/Projects-Linux/Simple-it V1/src/app/about/page.tsx
+  38:26  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  39:24  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/home/afz-k/Projects-Linux/Simple-it V1/src/app/book/calendar/page.tsx
+  323:82  error  `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+
+/home/afz-k/Projects-Linux/Simple-it V1/src/app/book/page.tsx
+   5:10  warning  'Play' is defined but never used                                 @typescript-eslint/no-unused-vars
+   5:16  warning  'ArrowLeft' is defined but never used                            @typescript-eslint/no-unused-vars
+  74:32  error    `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+
+/home/afz-k/Projects-Linux/Simple-it V1/src/app/contact/page.tsx
+   6:3  warning  'ChevronDown' is defined but never used            @typescript-eslint/no-unused-vars
+  10:3  warning  'Dribbble' is defined but never used               @typescript-eslint/no-unused-vars
+  11:3  warning  'CheckCircle' is defined but never used            @typescript-eslint/no-unused-vars
+  23:9  warning  'containerRef' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/home/afz-k/Projects-Linux/Simple-it V1/src/app/home/page.tsx
+  1:8  warning  'Morph' is defined but never used  @typescript-eslint/no-unused-vars
+
+/home/afz-k/Projects-Linux/Simple-it V1/src/app/project/[id]/page.tsx
+    5:21  warning  'ArrowRight' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              @typescript-eslint/no-unused-vars
+    5:60  warning  'ArrowUpRight' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            @typescript-eslint/no-unused-vars
+  341:46  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            @typescript-eslint/no-explicit-any
+  428:5   error    Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+/home/afz-k/Projects-Linux/Simple-it V1/src/app/project/[id]/page.tsx:428:5
+  426 |
+  427 |   useLayoutEffect(() => {
+> 428 |     setGsapLoaded(true);
+      |     ^^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  429 |   }, []);
+  430 |
+  431 |   useLayoutEffect(() => {  react-hooks/set-state-in-effect
+  452:64  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            @typescript-eslint/no-explicit-any
+  554:99  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            @typescript-eslint/no-explicit-any
+  557:23  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            @typescript-eslint/no-explicit-any
+  558:11  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             @next/next/no-img-element
+  560:47  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            @typescript-eslint/no-explicit-any
+  567:28  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            @typescript-eslint/no-explicit-any
+  569:19  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             @next/next/no-img-element
+  576:21  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             @next/next/no-img-element
+  581:21  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             @next/next/no-img-element
+  589:17  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             @next/next/no-img-element
+  674:50  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            @typescript-eslint/no-explicit-any
+
+/home/afz-k/Projects-Linux/Simple-it V1/src/app/project/page.tsx
+  248:19  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+/home/afz-k/Projects-Linux/Simple-it V1/src/app/services/page.tsx
+    5:3    warning  'ArrowUpRight' is defined but never used                         @typescript-eslint/no-unused-vars
+   23:11   error    Unexpected any. Specify a different type                         @typescript-eslint/no-explicit-any
+   24:20   error    Unexpected any. Specify a different type                         @typescript-eslint/no-explicit-any
+  220:125  error    `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+
+/home/afz-k/Projects-Linux/Simple-it V1/src/components/SmoothScroll.tsx
+  19:7   error  Use "@ts-expect-error" instead of "@ts-ignore", as "@ts-ignore" will do nothing if the following line is error-free  @typescript-eslint/ban-ts-comment
+  21:7   error  Use "@ts-expect-error" instead of "@ts-ignore", as "@ts-ignore" will do nothing if the following line is error-free  @typescript-eslint/ban-ts-comment
+  23:7   error  Use "@ts-expect-error" instead of "@ts-ignore", as "@ts-ignore" will do nothing if the following line is error-free  @typescript-eslint/ban-ts-comment
+  30:16  error  Unexpected any. Specify a different type                                                                             @typescript-eslint/no-explicit-any
+  41:53  error  Unexpected any. Specify a different type                                                                             @typescript-eslint/no-explicit-any
+  42:37  error  Unexpected any. Specify a different type                                                                             @typescript-eslint/no-explicit-any
+  43:18  error  Unexpected any. Specify a different type                                                                             @typescript-eslint/no-explicit-any
+  46:18  error  Unexpected any. Specify a different type                                                                             @typescript-eslint/no-explicit-any
+  57:30  error  Unexpected any. Specify a different type                                                                             @typescript-eslint/no-explicit-any
+
+/home/afz-k/Projects-Linux/Simple-it V1/src/components/atoms/CustomScrollbar.tsx
+  12:13  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+/home/afz-k/Projects-Linux/Simple-it V1/src/components/atoms/CustomScrollbar.tsx:12:13
+  10 |     useEffect(() => {
+  11 |         if (typeof window !== 'undefined' && window.gsap) {
+> 12 |             setGsapLoaded(true);
+     |             ^^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  13 |         } else {
+  14 |             const checkGsap = setInterval(() => {
+  15 |                 if (window.gsap) {  react-hooks/set-state-in-effect
+
+/home/afz-k/Projects-Linux/Simple-it V1/src/components/atoms/Marquee.tsx
+   4:10  warning  'ArrowRight' is defined but never used          @typescript-eslint/no-unused-vars
+   4:22  warning  'Globe' is defined but never used               @typescript-eslint/no-unused-vars
+   4:29  warning  'Menu' is defined but never used                @typescript-eslint/no-unused-vars
+   4:35  warning  'X' is defined but never used                   @typescript-eslint/no-unused-vars
+   4:38  warning  'ArrowUpRight' is defined but never used        @typescript-eslint/no-unused-vars
+   4:58  warning  'Smile' is defined but never used               @typescript-eslint/no-unused-vars
+  17:7   warning  'useScroll' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/home/afz-k/Projects-Linux/Simple-it V1/src/components/atoms/ScatterImage.tsx
+   4:10  warning  'ArrowRight' is defined but never used                                                                                                                                                                                                                                                   @typescript-eslint/no-unused-vars
+   4:22  warning  'Globe' is defined but never used                                                                                                                                                                                                                                                        @typescript-eslint/no-unused-vars
+   4:29  warning  'Menu' is defined but never used                                                                                                                                                                                                                                                         @typescript-eslint/no-unused-vars
+   4:35  warning  'X' is defined but never used                                                                                                                                                                                                                                                            @typescript-eslint/no-unused-vars
+   4:38  warning  'ArrowUpRight' is defined but never used                                                                                                                                                                                                                                                 @typescript-eslint/no-unused-vars
+   4:52  warning  'Star' is defined but never used                                                                                                                                                                                                                                                         @typescript-eslint/no-unused-vars
+   4:58  warning  'Smile' is defined but never used                                                                                                                                                                                                                                                        @typescript-eslint/no-unused-vars
+  17:7   warning  'useScroll' is assigned a value but never used                                                                                                                                                                                                                                           @typescript-eslint/no-unused-vars
+  79:7   warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+/home/afz-k/Projects-Linux/Simple-it V1/src/components/atoms/Transition.tsx
+  27:11  warning  'isMobile' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/home/afz-k/Projects-Linux/Simple-it V1/src/components/molecules/Morph.tsx
+  325:51  error  `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+
+/home/afz-k/Projects-Linux/Simple-it V1/src/components/molecules/NavItem.tsx
+    6:8   warning  'gsap' is defined but never used                                 @typescript-eslint/no-unused-vars
+    7:10  warning  'ScrollTrigger' is defined but never used                        @typescript-eslint/no-unused-vars
+  134:16  error    `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+  194:18  error    `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+
+/home/afz-k/Projects-Linux/Simple-it V1/src/components/molecules/ProjectCard.tsx
+  91:17  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+/home/afz-k/Projects-Linux/Simple-it V1/src/components/molecules/ServiceCard.tsx
+  18:11  error    Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  19:20  error    Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  26:9   warning  'uiMorphRef' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/home/afz-k/Projects-Linux/Simple-it V1/src/components/molecules/SuccessPopup.tsx
+  49:15  warning  'ctx' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/home/afz-k/Projects-Linux/Simple-it V1/src/components/organisms/AboutHero.tsx
+  24:17   error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  24:527  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+
+/home/afz-k/Projects-Linux/Simple-it V1/src/components/organisms/AboutServices.tsx
+  80:17  error  'mm' is never reassigned. Use 'const' instead  prefer-const
+
+/home/afz-k/Projects-Linux/Simple-it V1/src/components/organisms/AboutStudio.tsx
+  26:17  error  'mm' is never reassigned. Use 'const' instead  prefer-const
+
+/home/afz-k/Projects-Linux/Simple-it V1/src/components/organisms/ExpansionSpacer.tsx
+  29:17  error  'mm' is never reassigned. Use 'const' instead  prefer-const
+  64:42  error  Unexpected any. Specify a different type       @typescript-eslint/no-explicit-any
+
+/home/afz-k/Projects-Linux/Simple-it V1/src/components/organisms/Footer.tsx
+   12:14  error  Unexpected any. Specify a different type          @typescript-eslint/no-explicit-any
+  103:5   error  'timer' is never reassigned. Use 'const' instead  prefer-const
+
+/home/afz-k/Projects-Linux/Simple-it V1/src/components/organisms/Hero.tsx
+  4:10   warning  'LucideArrowUpRight' is defined but never used   @typescript-eslint/no-unused-vars
+  4:30   warning  'LucidePlay' is defined but never used           @typescript-eslint/no-unused-vars
+  4:42   warning  'LucideChevronLeft' is defined but never used    @typescript-eslint/no-unused-vars
+  4:61   warning  'LucideChevronRight' is defined but never used   @typescript-eslint/no-unused-vars
+  4:81   warning  'LucideMenu' is defined but never used           @typescript-eslint/no-unused-vars
+  4:93   warning  'LucideStar' is defined but never used           @typescript-eslint/no-unused-vars
+  4:105  warning  'LucideMousePointer2' is defined but never used  @typescript-eslint/no-unused-vars
+  5:10   warning  'gsap' is defined but never used                 @typescript-eslint/no-unused-vars
+  7:8    warning  'ScatterImage' is defined but never used         @typescript-eslint/no-unused-vars
+  8:8    warning  'Marquee' is defined but never used              @typescript-eslint/no-unused-vars
+  9:8    warning  'Morph' is defined but never used                @typescript-eslint/no-unused-vars
+
+/home/afz-k/Projects-Linux/Simple-it V1/src/components/organisms/TechStack.tsx
+  78:11  warning  'tweenRef' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/home/afz-k/Projects-Linux/Simple-it V1/src/components/organisms/TrustedBy.tsx
+  131:19  error  `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+
+✖ 120 problems (65 errors, 55 warnings)
+  3 errors and 0 warnings potentially fixable with the `--fix` option.
+

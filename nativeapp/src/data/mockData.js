@@ -67,3 +67,10 @@ export const mockPassportCredentials = [
     type: '🥇',
   },
 ];
+
+export const mockCategories = [
+  { id: '1', name: 'Tech', icon: '💻' },
+  { id: '2', name: 'Web3', icon: '🌐' },
+  { id: '3', name: 'Design', icon: '🎨' },
+  { id: '4', name: 'Business', icon: '💼' },
+];
