@@ -17,7 +17,7 @@ export const mockEvents = [
     location: 'DELHI',
     organizer: 'EventOne',
     description: 'Join us for a 24-hour AI Hackathon. Build the future with large language models, computer vision, and more.',
-    image: 'https://via.placeholder.com/400x200.png?text=AI+Hackathon',
+    image: require('../../assets/images/hackathon.jpg'),
     isRegistered: true,
     category: 'Tech',
   },
@@ -29,7 +29,7 @@ export const mockEvents = [
     location: 'MUMBAI',
     organizer: 'CryptoInd',
     description: 'Explore the decentralized web, smart contracts, and blockchain technologies at this exclusive summit.',
-    image: 'https://via.placeholder.com/400x200.png?text=Web3+Challenge',
+    image: require('../../assets/images/web3.jpg'),
     isRegistered: false,
     category: 'Web3',
   },
@@ -41,7 +41,7 @@ export const mockEvents = [
     location: 'BENGALURU',
     organizer: 'DesignX',
     description: 'Learn how to build scalable and maintainable design systems from industry leaders.',
-    image: 'https://via.placeholder.com/400x200.png?text=Design+Systems',
+    image: require('../../assets/images/design.jpg'),
     isRegistered: false,
     category: 'Design',
   },
@@ -67,3 +67,14 @@ export const mockPassportCredentials = [
     type: '🥇',
   },
 ];
+
+export const mockCategories = [
+  { id: '1', name: 'Tech', icon: '💻', lottie: require('../../assets/CMS computer animation.json') },
+  { id: '2', name: 'Web3', icon: '🌐', lottie: require('../../assets/Bitcoin 3d Outline Icon Animation.json'), recolor: '#FFFFFF' },
+  { id: '3', name: 'Design', icon: '🎨', lottie: require('../../assets/painting.json') },
+];
+
+export const mockWallet = {
+  address: '0x71C7656EC7ab88b098defB751B7401B5f6d8976F',
+  balance: '1.25',
+};

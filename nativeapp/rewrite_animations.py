@@ -1,4 +1,10 @@
-import React, { useContext, useEffect, useRef } from 'react';
+import os
+
+filepath = "/Users/param/crazyones/Event/nativeapp/src/navigation/AppNavigator.js"
+with open(filepath, "r") as f:
+    content = f.read()
+
+new_code = """import React, { useContext, useEffect, useRef } from 'react';
 import { StyleSheet, View, Animated } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -143,3 +149,8 @@ const styles = StyleSheet.create({
     height: '100%',
   }
 });
+"""
+
+with open(filepath, 'w') as f:
+    f.write(new_code)
+print("Updated AppNavigator.js with Instagram-style scale animations")

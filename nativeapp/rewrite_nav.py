@@ -1,5 +1,8 @@
-import React, { useContext, useEffect, useRef } from 'react';
-import { StyleSheet, View, Animated } from 'react-native';
+import os
+
+filepath = "/Users/param/crazyones/Event/nativeapp/src/navigation/AppNavigator.js"
+content = """import React, { useContext } from 'react';
+import { StyleSheet, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -21,81 +24,51 @@ import { Ionicons } from '@expo/vector-icons';
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
-function TabIcon({ focused, outlineName, filledName }) {
-  const scale = useRef(new Animated.Value(1)).current;
-
-  useEffect(() => {
-    if (focused) {
-      Animated.sequence([
-        Animated.timing(scale, {
-          toValue: 0.85,
-          duration: 50,
-          useNativeDriver: true,
-        }),
-        Animated.spring(scale, {
-          toValue: 1,
-          friction: 4,
-          tension: 50,
-          useNativeDriver: true,
-        })
-      ]).start();
-    } else {
-      // Ensure it resets safely when unfocused
-      scale.setValue(1);
-    }
-  }, [focused, scale]);
-
-  return (
-    <Animated.View style={[styles.iconWrapper, { transform: [{ scale }] }]}>
-      <Ionicons 
-        name={focused ? filledName : outlineName} 
-        size={28} 
-        color={focused ? '#FFFFFF' : '#A0A0A0'} 
-      />
-    </Animated.View>
-  );
-}
-
 function MainTabs() {
   return (
     <Tab.Navigator 
       screenOptions={({ route }) => ({
         headerShown: false, 
         tabBarActiveTintColor: '#FFFFFF',
-        tabBarInactiveTintColor: '#FFFFFF',
+        tabBarInactiveTintColor: '#FFFFFF', // Instagram uses white for both, relies on outline vs fill
         tabBarShowLabel: false,
         tabBarStyle: {
-          backgroundColor: '#000000',
+          backgroundColor: '#000000', // Pure black like Instagram dark mode
           borderTopWidth: 0.5,
-          borderTopColor: '#262626',
+          borderTopColor: '#262626', // Subtle dark gray divider
           elevation: 0,
           shadowOpacity: 0,
-          height: 60,
+          height: 60, // Standard height before safe area
         },
         tabBarItemStyle: {
           paddingVertical: 5,
         },
-        tabBarIcon: ({ focused }) => {
-          let outlineName, filledName;
+        tabBarIcon: ({ focused, color }) => {
+          let iconName;
 
           if (route.name === 'Home') {
-            outlineName = 'home-outline';
-            filledName = 'home';
+            iconName = focused ? 'home' : 'home-outline';
           } else if (route.name === 'Discover') {
-            outlineName = 'search-outline';
-            filledName = 'search';
+            iconName = focused ? 'search' : 'search-outline';
           } else if (route.name === 'Tickets') {
-            outlineName = 'ticket-outline';
-            filledName = 'ticket';
+            // Instagram middle icon is usually a plus, we'll use ticket
+            iconName = focused ? 'ticket' : 'ticket-outline';
           } else if (route.name === 'Passport') {
-            outlineName = 'file-tray-outline'; 
-            filledName = 'file-tray-full';
+            // Activity or reels equivalent
+            iconName = focused ? 'file-tray-full' : 'file-tray-outline'; 
           } else if (route.name === 'Profile') {
-            outlineName = 'person-circle-outline';
-            filledName = 'person-circle';
+            iconName = focused ? 'person-circle' : 'person-circle-outline';
           }
 
-          return <TabIcon focused={focused} outlineName={outlineName} filledName={filledName} />;
+          return (
+            <View style={styles.iconWrapper}>
+              <Ionicons 
+                name={iconName} 
+                size={28} 
+                color={focused ? '#FFFFFF' : '#A0A0A0'} // Slight dim for inactive to aid visibility
+              />
+            </View>
+          );
         },
       })}
     >
@@ -143,3 +116,8 @@ const styles = StyleSheet.create({
     height: '100%',
   }
 });
+"""
+
+with open(filepath, 'w') as f:
+    f.write(content)
+print("Updated AppNavigator.js with Instagram-style dock")

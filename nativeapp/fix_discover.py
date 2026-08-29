@@ -1,4 +1,8 @@
-import React, { useState } from 'react';
+import os
+
+filepath = "/Users/param/crazyones/Event/nativeapp/src/screens/DiscoverScreen.js"
+
+content = """import React, { useState } from 'react';
 import { StyleSheet, Text, View, TextInput, ScrollView, TouchableOpacity, Image } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
@@ -17,6 +21,9 @@ export default function DiscoverScreen({ navigation }) {
 
   return (
     <View style={styles.container}>
+      <View style={[styles.glowOrb, { top: -50, right: -100, backgroundColor: 'rgba(94, 92, 230, 0.25)' }]} />
+      <View style={[styles.glowOrb, { bottom: 150, left: -50, backgroundColor: 'rgba(10, 132, 255, 0.2)' }]} />
+
       <SafeAreaView style={{ flex: 1 }}>
         <View style={styles.header}>
           <Text style={styles.headerTitle}>Discover</Text>
@@ -85,7 +92,8 @@ export default function DiscoverScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#000000' },
+  container: { flex: 1, backgroundColor: '#050505' },
+  glowOrb: { position: 'absolute', width: 350, height: 350, borderRadius: 175 },
   header: { paddingHorizontal: 20, marginBottom: 15, marginTop: 10 },
   headerTitle: { fontSize: 32, fontWeight: '800', color: '#FFFFFF', letterSpacing: -0.5 },
   searchContainer: { 
@@ -136,3 +144,9 @@ const styles = StyleSheet.create({
   eventTitle: { fontSize: 20, fontWeight: '700', marginBottom: 6, color: '#FFFFFF' },
   eventMeta: { fontSize: 14, color: '#8c8cff', fontWeight: '600' }
 });
+"""
+
+with open(filepath, 'w') as f:
+    f.write(content)
+
+print("Updated DiscoverScreen to show images and use glassmorphism")

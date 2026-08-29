@@ -1,4 +1,8 @@
-import React, { useContext, useEffect, useState, useRef } from 'react';
+import os
+
+filepath = "/Users/param/crazyones/Event/nativeapp/src/screens/HomeScreen.js"
+
+content = """import React, { useContext, useEffect, useState, useRef } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, ScrollView, Image, Animated, Dimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
@@ -43,29 +47,33 @@ export default function HomeScreen({ navigation }) {
   return (
     <View style={styles.container}>
       {/* Ambient Glassmorphism Background Glows */}
+      <View style={[styles.glowOrb, { top: -100, left: -50, backgroundColor: 'rgba(94, 92, 230, 0.25)' }]} />
+      <View style={[styles.glowOrb, { bottom: 100, right: -100, backgroundColor: 'rgba(10, 132, 255, 0.2)' }]} />
+      
       <SafeAreaView style={{ flex: 1 }}>
         <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 40 }}>
           <Animated.View style={{ opacity: fadeAnim, transform: [{ translateY: slideAnim }], paddingHorizontal: 20 }}>
             
             <View style={styles.header}>
               <View>
-                <Text style={styles.greeting}>Good evening, {mockUser.name}</Text>
+                <Text style={styles.greeting}>Good evening, {mockUser.name} 👋</Text>
                 <Text style={styles.subtitle}>Welcome back to your dashboard</Text>
               </View>
               <TouchableOpacity onPress={() => navigation.navigate('Profile')} style={styles.avatarContainer}>
+                <BlurView tint="dark" intensity={80} style={StyleSheet.absoluteFillObject} />
                 <LottieView
                   source={require('../../assets/android-icon-monochrome.json')}
                   autoPlay
                   loop
-                  style={{ width: 85, height: 85, marginRight: -10 }}
+                  style={{ width: 44, height: 44 }}
                 />
               </TouchableOpacity>
             </View>
             
             <View style={styles.passportCard}>
-              <BlurView tint="dark" intensity={85} style={StyleSheet.absoluteFillObject} />
+              <BlurView tint="dark" intensity={60} style={StyleSheet.absoluteFillObject} />
               <LinearGradient
-                colors={['rgba(255, 255, 255, 0.15)', 'rgba(255, 255, 255, 0.0)']}
+                colors={['rgba(255, 255, 255, 0.1)', 'rgba(255, 255, 255, 0.0)']}
                 style={StyleSheet.absoluteFillObject}
               />
               <View style={{ position: 'relative', zIndex: 10 }}>
@@ -96,22 +104,12 @@ export default function HomeScreen({ navigation }) {
                 {mockCategories.map(cat => (
                   <TouchableOpacity key={cat.id} style={styles.categoryCardWrapper}>
                     <View style={styles.categoryCard}>
-                      <BlurView tint="dark" intensity={80} style={StyleSheet.absoluteFillObject} />
+                      <BlurView tint="dark" intensity={50} style={StyleSheet.absoluteFillObject} />
                       <LinearGradient
-                        colors={['rgba(255, 255, 255, 0.12)', 'rgba(255, 255, 255, 0.0)']}
+                        colors={['rgba(255, 255, 255, 0.08)', 'rgba(255, 255, 255, 0.01)']}
                         style={StyleSheet.absoluteFillObject}
                       />
-                      {cat.lottie ? (
-                        <LottieView
-                          source={cat.lottie}
-                          autoPlay
-                          loop
-                          colorFilters={cat.recolor ? [{ keypath: "**", color: cat.recolor }] : []}
-                          style={{ width: 44, height: 44, marginBottom: 5 }}
-                        />
-                      ) : (
-                        <Text style={styles.categoryIcon}>{cat.icon}</Text>
-                      )}
+                      <Text style={styles.categoryIcon}>{cat.icon}</Text>
                       <Text style={styles.categoryName}>{cat.name}</Text>
                     </View>
                   </TouchableOpacity>
@@ -129,15 +127,12 @@ export default function HomeScreen({ navigation }) {
                     onPress={() => navigation.navigate('EventDetails', { eventId: event.id })}
                   >
                     <View style={styles.recommendedCard}>
-                      <BlurView tint="dark" intensity={90} style={StyleSheet.absoluteFillObject} />
+                      <BlurView tint="dark" intensity={70} style={StyleSheet.absoluteFillObject} />
                       <LinearGradient
-                        colors={['rgba(255, 255, 255, 0.15)', 'rgba(255, 255, 255, 0.0)']}
+                        colors={['rgba(255, 255, 255, 0.1)', 'rgba(255, 255, 255, 0.0)']}
                         style={StyleSheet.absoluteFillObject}
                       />
-                      <Image 
-                        source={event.id === '1' ? require('../../assets/1148-GC-IO-Header-GC-43-0519.max-2500x2500.jpg') : (typeof event.image === 'string' ? { uri: event.image } : event.image)} 
-                        style={styles.recommendedImage} 
-                      />
+                      <Image source={event.image || { uri: event.image }} style={styles.recommendedImage} />
                       <View style={styles.recommendedInfo}>
                         <Text style={styles.recommendedTitle}>{event.title}</Text>
                         <Text style={styles.recommendedDate}>{event.date}</Text>
@@ -148,7 +143,7 @@ export default function HomeScreen({ navigation }) {
                 {recommendedEvents.length === 0 && (
                   <View style={[styles.recommendedCardWrapper, { justifyContent: 'center', alignItems: 'center' }]}>
                     <View style={styles.recommendedCard}>
-                       <BlurView tint="dark" intensity={90} style={StyleSheet.absoluteFillObject} />
+                       <BlurView tint="dark" intensity={70} style={StyleSheet.absoluteFillObject} />
                        <Text style={{color: '#888', marginTop: 10, textAlign: 'center'}}>Loading events...</Text>
                     </View>
                   </View>
@@ -166,26 +161,39 @@ export default function HomeScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: { 
     flex: 1, 
-    backgroundColor: '#000000', // Much darker, lets the ambient orbs pop
+    backgroundColor: '#050505', // Much darker, lets the ambient orbs pop
+  },
+  glowOrb: {
+    position: 'absolute',
+    width: 300,
+    height: 300,
+    borderRadius: 150,
+    // Note: Since Expo BlurView handles background blur, we rely on the parent container's child positioning
+    // React Native doesn't support 'filter: blur()' on views easily without SVG, so we just use opacity overlays
+    // that are heavily blurred by the glass cards floating ABOVE them.
   },
   header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 30, marginTop: 10 },
   greeting: { fontSize: 24, fontWeight: '800', color: '#FFFFFF', marginBottom: 6, letterSpacing: -0.5 },
   subtitle: { fontSize: 15, color: '#8E8E93', fontWeight: '500' },
   avatarContainer: { 
-    width: 80, 
-    height: 80, 
+    width: 50, 
+    height: 50, 
+    borderRadius: 25, 
+    borderWidth: 1, 
+    borderColor: 'rgba(255, 255, 255, 0.2)', 
     alignItems: 'center', 
     justifyContent: 'center', 
+    overflow: 'hidden' 
   },
   passportCard: { 
     borderRadius: 24, 
     padding: 24, 
     marginBottom: 35, 
     borderWidth: 1, 
-    borderColor: 'rgba(255, 255, 255, 0.1)',
-    borderTopWidth: 1.5, borderTopColor: 'rgba(255, 255, 255, 0.4)', borderLeftWidth: 1, borderLeftColor: 'rgba(255, 255, 255, 0.2)', // Specular highlight
+    borderColor: 'rgba(255, 255, 255, 0.15)',
+    borderTopColor: 'rgba(255, 255, 255, 0.3)', // Specular highlight
     overflow: 'hidden', // Forces the blur and gradient to stay within rounded corners
-    backgroundColor: 'rgba(255, 255, 255, 0.03)', // Base tint
+    backgroundColor: 'rgba(20, 20, 20, 0.4)', // Base tint
   },
   passportTitle: { color: '#8c8cff', fontSize: 13, fontWeight: '700', letterSpacing: 1.5, marginBottom: 20 },
   statsRow: { flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center' },
@@ -207,10 +215,10 @@ const styles = StyleSheet.create({
     alignItems: 'center', 
     minWidth: 100, 
     borderWidth: 1, 
-    borderColor: 'rgba(255, 255, 255, 0.1)',
-    borderTopWidth: 1.5, borderTopColor: 'rgba(255, 255, 255, 0.35)', borderLeftWidth: 1, borderLeftColor: 'rgba(255, 255, 255, 0.15)',
+    borderColor: 'rgba(255, 255, 255, 0.15)',
+    borderTopColor: 'rgba(255, 255, 255, 0.25)',
     overflow: 'hidden',
-    backgroundColor: 'rgba(255, 255, 255, 0.03)',
+    backgroundColor: 'rgba(20, 20, 20, 0.4)',
   },
   categoryIcon: { fontSize: 28, marginBottom: 10 },
   categoryName: { fontSize: 14, fontWeight: '600', color: '#FFFFFF' },
@@ -223,12 +231,17 @@ const styles = StyleSheet.create({
     borderRadius: 20, 
     overflow: 'hidden', 
     borderWidth: 1, 
-    borderColor: 'rgba(255, 255, 255, 0.1)',
-    borderTopWidth: 1.5, borderTopColor: 'rgba(255, 255, 255, 0.4)', borderLeftWidth: 1, borderLeftColor: 'rgba(255, 255, 255, 0.2)',
-    backgroundColor: 'rgba(255, 255, 255, 0.03)',
+    borderColor: 'rgba(255, 255, 255, 0.15)',
+    borderTopColor: 'rgba(255, 255, 255, 0.3)',
+    backgroundColor: 'rgba(20, 20, 20, 0.5)',
   },
   recommendedImage: { width: '100%', height: 160, opacity: 0.9 }, // Slight opacity to blend with glass
   recommendedInfo: { padding: 16, position: 'relative', zIndex: 10 },
   recommendedTitle: { fontSize: 18, fontWeight: '700', color: '#FFFFFF', marginBottom: 6 },
   recommendedDate: { fontSize: 14, color: '#A0A0A0', fontWeight: '500' },
 });
+"""
+
+with open(filepath, 'w') as f:
+    f.write(content)
+print("Updated HomeScreen to glassmorphism")

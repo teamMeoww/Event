@@ -1,9 +1,11 @@
-import React, { useState, useContext } from 'react';
+import os
+
+filepath = "/Users/param/crazyones/Event/nativeapp/src/screens/LoginScreen.js"
+
+content = """import React, { useState, useContext } from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, ActivityIndicator, KeyboardAvoidingView, Platform, SafeAreaView } from 'react-native';
 import { AuthContext } from '../context/AuthContext';
 import { Ionicons } from '@expo/vector-icons';
-import LottieView from 'lottie-react-native';
-
 
 export default function LoginScreen({ navigation }) {
   const { login } = useContext(AuthContext);
@@ -35,15 +37,7 @@ export default function LoginScreen({ navigation }) {
       >
         <View style={styles.innerContainer}>
           <View style={styles.header}>
-            <View style={styles.titleRow}>
-              <Text style={styles.title}>EventOne.</Text>
-              <LottieView
-                source={require('../../assets/android-icon-monochrome.json')}
-                autoPlay
-                loop
-                style={styles.logoAnimation}
-              />
-            </View>
+            <Text style={styles.title}>EventOne.</Text>
             <Text style={styles.subtitle}>Sign in to your legacy account</Text>
           </View>
           
@@ -139,21 +133,12 @@ const styles = StyleSheet.create({
   header: {
     marginBottom: 50,
   },
-  titleRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 8,
-  },
-  logoAnimation: {
-    width: 150,
-    height: 150,
-    marginLeft: -15, // Negative margin to counteract the huge empty canvas space in the Lottie file
-  },
   title: {
     fontSize: 48,
     fontWeight: '900',
     color: '#FFFFFF',
     letterSpacing: -1.5,
+    marginBottom: 8,
   },
   subtitle: {
     fontSize: 16,
@@ -263,3 +248,8 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   }
 });
+"""
+
+with open(filepath, 'w') as f:
+    f.write(content)
+print("Updated LoginScreen with Legacy Black design")
