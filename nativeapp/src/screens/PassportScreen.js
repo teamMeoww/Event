@@ -1,13 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, Text, FlatList, RefreshControl } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { getMyPassport, getMyCredentials } from '../api/passportApi';
-import { CredentialCard } from '../components/passport/CredentialCard';
-import { LoadingState, ErrorState, EmptyState } from '../components/ui/StateViews';
-import { GlassCard } from '../components/ui/GlassCard';
-import { colors } from '../theme/colors';
-import { spacing } from '../theme/spacing';
-import { typography } from '../theme/typography';
+import { BlurView } from 'expo-blur';
+import { Ionicons } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
+import { mockUser, mockPassportCredentials } from '../data/mockData';
 
 export default function PassportScreen({ navigation }) {
   const [passport, setPassport] = useState(null);
@@ -38,31 +35,26 @@ export default function PassportScreen({ navigation }) {
     fetchData();
   }, []);
 
-  const onRefresh = () => {
-    setRefreshing(true);
-    fetchData();
-  };
-
-  const renderHeader = () => (
-    <View style={styles.headerContainer}>
-      <Text style={styles.title}>Passport</Text>
-      <GlassCard style={styles.statsCard}>
-        <View style={styles.statBox}>
-          <Text style={styles.statNumber}>{passport?.verifiedEvents || 0}</Text>
-          <Text style={styles.statLabel}>Events</Text>
-        </View>
-        <View style={styles.statDivider} />
-        <View style={styles.statBox}>
-          <Text style={styles.statNumber}>{passport?.reputationScore || 0}</Text>
-          <Text style={styles.statLabel}>Reputation</Text>
-        </View>
-        <View style={styles.statDivider} />
-        <View style={styles.statBox}>
-          <Text style={styles.statNumber}>{credentials.length}</Text>
-          <Text style={styles.statLabel}>Credentials</Text>
-        </View>
-      </GlassCard>
-      <Text style={styles.sectionTitle}>Digital Credentials</Text>
+          <View style={styles.credentialsSection}>
+            <Text style={styles.sectionTitle}>Your Credentials</Text>
+            {mockPassportCredentials.map(cred => (
+              <View key={cred.id} style={styles.credentialItem}>
+                <BlurView tint="dark" intensity={90} style={StyleSheet.absoluteFillObject} />
+                <LinearGradient colors={['rgba(255, 255, 255, 0.12)', 'rgba(255, 255, 255, 0.0)']} style={StyleSheet.absoluteFillObject} />
+                <View style={styles.credentialContent}>
+                  <View style={styles.credentialIconContainer}>
+                    <Ionicons name={cred.type} size={28} color="#8c8cff" />
+                  </View>
+                  <View style={styles.credentialInfo}>
+                    <Text style={styles.credentialTitle}>{cred.title}</Text>
+                    <Text style={styles.credentialDate}>{cred.date}</Text>
+                  </View>
+                </View>
+              </View>
+            ))}
+          </View>
+        </ScrollView>
+      </SafeAreaView>
     </View>
   );
 
