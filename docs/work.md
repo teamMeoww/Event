@@ -81,3 +81,18 @@ For backend engineers connecting the apps:
 *   **Authentication**: Both Participant and Volunteer apps must attach the JWT token as a `Bearer` token in the `Authorization` header for all protected requests.
 *   **Mocking On-Chain Data**: For local testing without a live testnet, ensure the local `anvil` node is running (`docker compose up anvil -d`) and contracts are deployed locally, or use feature flags to bypass on-chain verification in dev environments.
 *   **WebSockets**: Connect the apps to the `realtime-service` to listen for immediate check-in confirmations and notifications.
+
+## 5. Current Folder Structure
+
+The project follows a standard monorepo architecture:
+
+*   **`client/`**: Contains the web interfaces.
+    *   `dashboard/`: The main web dashboard for users and organizers.
+    *   `landing_page/`: The public-facing website.
+*   **`mobile/`**: Contains mobile applications.
+    *   `participant-app/`: The React Native app for event attendees.
+    *   `volunteer-app/`: The Kotlin Android app for volunteers and organizers to scan tickets.
+*   **`server/`**: Contains the Spring Boot backend microservices (`auth-service`, `ticket-service`, `blockchain-service`, etc.).
+*   **`docs/`**: Contains all architectural, implementation, and audit documentation.
+*   **`contracts/`**: Contains the smart contracts (Solidity) for tickets and credentials.
+*   **`scripts/`**: Contains utility scripts for design mocks, avatars, and fixing assets.
