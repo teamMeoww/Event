@@ -102,10 +102,10 @@ const AboutStudio: React.FC<AboutStudioProps> = ({ gsapLoaded }) => {
                 <div ref={studioTitleRef} className="w-full md:w-[30%] flex flex-col justify-center items-start md:items-end text-left md:text-right order-2 md:order-1 relative z-20">
                     <div className="max-w-[380px] lg:max-w-[500px]">
                         <h2 className="text-4xl sm:text-5xl md:text-4xl lg:text-6xl xl:text-7xl font-black tracking-tight text-black leading-[1.05] mb-2">
-                            Our studio is a safe space where
+                            Our platform is a vibrant space where
                         </h2>
-                        <h2 className="text-4xl text-zinc-500 sm:text-5xl md:text-4xl text-zinc-500 lg:text-6xl xl:text-7xl text-zinc-500 font-black tracking-tight leading-[1.05]">
-                            startups grow <br /> and <span >shine.</span>
+                        <h2 className="text-4xl text-zinc-500 sm:text-5xl md:text-4xl lg:text-6xl xl:text-7xl font-black tracking-tight leading-[1.05]">
+                            GenZ connects <br /> and <span >thrives.</span>
                         </h2>
                     </div>
                 </div>
@@ -187,12 +187,12 @@ const AboutStudio: React.FC<AboutStudioProps> = ({ gsapLoaded }) => {
                 <div className="w-full md:w-[30%] flex flex-col justify-center items-start md:items-end text-left md:text-right order-3 z-20">
                     <div className="max-w-[380px] lg:max-w-[500px]">
                         <p className="text-xl md:text-2xl text-black font-medium leading-relaxed mb-8">
-                            We believe that the best digital experiences are born from true collaboration. Our multi-disciplinary team works in absolute synchrony to transform complex challenges into elegant products.
+                            We believe that the best IRL experiences are born from authentic digital connections. We bring together Web3 primitives and seamless social mechanics to redefine how you experience events.
                         </p>
                         <div className="flex flex-col items-start md:items-end justify-start gap-4">
-                            <span className="text-sm md:text-base font-bold uppercase tracking-widest text-black">Core Disciplines</span>
+                            <span className="text-sm md:text-base font-bold uppercase tracking-widest text-black">Core Pillars</span>
                             <div className="flex flex-wrap justify-start md:justify-end gap-3 w-full max-w-[320px] md:max-w-none">
-                                {['Creative Strategy', 'Product Design', 'Full-Stack Dev', 'Cloud Architecture'].map((discipline, i) => (
+                                {['Smart Contracts', 'Social Graph', 'AI Algorithms', 'Zero-Knowledge'].map((discipline, i) => (
                                     <div key={i} ref={el => { studioAvatarsRef.current[i] = el; }} className="px-5 py-2.5 rounded-full border border-zinc-200 bg-white text-black font-bold text-xs md:text-sm shadow-sm hover:border-black hover:bg-black hover:text-[#ecff33] transition-colors cursor-pointer">
                                         {discipline}
                                     </div>

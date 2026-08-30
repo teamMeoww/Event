@@ -24,11 +24,11 @@ const AboutHero: React.FC = () => {
                 " Event App GenZ is built different — we serve immaculate vibes and big brain tech. We operate as a squad of devs, web3 natives, and party planners who understand the assignment. Before we build, we check the vibes. Before we design, we secure the bag. No cap, we transform boring tech into lit IRL experiences. "
 
 
-                <br/><br/><br/>Designed to Dominate.
+                <br /><br /><br />Designed to Dominate.
             </p>
 
             <p className='text-lg md:text-xl italic px-5 pt-4 lg:pt-12 pb-5 font-medium leading-relaxed tracking-tight text-zinc-600 max-w-2xl text-left lg:text-left'>
-                Our work is not driven by trends, but by architecture and foresight. We integrate creativity with technical rigor to engineer digital ecosystems that perform under pressure, adapt with growth, and evolve with purpose. Every layer is deliberate. Every interaction considered. Because simplicity, when constructed with intelligence, becomes powerful and power, when refined, becomes lasting impact.
+                We are building the ultimate social layer for the next generation. Blending the transparency of Web3 with the unmatched energy of real-life connections, our platform guarantees that every ticket is real, every reputation is earned, and every hangout is unforgettable. Welcome to the future of events.
             </p>
         </div>
     );

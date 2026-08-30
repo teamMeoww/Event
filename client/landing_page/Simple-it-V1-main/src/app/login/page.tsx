@@ -33,8 +33,8 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#050505] text-white">
-      <div className="w-full max-w-md p-8 bg-zinc-950 border border-zinc-800 rounded-3xl shadow-2xl">
+    <div className="min-h-screen flex items-center justify-center bg-[#111111] text-white">
+      <div className="w-full max-w-md p-8 bg-[#1a1a1a] border border-zinc-800 rounded-3xl shadow-2xl">
         <h1 className="text-4xl font-black tracking-tighter mb-2 italic">Welcome Back</h1>
         <p className="text-zinc-400 mb-8 font-light">Login to manage your events.</p>
 
@@ -50,7 +50,7 @@ export default function LoginPage() {
             <input
               type="email"
               required
-              className="w-full px-4 py-3 bg-zinc-900 border border-zinc-800 rounded-xl text-white placeholder-zinc-500 focus:outline-none focus:border-[#ecff33] transition-colors"
+              className="w-full px-4 py-3 bg-[#222222] border border-zinc-800 rounded-xl text-white placeholder-zinc-500 focus:outline-none focus:border-zinc-500 transition-colors"
               placeholder="you@example.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -61,7 +61,7 @@ export default function LoginPage() {
             <input
               type="password"
               required
-              className="w-full px-4 py-3 bg-zinc-900 border border-zinc-800 rounded-xl text-white placeholder-zinc-500 focus:outline-none focus:border-[#ecff33] transition-colors"
+              className="w-full px-4 py-3 bg-[#222222] border border-zinc-800 rounded-xl text-white placeholder-zinc-500 focus:outline-none focus:border-zinc-500 transition-colors"
               placeholder="••••••••"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -70,7 +70,7 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-[#ecff33] text-black font-black uppercase tracking-widest py-4 rounded-xl hover:bg-[#d4e62e] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full bg-white text-black font-black uppercase tracking-widest py-4 rounded-xl hover:bg-zinc-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {loading ? 'Logging in...' : 'Login'}
           </button>
@@ -78,7 +78,7 @@ export default function LoginPage() {
 
         <p className="mt-8 text-center text-zinc-500 text-sm">
           Don't have an account?{' '}
-          <a href="/signup" className="text-white hover:text-[#ecff33] transition-colors underline underline-offset-4">
+          <a href="/signup" className="text-white hover:text-zinc-300 transition-colors underline underline-offset-4">
             Sign up here
           </a>
         </p>

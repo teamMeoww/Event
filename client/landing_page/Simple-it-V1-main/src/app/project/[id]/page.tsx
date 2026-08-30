@@ -17,247 +17,150 @@ gsap.registerPlugin(ScrollTrigger);
 const PROJECTS = [
   {
     id: 1,
-    title: 'RISC',
-    category: 'UI/UX Design & Development for RISC Platform.',
-    shortDesc: 'Comprehensive digital transformation for RISC.',
-    tags: ['DESIGN', 'DEVELOPMENT', 'SUPPORT'],
-    image: '/RISC/Screenshot_20260303_002342.png',
-    client: 'RISC',
-    duration: '4 Months',
+    title: 'Web3 Hacker House',
+    category: 'A week-long immersive co-living and building experience for top developers.',
+    shortDesc: 'Immersive builder experience.',
+    tags: ['HACKATHON', 'WEB3', 'IRL'],
+    image: 'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&q=80&w=1200',
+    client: 'DevDAO',
+    duration: '7 Days',
     date: 'Dec 2023',
     website: '#',
-    challenge: 'The client needed a complete digital overhaul to establish their presence in a highly competitive market. Their legacy systems were convoluted, making it difficult for users to navigate and for administrators to manage content efficiently.',
-    solution: 'We developed a responsive platform with custom animations, an intuitive UI, and a streamlined backend. The new architecture is highly modular, ensuring seamless updates and a drastic reduction in page load speeds across all devices.',
+    challenge: 'Bringing together the brightest minds in Web3 to collaborate, build, and innovate in a high-energy environment. The goal was to foster deep connections and rapid prototyping.',
+    solution: 'We curated a fully-equipped hacker house with high-speed internet, dedicated workspaces, and daily mentorship sessions. Developers co-lived and built next-gen protocols, culminating in a demo day with top VCs.',
     objectives: [
-      'Create a visually stunning digital presence',
-      'Build a cohesive platform for all users',
-      'Implement seamless content management',
-      'Optimize for fast loading times'
+      'Foster deep collaboration among developers',
+      'Accelerate Web3 protocol prototyping',
+      'Provide direct access to mentorship and funding'
     ],
-    targetAudience: 'Users seeking a streamlined digital experience, prioritizing usability and modern aesthetics. This includes tech-savvy professionals and everyday consumers looking for rapid access to information.',
+    targetAudience: 'Top-tier blockchain developers, founders, and Web3 enthusiasts looking to build and scale new projects.',
     keyFeatures: [
-      { title: 'Custom animation library', details: 'A bespoke animation library built using GSAP, tailored specifically for the brand to ensure ultra-smooth, lightweight visual transitions.' },
-      { title: 'Integrated system management', details: 'A centralized dashboard allowing administrators to oversee everything from analytics to user permissions without leaving the platform.' },
-      { title: 'Modern responsive design', details: 'A fully fluid layout system that automatically adapts to any screen size, providing a perfect viewing experience from ultra-wide monitors to small mobile screens.' },
-      { title: 'Content management system', details: 'A custom, headless CMS integration giving editors real-time preview capabilities and dynamic content modeling.' },
-      { title: 'Next level user interactivity', details: 'Micro-interactions on hover and click states that provide immediate tactile feedback, significantly improving the overall UX.' }
+      { title: '24/7 Co-working Space', details: 'A fully stocked workspace designed for flow state, complete with ergonomic setups and endless coffee.' },
+      { title: 'Mentorship Office Hours', details: 'Daily 1-on-1 sessions with industry leaders, cryptographers, and successful founders.' },
+      { title: 'Demo Day Pitch', details: 'The grand finale where teams pitched their 7-day builds to a panel of top-tier venture capitalists.' }
     ],
-    deliverables: ['Website Design & Development', 'Custom UI/UX', 'SEO Optimization', 'Analytics Setup', '3 Months Support'],
-    results: [
-      { metric: '350%', label: 'Increase in traffic' },
-      { metric: '180%', label: 'User engagement' },
-      { metric: '95%', label: 'Client satisfaction' }
-    ],
-    technologies: [
-      { category: 'Frontend', tech: 'React' },
-      { category: 'Framework', tech: 'Next.js' },
-      { category: 'Styling', tech: 'Tailwind CSS' },
-      { category: 'Animation', tech: 'GSAP' },
-      { category: 'Backend', tech: 'Node.js' }
+    deliverables: ['Sponsorships', 'Venue Logistics', 'Developer Onboarding', 'Demo Day Production'],
+    stats: [
+      { category: 'Attendees', tech: '150+' },
+      { category: 'Projects Built', tech: '32' },
+      { category: 'Funding Raised', tech: '$2.5M' },
+      { category: 'Hours Coded', tech: '10,000+' }
     ],
     images: [
-      '/RISC/Screenshot_20260303_002342.png',
-      '/RISC/Screenshot_20260303_002448.png',
-      '/RISC/Screenshot_20260303_002519.png',
-      '/RISC/Screenshot_20260303_002550.png',
-      '/RISC/Screenshot_20260303_002628.png',
-      '/RISC/Screenshot_20260303_002651.png'
+      'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&q=80&w=1200',
+      'https://images.unsplash.com/photo-1515187029135-18ee286d815b?auto=format&fit=crop&q=80&w=1200',
+      'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=1200'
     ]
   },
   {
     id: 2,
-    title: 'Campus Buddy',
-    category: 'Offline-First Mobile App for Activity & Focus Management.',
-    shortDesc: 'A powerful mobile toolkit for students combining focus management, finance tracking, and a secure vault.',
-    tags: ['MOBILE APP', 'DEVELOPMENT', 'UI/UX'],
-    image: '/CAMPUS BUDDY/Screenshot_20260302-224546_CollegeBuddy~2.png',
-    client: 'Campus Buddy',
-    duration: 'Ongoing',
+    title: 'GenZ Tech Summit',
+    category: 'The largest gathering of young founders and technologists.',
+    shortDesc: 'Connecting the next generation of builders.',
+    tags: ['CONFERENCE', 'NETWORKING', 'TECH'],
+    image: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&q=80&w=1200',
+    client: 'Tech Youth',
+    duration: '2 Days',
     date: 'March 2026',
     website: '#',
-    challenge: 'Students struggle with focus, task management, and keeping track of their daily expenses while dealing with overwhelming digital distractions. Balancing academic obligations with social life creates a chaotic digital footprint that decreases productivity.',
-    solution: 'We built an offline-first mobile application featuring a robust Dead Man’s Switch for distraction monitoring, a hard lockdown Kiosk Mode, finance manager, and a stealth vault. This creates a unified sanctuary that forces accountability and fosters deep work.',
+    challenge: 'Young founders often lack a dedicated platform to showcase their ideas and connect with like-minded peers and investors on a large scale.',
+    solution: 'A massive two-day summit featuring keynote speeches from GenZ unicorn founders, interactive workshops, and a massive networking mixer powered by our AI matchmaking.',
     objectives: [
-      'Provide strict distraction management through Kiosk and Dead Man’s Switch mode',
-      'Create an offline-first architecture with background sync',
-      'Integrate daily schedule management and financial tracking',
-      'Implement an encrypted stealth vault for private media'
+      'Inspire the next wave of young entrepreneurs',
+      'Facilitate meaningful networking via AI',
+      'Showcase cutting-edge tech built by GenZ'
     ],
-    targetAudience: 'Students, researchers, and young professionals who demand rigorous focus management and integrated tools. The app is designed for highly motivated individuals who want a proactive approach to limit their screen time and manage expenses efficiently.',
+    targetAudience: 'Students, young professionals, and early-stage founders under 25 looking for inspiration and connections.',
     keyFeatures: [
-      { title: 'Awake/Sleep toggles with Dead Man’s Switch', details: 'A sophisticated focus watchdog. If you fail to check in within your designated focus window, the app enforces a lockout or triggers an alert, ensuring you do not fall prey to digital wandering.' },
-      { title: 'Kiosk Mode (Hard Focus Lockdown)', details: 'Completely restricts the device to a single screen, disabling standard navigation buttons and notifications until the focus session is successfully completed, forcing you to concentrate.' },
-      { title: 'Dual Task Modes (Weekday/Holiday)', details: 'Automatically swaps out your schedule and available features based on the day of the week, allowing strict regimens during the week and relaxed interfaces on the weekends.' },
-      { title: 'Intelligent Notification Ecosystem', details: 'Intercepts incoming messages, stores them in a separate silent bundle, and even allows for offline automated replies to let your contacts know you are deeply focused.' },
-      { title: 'Built-in Finance Manager', details: 'Instead of switching between multiple finance apps, track your daily cafeteria expenses, bus fares, and planned future payments entirely offline with robust categorization.' },
-      { title: 'Encrypted Stealth Vault', details: 'A hidden, 256-bit encrypted storage space designed to look exactly like a fully functional music player. It only unlocks your private media and documents via a secret gesture sequence.' }
+      { title: 'Keynote Stages', details: 'Multiple stages featuring talks on AI, Web3, creator economy, and sustainable tech.' },
+      { title: 'AI Matchmaking Lounges', details: 'Dedicated zones where attendees met their algorithmically matched peers for high-value networking.' },
+      { title: 'Startup Alley', details: 'An exhibition floor showcasing 50+ early-stage startups founded by students.' }
     ],
-    deliverables: ['Mobile App', 'Local Database Architecture', 'Web Dashboard Control Center', 'Background Sync Engine', 'Encryption Module'],
-    results: [
-      { metric: '100%', label: 'Offline capability' },
-      { metric: '0', label: 'Distractions during Kiosk Mode' },
-      { metric: '256-bit', label: 'Vault Encryption' }
-    ],
-    technologies: [
-      { category: 'Frontend', tech: 'React Native' },
-      { category: 'Local DB', tech: 'WatermelonDB' },
-      { category: 'Backend', tech: 'PostgreSQL / Node.js' },
-      { category: 'State', tech: 'Redux/Zustand' },
-      { category: 'Security', tech: 'Crypto-JS' },
-      { category: 'Sync', tech: 'WebSockets' }
+    deliverables: ['Stage Design', 'Ticketing & Access', 'AI Matchmaking Engine', 'Speaker Management'],
+    stats: [
+      { category: 'Total Visitors', tech: '5,000+' },
+      { category: 'Speakers', tech: '45' },
+      { category: 'Matches Made', tech: '12,000' },
+      { category: 'Startups Exhibited', tech: '50' }
     ],
     images: [
-      '/CAMPUS BUDDY/Screenshot_20260302-224546_CollegeBuddy~2.png',
-      '/CAMPUS BUDDY/Screenshot_20260302-224553_CollegeBuddy~2.png',
-      '/CAMPUS BUDDY/Screenshot_20260302-224557_CollegeBuddy~2.png',
-      '/CAMPUS BUDDY/Screenshot_20260302-224618_CollegeBuddy~2.png',
-      '/CAMPUS BUDDY/Screenshot_20260302-224751_CollegeBuddy~2.png',
-      '/CAMPUS BUDDY/Screenshot_20260302-224803_CollegeBuddy~2.png'
-    ],
-    isMobileApp: true
+      'https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&q=80&w=1200',
+      'https://images.unsplash.com/photo-1505373877841-8d25f7d46678?auto=format&fit=crop&q=80&w=1200',
+      'https://images.unsplash.com/photo-1558403194-611308249d50?auto=format&fit=crop&q=80&w=1200'
+    ]
   },
   {
     id: 3,
-    title: 'Broken Shell',
-    category: 'An innovative arch-based terminal interface acting as a web OS.',
-    shortDesc: 'Complete web OS via terminal interface.',
-    tags: ['AESTHETIC', 'WEB3', 'DEVELOPMENT'],
-    image: '/BrokennShell/Screenshot_20260304_130807.png',
-    client: 'Broken Shell',
-    duration: 'Ongoing',
+    title: 'Neon Nights Party',
+    category: 'An exclusive token-gated warehouse party with live DJ sets.',
+    shortDesc: 'Exclusive Web3 nightlife experience.',
+    tags: ['PARTY', 'MUSIC', 'EXCLUSIVE'],
+    image: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&q=80&w=1200',
+    client: 'Nightlife Collective',
+    duration: '1 Night',
     date: 'March 2024',
     website: '#',
-    challenge: 'The client needed a highly engaging, flagship-level platform that mimics a full Linux-based operating system in the browser to establish their Web3 presence. Standard layouts wouldn\'t provide the deep technological vibe they were aiming for.',
-    solution: 'We engineered an arch-based terminal website where users control the environment via Linux commands. Upon logging in with an ID and password, users can access admin-assigned projects, integrating Web3 features and all social media channels into a cohesive OS-like experience.',
+    challenge: 'Creating a highly exclusive, secure, and memorable nightlife experience where entry and VIP access are entirely governed by on-chain assets.',
+    solution: 'A futuristic warehouse party featuring top electronic DJs. Entry was strictly token-gated, requiring attendees to hold a specific NFT or have a minimum on-chain reputation score.',
     objectives: [
-      'Create an immersive arch-based terminal UX',
-      'Implement an OS-level application manager',
-      'Integrate Telegram & other social ecosystems naturally',
-      'Achieve a flagship, cyberpunk-esque visual standard'
+      'Demonstrate the utility of NFT ticketing',
+      'Create a premium, immersive audiovisual experience',
+      'Ensure a secure, bot-free guestlist'
     ],
-    targetAudience: 'Developers, tech enthusiasts, and Web3 investors who appreciate low-level computing interfaces, gamified interactions, and uncompromising digital aesthetics.',
+    targetAudience: 'Web3 natives, NFT collectors, and electronic music fans seeking exclusive, high-energy IRL experiences.',
     keyFeatures: [
-      { title: 'Arch-Based Terminal Engine', details: 'A fully custom command-line parser that interprets standard Linux commands like ls, cd, cat alongside custom application triggers, making the entire website feel like a real OS.' },
-      { title: 'Secure Login & Project Assignment', details: 'A secure authentication layer verifying users via ID and passing them into a personalized space where admins can dynamically assign and revoke access to specific projects.' },
-      { title: 'Social & Web3 Integration', details: 'Deep connection to Telegram bots and seamless integration with Web3 wallets and smart contracts, allowing direct interaction from the terminal interface.' },
-      { title: 'Flagship Aesthetic & Shaders', details: 'Heavily stylized cathode-ray tube (CRT) effects, pixel-perfect brutalist typography, and WebGL background elements creating an unmistakable identity.' }
+      { title: 'Token-Gated Entry', details: 'Seamless NFC wristbands paired with user wallets to verify NFT ownership at the door in seconds.' },
+      { title: 'Immersive Audiovisuals', details: 'State-of-the-art projection mapping and laser systems synchronized with the DJ sets.' },
+      { title: 'VIP Token Lounges', details: 'Exclusive areas accessible only to holders of ultra-rare community tokens.' }
     ],
-    deliverables: ['Web Application', 'Terminal UI Engine', 'Auth Infrastructure', 'Web3 Integrations', 'Social Automations'],
-    results: [
-      { metric: '100%', label: 'Terminal immersion' },
-      { metric: '4x', label: 'Average session time' },
-      { metric: 'Multi-chain', label: 'Web3 Ready' }
-    ],
-    technologies: [
-      { category: 'Frontend', tech: 'Next.js' },
-      { category: 'Visuals', tech: 'Three.js / WebGL' },
-      { category: 'Backend', tech: 'Node.js' },
-      { category: 'Web3', tech: 'Ethers.js / Wagmi' },
-      { category: 'Terminal', tech: 'Xterm.js / Custom Engine' },
-      { category: 'Auth', tech: 'JWT / Custom OAuth' }
+    deliverables: ['Venue Transformation', 'Token-Gating Tech', 'Artist Booking', 'Audiovisual Production'],
+    stats: [
+      { category: 'Attendees', tech: '800' },
+      { category: 'Tickets Minted', tech: '1,000' },
+      { category: 'Artists', tech: '5' },
+      { category: 'Vibes', tech: 'Immaculate' }
     ],
     images: [
-      '/BrokennShell/Screenshot_20260304_130412.png',
-      '/BrokennShell/Screenshot_20260304_130500.png',
-      '/BrokennShell/Screenshot_20260304_130606.png',
-      '/BrokennShell/Screenshot_20260304_130739.png',
-      '/BrokennShell/Screenshot_20260304_130807.png'
+      'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&q=80&w=1200',
+      'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&q=80&w=1200',
+      'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&q=80&w=1200'
     ]
   },
   {
     id: 4,
-    title: 'WOC',
-    category: 'UI/UX Design & Custom Code development of WOC website.',
-    shortDesc: 'Premium digital experience for WOC.',
-    tags: ['DEVELOPMENT', 'WEB DESIGN'],
-    image: '/WOC/Screenshot_20260303_002732.png',
-    client: 'WOC',
-    duration: '5 Months',
+    title: 'AI Builders Workshop',
+    category: 'Hands-on sessions on building LLM agents and AI apps.',
+    shortDesc: 'Learn to build the future with AI.',
+    tags: ['WORKSHOP', 'AI', 'LEARNING'],
+    image: 'https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&q=80&w=1200',
+    client: 'AI Builders',
+    duration: '1 Day',
     date: 'March 2024',
     website: '#',
-    challenge: 'WOC required a highly premium, modern platform to present their vision online. Standard templates failed to capture their avant-garde identity, leading to a disconnect between their physical branding and their online presence.',
-    solution: 'We engineered a visually striking, highly interactive website focused on conveying maximum brand value rapidly. By utilizing advanced WebGL components and buttery-smooth scrolling, the website acts as an immersive digital showroom.',
+    challenge: 'Providing hands-on, deeply technical education on emerging AI frameworks to a diverse group of developers in a short timeframe.',
+    solution: 'An intensive, full-day workshop led by core contributors to popular open-source AI tools. Attendees built and deployed their own autonomous agents by the end of the day.',
     objectives: [
-      'Create an online experience that matches premium quality',
-      'Implement an intuitive layout system',
-      'Establish brand authority',
-      'Increase average engagement value'
+      'Upskill developers in LLM integration',
+      'Provide hands-on building experience',
+      'Foster a community of AI engineers'
     ],
-    targetAudience: 'Discerning users, potential investors, and luxury consumers who expect flawlessness and high-end design sensibilities. These users are heavily influenced by visual storytelling and seamless, app-like web experiences.',
+    targetAudience: 'Software engineers, data scientists, and technical founders eager to integrate generative AI into their products.',
     keyFeatures: [
-      { title: 'Interactive storytelling', details: 'A scroll-driven narrative that guides the user through the brand’s history, gradually revealing information to maintain a sense of mystery.' },
-      { title: 'Comprehensive layout system', details: 'A grid-defying modular layout that brings editorial, magazine-style brutalism directly into the web space while ensuring accessibility.' },
-      { title: 'Fluid animations', details: 'Physics-based page transitions and spring animations that make every click, hover, and swipe feel weighty and deeply satisfying.' },
-      { title: 'High performance', details: 'Despite heavy media use, strategic lazy-loading and edge-caching ensure the site achieves perfect Lighthouse scores across the globe.' },
-      { title: 'Fully responsive UI', details: 'Custom breakpoints guaranteeing the premium aesthetic is preserved flawlessly whether viewed on a 4K display or a compact smartphone.' }
+      { title: 'Live Coding Sessions', details: 'Real-time walkthroughs of building RAG pipelines and autonomous agents.' },
+      { title: 'Breakout Pods', details: 'Small group sessions for personalized debugging and architectural advice.' },
+      { title: 'Deployment Challenge', details: 'A mini-hackathon at the end where attendees competed to deploy the most creative AI app.' }
     ],
-    deliverables: ['E-commerce Website', 'Content Strategy', 'UI Systems', 'Web Components'],
-    results: [
-      { metric: '520%', label: 'Online growth' },
-      { metric: '85%', label: 'User satisfaction' },
-      { metric: '3.2x', label: 'Average engagement duration' }
-    ],
-    technologies: [
-      { category: 'Framework', tech: 'Next.js' },
-      { category: 'Animation', tech: 'Framer Motion' },
-      { category: 'Styling', tech: 'Tailwind CSS' }
+    deliverables: ['Curriculum Design', 'Technical Environment Setup', 'Instructor Sourcing', 'Catering'],
+    stats: [
+      { category: 'Participants', tech: '200' },
+      { category: 'Agents Deployed', tech: '185' },
+      { category: 'Instructors', tech: '8' },
+      { category: 'Lines of Code', tech: '50k+' }
     ],
     images: [
-      '/WOC/Screenshot_20260303_002732.png',
-      '/WOC/Screenshot_20260303_002814.png',
-      '/WOC/Screenshot_20260303_002856.png',
-      '/WOC/Screenshot_20260303_002929.png'
-    ]
-  },
-  {
-    id: 5,
-    title: 'E-Commerce Marketing Landing Page',
-    category: 'UI/UX Design for E-commerce Marketing Landing Page.',
-    shortDesc: 'High-converting landing page for digital marketing agency',
-    tags: ['SUPPORT', 'WEB DESIGN'],
-    image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=1200',
-    client: 'E-Comm Pro',
-    duration: '1 Month',
-    date: 'April 2024',
-    website: 'https://ecommpro.com',
-    challenge: 'The agency suffered from poor return on ad spend (ROAS) because their landing page was failing to convert cold traffic. Visitors were overwhelmed by walls of text and lacked an immediate understanding of the core value proposition.',
-    solution: 'We architected a high-velocity, conversion-focused landing page featuring a strict messaging hierarchy. By implementing dynamic social proof widgets and perfectly positioned CTAs derived from heatmap analytics, we dramatically optimized the funnel.',
-    objectives: [
-      'Achieve 5%+ conversion rate from paid traffic',
-      'Reduce cost per acquisition by 40%',
-      'A/B test different messaging approaches',
-      'Create scalable template for future campaigns'
-    ],
-    targetAudience: 'Ambitious e-commerce business owners and marketing executives actively seeking agency partnerships to scale their revenue. These decision-makers have limited time and demand immediate proof of ROI.',
-    keyFeatures: [
-      { title: 'Above-the-fold video testimonial', details: 'Instantly builds trust by showcasing high-production-value interviews with successful clients immediately upon page load.' },
-      { title: 'Interactive ROI calculator', details: 'A dynamic sliding tool that allows prospects to input their current metrics and instantly visualize their projected growth with the agency.' },
-      { title: 'Strategic CTA placement', details: 'Call-to-action buttons positioned aggressively yet elegantly at exact drop-off points determined by extensive scroll depth analysis.' },
-      { title: 'Trust signals and client logos', details: 'An animated marquee banner featuring recognizable industry brands to establish immediate authority by association.' },
-      { title: 'Mobile-optimized forms', details: 'A frictionless, floating multi-step lead capture form that takes less than 15 seconds to complete on a mobile device.' },
-      { title: 'Exit-intent popup', details: 'A smart overlay that triggers precisely when mouse velocity indicates departure, offering an exclusive downloadable resource' }
-    ],
-    deliverables: ['Landing Page Design', 'A/B Testing Setup', 'Analytics Integration', 'Conversion Optimization', 'Copy Writing', 'Ad Creative Suggestions'],
-    results: [
-      { metric: '680%', label: 'Conversion rate increase' },
-      { metric: '45%', label: 'Reduction in CPA' },
-      { metric: '8.2%', label: 'Final conversion rate' }
-    ],
-    technologies: [
-      { category: 'Markup', tech: 'HTML5' },
-      { category: 'Styling', tech: 'CSS3' },
-      { category: 'Language', tech: 'JavaScript' },
-      { category: 'Analytics', tech: 'Google Analytics' },
-      { category: 'User Insights', tech: 'Hotjar' },
-      { category: 'Optimization', tech: 'A/B Testing' }
-    ],
-    images: [
-      'https://images.unsplash.com/photo-1547658719-da2b51169166?auto=format&fit=crop&q=80&w=1600',
-      'https://images.unsplash.com/photo-1553877522-43269d4ea984?auto=format&fit=crop&q=80&w=1600',
-      'https://images.unsplash.com/photo-1432888622747-4eb9a8f2c2fd?auto=format&fit=crop&q=80&w=1600',
-      'https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&q=80&w=1600',
-      'https://images.unsplash.com/photo-1552581234-26160f608093?auto=format&fit=crop&q=80&w=1600',
-      'https://images.unsplash.com/photo-1559136555-9303baea8ebd?auto=format&fit=crop&q=80&w=1600'
+      'https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&q=80&w=1200',
+      'https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&q=80&w=1200',
+      'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&q=80&w=1200'
     ]
   }
 ];
@@ -331,8 +234,8 @@ function DeliverableCard({ item, className = '' }: { item: string; className?: s
         style={{ height: 0, opacity: 0, display: 'none' }}
       >
         <p className="text-[13px] leading-snug text-zinc-400 mt-3 pt-3 border-t border-zinc-600">
-          <span className="font-bold text-[#ecff33] uppercase tracking-wider text-xs">Delivered element  </span>
-          — Important project component successfully launched.
+          <span className="font-bold text-[#ecff33] uppercase tracking-wider text-xs">Event Asset  </span>
+          — Essential component successfully executed.
         </p>
       </div>
     </div>
@@ -471,10 +374,10 @@ export default function ProjectDetail() {
     return (
       <div className="min-h-screen bg-[#fcfcfc] flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-6xl font-black text-black mb-6">Project Not Found</h1>
+          <h1 className="text-6xl font-black text-black mb-6">Event Not Found</h1>
           <TransitionLink href="/project">
             <button className="text-2xl font-bold flex items-center gap-3 mx-auto hover:opacity-60 transition-opacity">
-              <ArrowLeft /> Back to Projects
+              <ArrowLeft /> Back to Events
             </button>
           </TransitionLink>
         </div>
@@ -503,7 +406,7 @@ export default function ProjectDetail() {
             </div>
             <span className="mx-2 shrink-0">/</span>
             <div className="shrink-0 whitespace-nowrap">
-              <TransitionLink href="/project" className="hover:text-black transition-colors">Work</TransitionLink>
+              <TransitionLink href="/project" className="hover:text-black transition-colors">Events</TransitionLink>
             </div>
             <span className="mx-2 shrink-0">/</span>
             <span className="text-black truncate w-full block min-w-0">{project.title}</span>
@@ -522,7 +425,7 @@ export default function ProjectDetail() {
         {/* Project Meta Grid */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 mb-8 sm:mb-10">
           <div className="hero-meta">
-            <div className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400 mb-2">Client</div>
+            <div className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400 mb-2">Organizer</div>
             <p className="text-base sm:text-lg md:text-xl font-bold text-black">{project.client}</p>
           </div>
           <div className="hero-meta">
@@ -651,13 +554,13 @@ export default function ProjectDetail() {
       <section className="px-4 sm:px-6 md:px-12 lg:px-20 py-10 md:py-16 bg-white fade-in-section">
         <div className="max-w-screen mx-auto">
           <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black tracking-tighter uppercase mb-8 md:mb-16 leading-none text-black">
-            Project Overview
+            Event Overview
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-8 lg:gap-12 mb-16 lg:mb-20">
             {/* The Challenge */}
             <div className="flex flex-col items-start border-t-2 border-black pt-6 sm:pt-12">
-              <h3 className="text-xl sm:text-2xl font-black tracking-tight uppercase text-zinc-400 mb-4 sm:mb-6">The Challenge</h3>
+              <h3 className="text-xl sm:text-2xl font-black tracking-tight uppercase text-zinc-400 mb-4 sm:mb-6">The Concept</h3>
               <p className="text-base sm:text-lg md:text-xl text-black leading-relaxed font-medium">
                 {project.challenge}
               </p>
@@ -665,7 +568,7 @@ export default function ProjectDetail() {
 
             {/* Our Solution */}
             <div className="flex flex-col items-start border-t-2 border-black pt-6 sm:pt-12">
-              <h3 className="text-xl sm:text-2xl font-black tracking-tight uppercase text-zinc-400 mb-4 sm:mb-6">Our Solution</h3>
+              <h3 className="text-xl sm:text-2xl font-black tracking-tight uppercase text-zinc-400 mb-4 sm:mb-6">The Experience</h3>
               <p className="text-base sm:text-lg md:text-xl text-black leading-relaxed font-medium">
                 {project.solution}
               </p>
@@ -682,7 +585,7 @@ export default function ProjectDetail() {
 
           {/* Key Features Dropdown Menu */}
           <div className="mb-8 lg:mb-12 mt-10 sm:mt-16 bg-black p-6 sm:p-8 md:p-10 lg:p-12 rounded-3xl -mx-4 sm:mx-0 shadow-2xl">
-            <h3 className="text-4xl sm:text-5xl md:text-6xl font-black tracking-tighter text-white uppercase mb-8 sm:mb-12">Feature Analysis</h3>
+            <h3 className="text-4xl sm:text-5xl md:text-6xl font-black tracking-tighter text-white uppercase mb-8 sm:mb-12">Event Highlights</h3>
             <div className="flex flex-col divide-y-2 divide-zinc-800 border-t-2 border-b-2 border-zinc-800">
               {project.keyFeatures.map((feature: any, i: number) => (
                 <FeatureItem key={i} feature={feature} />
@@ -698,10 +601,10 @@ export default function ProjectDetail() {
         <div className="max-w-screen mx-auto">
           <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 md:mb-16 gap-6">
             <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black tracking-tighter uppercase leading-none text-black">
-              The Tools Behind the Work
+              Event Statistics
             </h2>
             <p className="text-base sm:text-lg md:text-2xl text-zinc-500 max-w-xl font-medium leading-relaxed">
-              The foundational technologies and architecture that power this solution.
+              The metrics and impact generated by this experience.
             </p>
           </div>
 
@@ -712,17 +615,17 @@ export default function ProjectDetail() {
 
                 <div className="relative z-10">
                   <div className="inline-block bg-[#ecff33] text-black px-3 py-1.5 md:px-4 md:py-2 rounded-lg font-black text-[10px] md:text-xs uppercase tracking-widest mb-6 md:mb-8">
-                    Architecture
+                    Impact
                   </div>
                   <h3 className="text-2xl sm:text-3xl md:text-4xl font-black text-white mb-4 md:mb-6 tracking-tight leading-tight">
-                    Modern & Scalable Foundation
+                    Metrics that Matter
                   </h3>
                   <p className="text-base md:text-lg text-zinc-400 leading-relaxed mb-8 md:mb-10">
-                    Engineered for performance, reliability, and unparalleled user experience.
+                    A look at the numbers behind the event.
                   </p>
 
                   <div className="space-y-3 md:space-y-4 mb-2 md:mb-4">
-                    {['High Performance', 'Robust Security', 'Scalable Systems'].map((feat, i) => (
+                    {['High Engagement', 'Verified Attendees', 'Unmatched Energy'].map((feat, i) => (
                       <div key={i} className="flex items-center gap-3 md:gap-4 bg-white/5 p-3 md:p-4 rounded-xl border border-white/10">
                         <div className="w-2.5 h-2.5 md:w-3 md:h-3 bg-[#ecff33] rounded-full"></div>
                         <span className="text-white font-bold text-sm md:text-base">{feat}</span>
@@ -736,7 +639,7 @@ export default function ProjectDetail() {
             {/* Right Column - Tech Stack List */}
             <div className="lg:col-span-7 flex flex-col h-full">
               <div className="grid grid-cols-2 md:grid-cols-2 gap-3 sm:gap-4 h-full">
-                {project.technologies.map((item, i) => (
+                {(project as any).stats.map((item: any, i: number) => (
                   <div
                     key={i}
                     className="flex flex-col justify-center p-5 sm:p-6 md:p-8 bg-white rounded-2xl md:rounded-3xl border-2 border-zinc-200 hover:border-black hover:shadow-xl transition-all group"

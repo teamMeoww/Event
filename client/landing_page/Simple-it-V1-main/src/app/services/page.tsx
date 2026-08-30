@@ -12,10 +12,8 @@ import {
 } from 'lucide-react';
 import Footer from '@/components/organisms/Footer';
 import NavItem from '@/components/molecules/NavItem';
-import Morph from '@/components/molecules/Morph';
 import TransitionLink from '@/components/atoms/TransitionLink';
 import OroyaSequentialScroll from '@/components/organisms/OroyaSequentialScroll';
-import TechStack from '@/components/organisms/TechStack';
 import CTA from '@/components/molecules/CTA';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -45,51 +43,51 @@ interface Service {
 const SERVICES: Service[] = [
   {
     id: '01',
-    title: 'Web Development',
-    tagline: 'Code that performs.',
-    description: 'We build fast, scalable web applications using modern frameworks — from SaaS platforms and dashboards to full-stack e-commerce systems engineered for growth.',
-    icon: <Code2 className="w-8 h-8" />,
-    features: ['Custom Web Apps', 'E-commerce', 'SaaS Platforms', 'API Architecture']
+    title: 'Event & Auth Services',
+    tagline: 'Manage users and events seamlessly.',
+    description: 'Core microservices handling user registration, JWT login, comprehensive event creation, and organizer management.',
+    icon: <Globe className="w-8 h-8" />,
+    features: ['User Management', 'JWT Login', 'Event Creation', 'Organizer Management']
   },
   {
     id: '02',
-    title: 'UI/UX Design',
-    tagline: 'Designed to convert.',
-    description: 'Research-driven interfaces that turn complexity into clarity. Every pixel serves a purpose — guiding users toward action.',
-    icon: <Palette className="w-8 h-8" />,
-    features: ['User Research', 'Interface Design', 'Prototyping', 'Design Systems']
+    title: 'Ticket & Check-In Services',
+    tagline: 'Smooth entry and validation.',
+    description: 'Dedicated services for ticket creation, secure QR code generation, rapid QR scanning, and robust check-in logic.',
+    icon: <Smartphone className="w-8 h-8" />,
+    features: ['Ticket Creation', 'QR Generation', 'QR Scanning', 'Check-In Logic']
   },
   {
     id: '03',
-    title: 'Mobile Apps',
-    tagline: 'Native feel. Cross-platform reach.',
-    description: 'From native Swift/Kotlin to Flutter and React Native — we deliver polished mobile experiences your users will love.',
-    icon: <Smartphone className="w-8 h-8" />,
-    features: ['iOS & Android', 'Cross-Platform', 'App Store Launch', 'Push & Analytics']
+    title: 'Event Driven Architecture',
+    tagline: 'Scalable and decoupled.',
+    description: 'Powered by Apache Kafka, handling asynchronous ticket-events, checkin-events, and credential-events with persistent logs and high throughput.',
+    icon: <Layers className="w-8 h-8" />,
+    features: ['Apache Kafka', 'Event Streaming', 'Decoupled Systems', 'Replayable Logs']
   },
   {
     id: '04',
-    title: 'Digital Strategy',
-    tagline: 'Think before you build.',
-    description: 'We align technology with business goals through data-driven audits, product roadmaps, and go-to-market strategies that reduce risk.',
-    icon: <Target className="w-8 h-8" />,
-    features: ['Product Roadmaps', 'Tech Audits', 'Market Analysis', 'Growth Strategy']
+    title: 'Blockchain & Credential Services',
+    tagline: 'Immutable proof of attendance.',
+    description: 'EVM integration via Web3j to issue credentials, interact with smart contracts, and store transaction hashes on-chain.',
+    icon: <Code2 className="w-8 h-8" />,
+    features: ['Smart Contracts', 'Web3j Integration', 'Issue Credential', 'Store Tx Hash']
   },
   {
     id: '05',
-    title: 'Brand Identity',
-    tagline: 'Stand out. Stay remembered.',
-    description: 'From logo systems to full visual identities — we craft brands that feel premium, consistent, and unmistakably yours.',
-    icon: <Layers className="w-8 h-8" />,
-    features: ['Logo & Identity', 'Brand Guidelines', 'Visual Systems', 'Marketing Assets']
+    title: 'Verification & Passport Services',
+    tagline: 'Trustless validation.',
+    description: 'Public verification APIs, cross-checking with the blockchain, detecting mismatches, and managing attendee passports and reputation history.',
+    icon: <Target className="w-8 h-8" />,
+    features: ['Public Verification', 'Cross-check DB + Chain', 'Mismatch Detection', 'Reputation/History']
   },
   {
     id: '06',
-    title: 'Web Design',
-    tagline: 'First impressions, engineered.',
-    description: 'Stunning, responsive websites that load fast, rank well, and convert visitors into customers — designed for impact.',
-    icon: <Globe className="w-8 h-8" />,
-    features: ['Landing Pages', 'Corporate Sites', 'Responsive Design', 'SEO Optimized']
+    title: 'Wallet & Infrastructure',
+    tagline: 'Connecting the ecosystem.',
+    description: 'Robust backend backed by Spring Boot, MongoDB for operational data, Redis for caching/rate limiting, and seamless Wallet Connect integration.',
+    icon: <Palette className="w-8 h-8" />,
+    features: ['Spring Boot', 'MongoDB / Redis', 'Wallet Connect', 'Rate Limiting']
   }
 ];
 
@@ -182,11 +180,6 @@ const Services: React.FC = () => {
   return (
     <div ref={containerRef} className="bg-[#fcfcfc] text-[#1a1a1a] antialiased min-h-screen">
       <NavItem />
-      <style dangerouslySetInnerHTML={{
-        __html: `
-        .hero-title, .hero-subtitle, .hero-stat, .service-card, .tech-title, .tech-badge { opacity: 0; }
-      `}} />
-
       {/* Hero Header */}
       <header className="pt-24 sm:pt-28 md:pt-40 pb-6 sm:pb-12 md:pb-16 px-4 sm:px-6 md:px-12 max-w-screen mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
@@ -200,30 +193,30 @@ const Services: React.FC = () => {
             </div>
 
             <h1 ref={titleRef} className="hero-title text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-black tracking-tight leading-[0.95] text-zinc-900 mb-8">
-              What We Do Best
+              Backend Architecture
             </h1>
             <p ref={subtitleRef} className="hero-subtitle text-zinc-600 text-xl md:text-2xl leading-relaxed">
-              We craft digital products that combine stunning design with powerful functionality. From concept to launch, we're your partner in building remarkable experiences.
+              Our Event App GenZ is powered by a robust, domain-driven microservices architecture, built for scalability, real-time event streaming with Kafka, and immutable blockchain verification.
             </p>
           </div>
 
           {/* Right: Stats Grid */}
           <div className="grid grid-cols-2 gap-6">
             <div className="hero-stat bg-black rounded-3xl p-8 text-white">
-              <div className="text-3xl sm:text-4xl md:text-5xl font-black mb-2">50+</div>
-              <div className="text-sm font-bold uppercase tracking-wide opacity-80">Projects Delivered</div>
+              <div className="text-3xl sm:text-4xl md:text-5xl font-black mb-2">9+</div>
+              <div className="text-sm font-bold uppercase tracking-wide opacity-80">Microservices</div>
             </div>
             <div className="hero-stat bg-black rounded-3xl p-8 text-white">
-              <div className="text-3xl sm:text-4xl md:text-5xl font-black mb-2">15+</div>
-              <div className="text-sm font-bold uppercase tracking-wide opacity-80">Team Members</div>
+              <div className="text-3xl sm:text-4xl md:text-5xl font-black mb-2">Kafka</div>
+              <div className="text-sm font-bold uppercase tracking-wide opacity-80">Event Streaming</div>
             </div>
             <div className="hero-stat bg-[#ecff33] rounded-3xl p-8 text-black">
-              <div className="text-3xl sm:text-4xl md:text-5xl font-black mb-2">98%</div>
-              <div className="text-sm font-bold uppercase tracking-wide opacity-80">Client Satisfaction</div>
+              <div className="text-3xl sm:text-4xl md:text-5xl font-black mb-2">Web3</div>
+              <div className="text-sm font-bold uppercase tracking-wide opacity-80">Blockchain Ready</div>
             </div>
             <div className="hero-stat bg-black rounded-3xl p-8 text-white">
-              <div className="text-3xl sm:text-4xl md:text-5xl font-black mb-2">24/7</div>
-              <div className="text-sm font-bold uppercase tracking-wide opacity-80">Support Available</div>
+              <div className="text-3xl sm:text-4xl md:text-5xl font-black mb-2">100%</div>
+              <div className="text-sm font-bold uppercase tracking-wide opacity-80">Scalable</div>
             </div>
           </div>
         </div>
@@ -232,8 +225,8 @@ const Services: React.FC = () => {
       {/* Services Grid - Bento Box Layout */}
       <section ref={servicesGridRef} className="max-w-screen mx-auto px-6 md:px-12 pb-32">
         <div className="mb-16">
-          <h2 className="text-5xl md:text-6xl font-black text-zinc-900 mb-4">Our Expertise</h2>
-          <p className="text-zinc-600 text-xl max-w-2xl">Comprehensive solutions tailored to your business needs</p>
+          <h2 className="text-5xl md:text-6xl font-black text-zinc-900 mb-4">System Components</h2>
+          <p className="text-zinc-600 text-xl max-w-2xl">High Level Design of the Event App GenZ</p>
         </div>
 
         {/* Bento Grid Layout */}
@@ -345,12 +338,6 @@ const Services: React.FC = () => {
 
       {/* Oroya Approach — Sequential Scroll Section */}
       <OroyaSequentialScroll />
-
-      {/* Technology Stack */}
-      <TechStack />
-
-      {/* Process Section - Morph Component */}
-      <Morph />
 
       <CTA />
 

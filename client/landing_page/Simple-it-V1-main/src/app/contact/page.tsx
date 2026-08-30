@@ -71,7 +71,7 @@ const Contact: React.FC = () => {
   }, [gsapLoaded]);
 
   return (
-    <div className="bg-[#fcfcfc] text-[#1a1a1a] antialiased min-h-screen">
+    <div className="bg-[#111111] text-zinc-100 antialiased min-h-screen">
       <NavItem />
 
       {/* Hero Header */}
@@ -79,12 +79,12 @@ const Contact: React.FC = () => {
         <div ref={titleRef}>
           {/* Elegant Breadcrumb Navigation */}
           <div className="text-[10px] sm:text-xs font-bold uppercase tracking-widest text-zinc-400 mb-6 sm:mb-8 whitespace-nowrap overflow-x-auto scrollbar-hide pr-4">
-            <TransitionLink href="/" className="hover:text-zinc-900 transition-colors inline">Home</TransitionLink>
+            <TransitionLink href="/" className="hover:text-white transition-colors inline">Home</TransitionLink>
             <span className="mx-2">/</span>
-            <span className="text-zinc-900 inline">Contact</span>
+            <span className="text-white inline">Contact</span>
           </div>
           <h1
-            className="text-[2.5rem] leading-[1.05] sm:text-6xl md:text-7xl lg:text-[10rem] font-black tracking-tight lg:leading-none text-zinc-900"
+            className="text-[2.5rem] leading-[1.05] sm:text-6xl md:text-7xl lg:text-[10rem] font-black tracking-tight lg:leading-none text-white"
           >
             Let&apos;s Connect
           </h1>
@@ -96,21 +96,21 @@ const Contact: React.FC = () => {
 
         {/* Mobile: Sidebar info card on top */}
         <div className="block lg:hidden mb-8 sidebar-content">
-          <div className="bg-gray-100 rounded-[1.5rem] p-6 sm:p-8 space-y-6">
+          <div className="bg-[#1a1a1a] border border-zinc-800 rounded-[1.5rem] p-6 sm:p-8 space-y-6">
             <p className="text-zinc-500 text-base sm:text-lg font-medium">
-              In touch. New spots for February 2026.
+              Ready to host your next big event? Let's talk scale.
             </p>
             <TransitionLink href="/book">
-              <button className="flex items-center rounded-full gap-2 bg-[#ecff33] px-6 py-4 font-bold text-base hover:shadow-xl hover:-translate-y-1 transition-all text-black">
+              <button className="flex items-center rounded-full gap-2 bg-white px-6 py-4 font-bold text-base hover:shadow-xl hover:-translate-y-1 transition-all text-zinc-900">
                 <ArrowUpRight className="w-5 h-5" />
                 Book a Call
               </button>
             </TransitionLink>
             <div className="flex gap-5 pt-2">
-              <a href="#" className="text-zinc-400 hover:text-black transition-colors flex items-center gap-1.5 text-sm font-bold uppercase tracking-widest">
+              <a href="#" className="text-zinc-400 hover:text-zinc-900 transition-colors flex items-center gap-1.5 text-sm font-bold uppercase tracking-widest">
                 <Instagram className="w-4 h-4" /> Instagram
               </a>
-              <a href="#" className="text-zinc-400 hover:text-black transition-colors flex items-center gap-1.5 text-sm font-bold uppercase tracking-widest">
+              <a href="#" className="text-zinc-400 hover:text-zinc-900 transition-colors flex items-center gap-1.5 text-sm font-bold uppercase tracking-widest">
                 <Linkedin className="w-4 h-4" /> LinkedIn
               </a>
             </div>
@@ -124,10 +124,10 @@ const Contact: React.FC = () => {
           <aside className="hidden lg:block lg:col-span-3 space-y-12 sidebar-content">
             <div className="space-y-6">
               <p className="text-zinc-500 text-xl font-medium max-w-[250px]">
-                In touch. New spots for February 2026.
+                Ready to host your next big event? Let's talk scale.
               </p>
               <TransitionLink href="/book">
-                <button className="flex items-center rounded-full gap-2 bg-[#ecff33] px-8 py-5 font-bold text-lg hover:shadow-xl hover:-translate-y-1 transition-all text-black">
+                <button className="flex items-center rounded-full gap-2 bg-white px-8 py-5 font-bold text-lg hover:shadow-xl hover:-translate-y-1 transition-all text-zinc-900">
                   <ArrowUpRight className="w-5 h-5" />
                   Book a Call
                 </button>
@@ -135,10 +135,10 @@ const Contact: React.FC = () => {
             </div>
 
             <div className="flex flex-col gap-4 text-zinc-400 font-bold uppercase tracking-widest text-sm">
-              <a href="#" className="hover:text-black transition-colors flex items-center gap-2 group">
+              <a href="#" className="hover:text-zinc-900 transition-colors flex items-center gap-2 group">
                 Instagram <ArrowUpRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" />
               </a>
-              <a href="#" className="hover:text-black transition-colors flex items-center gap-2 group">
+              <a href="#" className="hover:text-zinc-900 transition-colors flex items-center gap-2 group">
                 LinkedIn <ArrowUpRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" />
               </a>
             </div>
@@ -146,9 +146,9 @@ const Contact: React.FC = () => {
 
           {/* Right Column: Quote Form */}
           <div ref={formRef} className="lg:col-span-9 space-y-8 sm:space-y-12">
-            <div className="form-container bg-gray-100 rounded-[1.5rem] sm:rounded-3xl p-5 sm:p-8 md:p-12 shadow-sm space-y-8 sm:space-y-12">
+            <div className="form-container bg-[#1a1a1a] border border-zinc-800 rounded-[1.5rem] sm:rounded-3xl p-5 sm:p-8 md:p-12 shadow-sm space-y-8 sm:space-y-12">
               <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight">
-                Get a quote
+                Partner with us
               </h2>
 
               <form className="space-y-6 sm:space-y-8" onSubmit={async (e) => {
@@ -191,7 +191,7 @@ const Contact: React.FC = () => {
                       name="name"
                       required
                       placeholder="Name *"
-                      className="w-full bg-[#f8f8f8] border-b border-zinc-200 py-3 sm:py-4 px-3 sm:px-4 focus:border-zinc-900 outline-none transition-colors placeholder:opacity-0 focus:placeholder:opacity-100 placeholder:text-zinc-400"
+                      className="w-full bg-[#222222] border border-zinc-800 rounded-lg text-zinc-200 py-3 sm:py-4 px-3 sm:px-4 focus:border-zinc-500 outline-none transition-colors placeholder:opacity-0 focus:placeholder:opacity-100 placeholder:text-zinc-400"
                     />
                   </div>
                   <div className={`${styles.formField} space-y-2`}>
@@ -201,7 +201,7 @@ const Contact: React.FC = () => {
                       name="surname"
                       required
                       placeholder="Surname *"
-                      className="w-full bg-[#f8f8f8] border-b border-zinc-200 py-3 sm:py-4 px-3 sm:px-4 focus:border-zinc-900 outline-none transition-colors placeholder:opacity-0 focus:placeholder:opacity-100 placeholder:text-zinc-400"
+                      className="w-full bg-[#222222] border border-zinc-800 rounded-lg text-zinc-200 py-3 sm:py-4 px-3 sm:px-4 focus:border-zinc-500 outline-none transition-colors placeholder:opacity-0 focus:placeholder:opacity-100 placeholder:text-zinc-400"
                     />
                   </div>
                 </div>
@@ -215,13 +215,13 @@ const Contact: React.FC = () => {
                       name="email"
                       required
                       placeholder="E-mail *"
-                      className="w-full bg-[#f8f8f8] border-b border-zinc-200 py-3 sm:py-4 px-3 sm:px-4 focus:border-zinc-900 outline-none transition-colors placeholder:opacity-0 focus:placeholder:opacity-100 placeholder:text-zinc-400"
+                      className="w-full bg-[#222222] border border-zinc-800 rounded-lg text-zinc-200 py-3 sm:py-4 px-3 sm:px-4 focus:border-zinc-500 outline-none transition-colors placeholder:opacity-0 focus:placeholder:opacity-100 placeholder:text-zinc-400"
                     />
                   </div>
                   <div className={`${styles.formField} space-y-2`}>
                     <label className="text-zinc-400 text-xs sm:text-sm font-medium">Contact Number *</label>
-                    <div className="w-full bg-[#f8f8f8] border-b border-zinc-200 flex items-center focus-within:border-zinc-900 transition-colors">
-                      <span className="py-3 sm:py-4 pl-3 sm:pl-4 pr-2 text-zinc-600 font-medium flex items-center gap-1 text-sm sm:text-base whitespace-nowrap">
+                    <div className="w-full bg-[#222222] border border-zinc-800 rounded-lg text-zinc-200 flex items-center focus-within:border-zinc-900 transition-colors">
+                      <span className="py-3 sm:py-4 pl-3 sm:pl-4 pr-2 text-zinc-200 font-medium flex items-center gap-1 text-sm sm:text-base whitespace-nowrap">
                         🇮🇳 +91
                       </span>
                       <input
@@ -244,66 +244,64 @@ const Contact: React.FC = () => {
                 </div>
 
                 <div className={`${styles.formField} space-y-2`}>
-                  <label className="text-zinc-400 text-xs sm:text-sm font-medium">Company&apos;s Name / URL / Social Media</label>
+                  <label className="text-zinc-400 text-xs sm:text-sm font-medium">Organization / Event Name</label>
                   <input
                     type="text"
                     name="company"
-                    placeholder="Company's Name / URL / Social Media"
-                    className="w-full bg-[#f8f8f8] border-b border-zinc-200 py-3 sm:py-4 px-3 sm:px-4 focus:border-zinc-900 outline-none transition-colors placeholder:opacity-0 focus:placeholder:opacity-100 placeholder:text-zinc-400"
+                    placeholder="Organization / Event Name"
+                    className="w-full bg-[#222222] border border-zinc-800 rounded-lg text-zinc-200 py-3 sm:py-4 px-3 sm:px-4 focus:border-zinc-500 outline-none transition-colors placeholder:opacity-0 focus:placeholder:opacity-100 placeholder:text-zinc-400"
                   />
                 </div>
 
                 {/* Custom Styled Dropdowns */}
                 <div className={`${styles.formField} space-y-2`}>
-                  <label className="text-zinc-400 text-xs sm:text-sm font-medium">Services you need? *</label>
-                  <select name="services" required className="w-full bg-[#f8f8f8] border-b border-zinc-200 py-3 sm:py-4 px-3 sm:px-4 text-zinc-600 focus:border-zinc-900 outline-none transition-colors appearance-none cursor-pointer text-sm sm:text-base">
-                    <option value="">Services you need? *</option>
-                    <option value="web">Web Development</option>
-                    <option value="mobile">Mobile App Development</option>
-                    <option value="web3">WEB3</option>
-                    <option value="ai">AI Agent</option>
-                    <option value="ui-ux">UI/UX Design</option>
-                    <option value="branding">Branding</option>
+                  <label className="text-zinc-400 text-xs sm:text-sm font-medium">Event Type *</label>
+                  <select name="services" required className="w-full bg-[#222222] border border-zinc-800 rounded-lg text-zinc-200 py-3 sm:py-4 px-3 sm:px-4 text-zinc-200 focus:border-zinc-500 outline-none transition-colors appearance-none cursor-pointer text-sm sm:text-base">
+                    <option value="">Event Type *</option>
+                    <option value="hackathon">Hackathon</option>
+                    <option value="conference">Conference / Summit</option>
+                    <option value="workshop">Workshop</option>
+                    <option value="meetup">Meetup</option>
+                    <option value="party">Party / Social</option>
                     <option value="other">Other</option>
                   </select>
                 </div>
 
                 <div className={`${styles.formField} space-y-2`}>
-                  <label className="text-zinc-400 text-xs sm:text-sm font-medium">Type of designs you prefer *</label>
-                  <select name="designs" required className="w-full bg-[#f8f8f8] border-b border-zinc-200 py-3 sm:py-4 px-3 sm:px-4 text-zinc-600 focus:border-zinc-900 outline-none transition-colors appearance-none cursor-pointer text-sm sm:text-base">
-                    <option value="">Type of designs you prefer *</option>
-                    <option value="minimalist">Minimalist</option>
-                    <option value="modern">Modern</option>
-                    <option value="bold">Bold &amp; Vibrant</option>
-                    <option value="classic">Classic &amp; Elegant</option>
-                    <option value="playful">Playful &amp; Creative</option>
+                  <label className="text-zinc-400 text-xs sm:text-sm font-medium">Expected Attendees *</label>
+                  <select name="designs" required className="w-full bg-[#222222] border border-zinc-800 rounded-lg text-zinc-200 py-3 sm:py-4 px-3 sm:px-4 text-zinc-200 focus:border-zinc-500 outline-none transition-colors appearance-none cursor-pointer text-sm sm:text-base">
+                    <option value="">Expected Attendees *</option>
+                    <option value="small">1 - 100</option>
+                    <option value="medium">100 - 500</option>
+                    <option value="large">500 - 1,000</option>
+                    <option value="xlarge">1,000+</option>
                   </select>
                 </div>
 
                 <div className={`${styles.formField} space-y-2`}>
-                  <label className="text-zinc-400 text-xs sm:text-sm font-medium">How much are you looking to invest? *</label>
-                  <select name="investment" required className="w-full bg-[#f8f8f8] border-b border-zinc-200 py-3 sm:py-4 px-3 sm:px-4 text-zinc-600 focus:border-zinc-900 outline-none transition-colors appearance-none cursor-pointer text-sm sm:text-base">
-                    <option value="">How much are you looking to invest? *</option>
-                    <option value="5k-10k">₹5,000 - ₹10,000</option>
-                    <option value="10k-25k">₹10,000 - ₹25,000</option>
-                    <option value="25k-50k">₹25,000 - ₹50,000</option>
-                    <option value="50k+">₹50,000+</option>
+                  <label className="text-zinc-400 text-xs sm:text-sm font-medium">Web3 / Blockchain Features? *</label>
+                  <select name="investment" required className="w-full bg-[#222222] border border-zinc-800 rounded-lg text-zinc-200 py-3 sm:py-4 px-3 sm:px-4 text-zinc-200 focus:border-zinc-500 outline-none transition-colors appearance-none cursor-pointer text-sm sm:text-base">
+                    <option value="">Web3 / Blockchain Features? *</option>
+                    <option value="full">Yes - Full Integration</option>
+                    <option value="tickets">Yes - Just Ticketing</option>
+                    <option value="no">No</option>
+                    <option value="unsure">Not sure yet</option>
                   </select>
                 </div>
 
                 <div className={`${styles.formField} space-y-2`}>
-                  <label className="text-zinc-400 text-xs sm:text-sm font-medium">Project details *</label>
+                  <label className="text-zinc-400 text-xs sm:text-sm font-medium">Event details *</label>
                   <textarea
                     rows={4}
                     name="details"
                     required
-                    placeholder="Project details (Give a little bit of detail about the project)*"
-                    className="w-full bg-[#f8f8f8] border-b border-zinc-200 py-3 sm:py-4 px-3 sm:px-4 focus:border-zinc-900 outline-none transition-colors resize-none placeholder:opacity-0 focus:placeholder:opacity-100 placeholder:text-zinc-400"
+                    placeholder="Event details (Tell us a bit about what you're planning)*"
+                    className="w-full bg-[#222222] border border-zinc-800 rounded-lg text-zinc-200 py-3 sm:py-4 px-3 sm:px-4 focus:border-zinc-500 outline-none transition-colors resize-none placeholder:opacity-0 focus:placeholder:opacity-100 placeholder:text-zinc-400"
                   ></textarea>
                 </div>
 
                 <button type="submit" disabled={isSubmitting} className="flex items-center gap-3 text-lg sm:text-xl font-bold group pt-4 sm:pt-8 disabled:opacity-70 disabled:cursor-not-allowed transition-all w-full sm:w-auto">
-                  <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-[#ecff33] flex items-center justify-center group-hover:translate-x-2 transition-transform shadow-md flex-shrink-0">
+                  <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-white flex items-center justify-center group-hover:translate-x-2 transition-transform shadow-md flex-shrink-0">
                     {isSubmitting ? (
                       <div className="w-5 h-5 border-2 border-zinc-900 border-t-transparent rounded-full animate-spin"></div>
                     ) : (

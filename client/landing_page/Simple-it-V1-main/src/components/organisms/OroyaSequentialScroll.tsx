@@ -116,6 +116,7 @@ export default function OroyaSequentialScroll() {
                     pinSpacing: true,
                     scrub: 2,
                     invalidateOnRefresh: true,
+                    refreshPriority: 1,
                 },
             });
 

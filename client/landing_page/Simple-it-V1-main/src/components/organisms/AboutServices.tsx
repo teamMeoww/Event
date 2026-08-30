@@ -17,8 +17,8 @@ interface AboutServicesProps {
 
 const services: Service[] = [
     {
-        title: "Brand Architecture",
-        desc: "We engineer definitive brand systems. By aligning core identity with market positioning, we ensure your brand projects absolute authority.",
+        title: "Web3 Ticketing",
+        desc: "No more fake tickets or scalpers. Our blockchain-backed ticketing ensures true ownership, seamless transfers, and exclusive token-gated access to the hottest events.",
         height: "h-[480px]",
         position: "md:mt-6",
         icon: (
@@ -26,8 +26,8 @@ const services: Service[] = [
         )
     },
     {
-        title: "High-Performance Web",
-        desc: "Uncompromising design meets technical superiority. We build fluid, performant platforms engineered to convert audiences into loyalists.",
+        title: "Verified Reputation",
+        desc: "Your vibes, on-chain. Build a verifiable reputation based on the events you attend, communities you join, and the value you bring to the network.",
         height: "h-[500px]",
         position: "md:-mt-4",
         icon: (
@@ -35,8 +35,8 @@ const services: Service[] = [
         )
     },
     {
-        title: "Strategic Intelligence",
-        desc: "A brand without a blueprint is just noise. We conduct rigorous research and synthesize narratives that command market attention.",
+        title: "IRL Hangouts",
+        desc: "We bridge the gap between digital flex and physical fun. Discover, organize, and attend curated real-life hangouts with people who match your frequency.",
         height: "h-[460px]",
         position: "md:mt-20",
         icon: (
@@ -44,8 +44,8 @@ const services: Service[] = [
         )
     },
     {
-        title: "Digital Systems",
-        desc: "Frictionless digital experiences. We architect responsive, intuitive environments driven by sophisticated micro-interactions.",
+        title: "AI Matchmaking",
+        desc: "Stop swiping blindly. Our AI engine analyzes your on-chain activity and stated preferences to match you with the exact right squad for any event.",
         height: "h-[490px]",
         position: "md:mt-2",
         icon: (
@@ -53,8 +53,8 @@ const services: Service[] = [
         )
     },
     {
-        title: "Systemic Identity Structure",
-        desc: "Visual presence must be absolute. We forge cohesive design systems that protect your brand's integrity across every medium.",
+        title: "Passport Credentials",
+        desc: "Your unified digital identity. Carry your event history, achievements, and access passes wherever you go, completely under your control.",
         height: "h-[470px]",
         position: "md:mt-14",
         icon: (

@@ -35,8 +35,8 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#050505] text-white">
-      <div className="w-full max-w-md p-8 bg-zinc-950 border border-zinc-800 rounded-3xl shadow-2xl">
+    <div className="min-h-screen flex items-center justify-center bg-[#111111] text-white">
+      <div className="w-full max-w-md p-8 bg-[#1a1a1a] border border-zinc-800 rounded-3xl shadow-2xl">
         <h1 className="text-4xl font-black tracking-tighter mb-2 italic">Join Us</h1>
         <p className="text-zinc-400 mb-8 font-light">Create an account to start managing events.</p>
 
@@ -52,7 +52,7 @@ export default function SignupPage() {
             <input
               type="text"
               required
-              className="w-full px-4 py-3 bg-zinc-900 border border-zinc-800 rounded-xl text-white placeholder-zinc-500 focus:outline-none focus:border-[#ecff33] transition-colors"
+              className="w-full px-4 py-3 bg-[#222222] border border-zinc-800 rounded-xl text-white placeholder-zinc-500 focus:outline-none focus:border-zinc-500 transition-colors"
               placeholder="John Doe"
               value={name}
               onChange={(e) => setName(e.target.value)}
@@ -63,7 +63,7 @@ export default function SignupPage() {
             <input
               type="email"
               required
-              className="w-full px-4 py-3 bg-zinc-900 border border-zinc-800 rounded-xl text-white placeholder-zinc-500 focus:outline-none focus:border-[#ecff33] transition-colors"
+              className="w-full px-4 py-3 bg-[#222222] border border-zinc-800 rounded-xl text-white placeholder-zinc-500 focus:outline-none focus:border-zinc-500 transition-colors"
               placeholder="you@example.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -74,7 +74,7 @@ export default function SignupPage() {
             <input
               type="password"
               required
-              className="w-full px-4 py-3 bg-zinc-900 border border-zinc-800 rounded-xl text-white placeholder-zinc-500 focus:outline-none focus:border-[#ecff33] transition-colors"
+              className="w-full px-4 py-3 bg-[#222222] border border-zinc-800 rounded-xl text-white placeholder-zinc-500 focus:outline-none focus:border-zinc-500 transition-colors"
               placeholder="••••••••"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -85,7 +85,7 @@ export default function SignupPage() {
             <select
               value={role}
               onChange={(e) => setRole(e.target.value)}
-              className="w-full px-4 py-3 bg-zinc-900 border border-zinc-800 rounded-xl text-white focus:outline-none focus:border-[#ecff33] transition-colors appearance-none"
+              className="w-full px-4 py-3 bg-[#222222] border border-zinc-800 rounded-xl text-white focus:outline-none focus:border-zinc-500 transition-colors appearance-none"
             >
               <option value="ORGANIZER">Organizer</option>
               <option value="VOLUNTEER">Volunteer</option>

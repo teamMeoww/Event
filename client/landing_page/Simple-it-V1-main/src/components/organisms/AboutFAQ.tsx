@@ -10,36 +10,36 @@ interface FAQ {
 
 const faqs: FAQ[] = [
     {
-        question: "What does your typical project timeline look like?",
-        answer: "Every project is unique, but our typical engagements range from 6 to 12 weeks. We begin with a 1-2 week discovery phase, followed by iterative design and development sprints. We'll provide a detailed timeline during our initial scoping."
+        question: "What is Event App GenZ?",
+        answer: "We are a next-generation event platform built specifically for GenZ. We combine Web3 ticketing, AI matchmaking, and on-chain reputation to create seamless, bot-free, and highly curated IRL hangouts."
     },
     {
-        question: "How do you handle project management and communication?",
-        answer: "We believe in radical transparency. Process includes weekly check-ins, a dedicated shared Slack channel, and an active Notion or Linear board so you can track progress, view deliverables, and provide feedback in real-time."
+        question: "How does Web3 Ticketing work?",
+        answer: "Every ticket is minted as an NFT on the blockchain. This means you truly own your ticket, can transfer it securely without getting scammed, and can use it to access token-gated experiences."
     },
     {
-        question: "What is your pricing structure? Fixed or hourly?",
-        answer: "We offer both flexible arrangements depending on the project scope. For clearly defined scopes, we prefer milestone-based fixed pricing. For continuous product development and staff augmentation, we operate on a dedicated retainer or hourly basis."
+        question: "What is the Verified Reputation system?",
+        answer: "Your reputation is built based on your event attendance, community participation, and positive interactions. It helps maintain high-quality communities and ensures you get matched with people who share your vibe."
     },
     {
-        question: "Do you offer post-launch support and maintenance?",
-        answer: "Absolutely. Launching is just the beginning. We offer ongoing support, maintenance, and optimization packages to ensure your product scales securely and remains flawless as your user base grows."
+        question: "How does AI Matchmaking help me?",
+        answer: "Our AI analyzes your interests, past events, and verified reputation to suggest events you'll love and introduce you to potential friends or collaborators before you even arrive at the venue."
     },
     {
-        question: "How much involvement is expected from our team?",
-        answer: "We prefer deep collaboration. Plan for 2-3 hours of sync time per week for feedback and approvals. However, we handle all the heavy lifting in design and engineering so you can stay focused on running your business."
+        question: "What are Passport Credentials?",
+        answer: "Your Passport is your decentralized identity. It securely holds your tickets, event POAPs (Proof of Attendance Protocols), and reputation scores, all controlled by you."
     },
     {
-        question: "Can you work with our existing codebase or brand guidelines?",
-        answer: "Yes. Our team is highly adaptable. We routinely step into existing codebases to refactor, optimize, or build on top of them. We also seamlessly adopt and evolve existing brand guidelines to fit modern digital landscapes."
+        question: "Do I need to know about crypto to use this?",
+        answer: "Not at all! While we use blockchain technology under the hood to ensure security and ownership, our app is designed to feel just like any other modern social application. No complex wallets required to get started."
     },
     {
-        question: "What technology stack do you primarily use?",
-        answer: "We are framework-agnostic but lean heavily into Next.js, React, Node.js, and TypeScript for modern web applications. We also rely on stable backends like Postgres and flexible cloud infrastructure via AWS and Vercel."
+        question: "How do I host my own event?",
+        answer: "Anyone can become an organizer. Simply create an event, set your ticketing rules (including any reputation or token requirements), and our platform will help you reach the right audience."
     },
     {
-        question: "How do we get started with a new project?",
-        answer: "It starts with a conversation. Reach out via our contact page to schedule an introductory call. We'll discuss your goals, technical constraints, and timeline, then follow up with a formal proposal and statement of work."
+        question: "Is my data safe and private?",
+        answer: "Absolutely. We utilize Zero-Knowledge proofs and decentralized storage principles, meaning you control what data you share and who you share it with, unlike traditional Web2 platforms."
     }
 ];
 

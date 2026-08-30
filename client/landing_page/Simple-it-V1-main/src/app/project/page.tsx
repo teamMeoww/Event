@@ -33,59 +33,58 @@ interface Project {
   filterCategories: FilterCategory[];
 }
 
-type FilterCategory = 'All' | 'App Design' | 'Web design' | 'Branding' | 'Development' | 'Support';
+type FilterCategory = 'All' | 'Conferences' | 'Meetups' | 'Parties' | 'Hackathons' | 'Workshops';
 
-const FILTERS: FilterCategory[] = ['All', 'App Design', 'Web design', 'Branding', 'Development', 'Support'];
+const FILTERS: FilterCategory[] = ['All', 'Conferences', 'Meetups', 'Parties', 'Hackathons', 'Workshops'];
 
 const PROJECTS: Project[] = [
   {
     id: 1,
-    title: 'RISC',
-    category: 'UI/UX Design & Development for RISC Platform.',
-    tags: ['DESIGN', 'DEVELOPMENT', 'SUPPORT'],
-    image: '/RISC/COVER PAGE/Screenshot_20260303_002342_cropped_processed_by_imagy.png',
+    title: 'Web3 Hacker House',
+    category: 'A week-long immersive co-living and building experience for top developers.',
+    tags: ['HACKATHON', 'WEB3', 'IRL'],
+    image: 'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&q=80&w=1200',
     gridClass: 'md:col-span-6',
-    client: 'RISC',
-    duration: '4 Months',
+    client: 'DevDAO',
+    duration: '7 Days',
     date: 'Dec 2023',
-    filterCategories: ['Web design', 'Development', 'Support']
+    filterCategories: ['Hackathons', 'Meetups']
   },
   {
     id: 2,
-    title: 'Campus Buddy',
-    category: 'Offline-First Mobile App for Activity & Focus Management.',
-    tags: ['MOBILE APP', 'DEVELOPMENT', 'UI/UX'],
-    image: '/CAMPUS BUDDY/COVER PAGE/Screenshot_20260302-224557_CollegeBuddy~3.png',
+    title: 'GenZ Tech Summit',
+    category: 'The largest gathering of young founders and technologists.',
+    tags: ['CONFERENCE', 'NETWORKING', 'TECH'],
+    image: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&q=80&w=1200',
     gridClass: 'md:col-span-6',
-    client: 'Campus Buddy',
-    duration: 'Ongoing',
+    client: 'Tech Youth',
+    duration: '2 Days',
     date: 'March 2026',
-    isPortrait: true,
-    filterCategories: ['App Design', 'Development', 'Support']
+    filterCategories: ['Conferences', 'Workshops']
   },
   {
     id: 3,
-    title: 'Broken Shell',
-    category: 'An innovative arch-based terminal interface acting as a web OS.',
-    tags: ['AESTHETIC', 'WEB3', 'DEVELOPMENT'],
-    image: '/BrokennShell/COVER PAGE/Screenshot_20260304_130412_cropped_processed_by_imagy (2).png',
+    title: 'Neon Nights Party',
+    category: 'An exclusive token-gated warehouse party with live DJ sets.',
+    tags: ['PARTY', 'MUSIC', 'EXCLUSIVE'],
+    image: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&q=80&w=1200',
     gridClass: 'md:col-span-6',
-    client: 'Broken Shell',
-    duration: 'Ongoing',
+    client: 'Nightlife Collective',
+    duration: '1 Night',
     date: 'March 2024',
-    filterCategories: ['Web design', 'Development', 'Branding']
+    filterCategories: ['Parties', 'Meetups']
   },
   {
     id: 4,
-    title: 'WOC',
-    category: 'UI/UX Design & Custom Code development of WOC website.',
-    tags: ['DEVELOPMENT', 'WEB DESIGN'],
-    image: '/WOC/COVER PAGE/Screenshot_20260303_002732_cropped_processed_by_imagy (1).png',
+    title: 'AI Builders Workshop',
+    category: 'Hands-on sessions on building LLM agents and AI apps.',
+    tags: ['WORKSHOP', 'AI', 'LEARNING'],
+    image: 'https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&q=80&w=1200',
     gridClass: 'md:col-span-6',
-    client: 'WOC',
-    duration: '5 Months',
+    client: 'AI Builders',
+    duration: '1 Day',
     date: 'March 2024',
-    filterCategories: ['Web design', 'Development']
+    filterCategories: ['Workshops', 'Meetups']
   },
 ];
 
@@ -175,13 +174,13 @@ const Page: React.FC = () => {
             <div className="text-[10px] sm:text-xs font-bold uppercase tracking-widest text-zinc-400 mb-6 sm:mb-8 whitespace-nowrap overflow-x-auto scrollbar-hide pr-4">
               <TransitionLink href="/" className="hover:text-zinc-900 transition-colors inline">Home</TransitionLink>
               <span className="mx-2">/</span>
-              <span className="text-zinc-900 inline">Work</span>
+              <span className="text-zinc-900 inline">Events</span>
             </div>
 
             <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end mb-0 gap-4 sm:gap-6 lg:gap-8">
               <h1 className="text-6xl sm:text-7xl md:text-8xl lg:text-[10rem] font-black tracking-tight leading-none text-zinc-900">
                 <span className="relative inline-block">
-                  <span className="relative z-10">Projects</span>
+                  <span className="relative z-10">Events</span>
                   {/* Lime Underline SVG */}
                   <svg className="absolute top-[65%] sm:top-[75%] left-0 w-full h-10 sm:h-16 overflow-visible z-0" viewBox="0 0 600 40" preserveAspectRatio="none">
                     <path
@@ -196,7 +195,7 @@ const Page: React.FC = () => {
                 </span>
               </h1>
               <p className="text-zinc-500 text-lg sm:text-xl font-medium max-w-md leading-relaxed lg:pb-4">
-                Every project we deliver is a reflection of our commitment to quality, designed to inspire and drive success.
+                Discover the most legendary IRL hangouts, conferences, and exclusive experiences powered by our platform.
               </p>
             </div>
           </div>
